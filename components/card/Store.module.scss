@@ -1,0 +1,29 @@
+.card {
+	background-color: transparent;
+	border: 1px solid var(--mantine-color-gray-3);
+	padding: var(--mantine-spacing-xl);
+	height: 100%;
+	transition: 0.25s all ease;
+
+	@include larger-than($mantine-breakpoint-md) {
+		padding: var(--mantine-spacing-md);
+	}
+
+	@include larger-than($mantine-breakpoint-lg) {
+		padding: var(--mantine-spacing-xl);
+	}
+
+	@include hover {
+		box-shadow: var(--mantine-shadow-sm);
+		border: 1px solid var(--mantine-color-pri-6);
+	}
+}
+
+.link {
+	transition: 0.25s all ease;
+	color: light-dark(var(--mantine-color-dark-6), var(--mantine-color-dark-6));
+
+	@include hover {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+}

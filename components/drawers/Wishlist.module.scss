@@ -1,0 +1,41 @@
+// drawer
+.header {
+	background-color: light-dark(var(--mantine-color-pri-0), var(--mantine-color-pri-0));
+	border-bottom: 1px solid var(--mantine-color-default-border);
+	box-shadow: var(--mantine-shadow-xs);
+}
+
+.content {
+	background-color: light-dark(var(--mantine-color-pri-0), var(--mantine-color-pri-0));
+}
+
+.close {
+	width: 32;
+	height: 32;
+	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
+	transition: 0.25s all ease;
+
+	@include hover {
+		color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
+		background-color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+}
+
+// indicator
+.indicator {
+	@include hover {
+		cursor: pointer;
+	}
+}
+
+// action icon
+.iconRoot {
+	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	transition: 0.25s all ease;
+
+	@include hover {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+		background-color: light-dark(var(--mantine-color-pl-light), var(--mantine-color-pri-6));
+	}
+}

@@ -1,0 +1,15 @@
+.navbar {
+	// background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-pri-light));
+	// border-bottom: rem(1px) solid var(--mantine-color-default-border);
+	padding: var(--mantine-spacing-xs) 0;
+}
+
+.logo {
+	width: 40px;
+	height: 40px;
+
+	@include smaller-than($mantine-breakpoint-xs) {
+		width: 32px;
+		height: 32px;
+	}
+}

@@ -1,6 +1,4 @@
-This is a [Next.js](https://nextjs.org/) and [Mantine](https://mantine.dev/) template bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
+# Fresh Cart
 
 First, install dependencies:
 

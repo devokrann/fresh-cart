@@ -1,0 +1,16 @@
+.link {
+	padding: calc(var(--mantine-spacing-xs) / 4) calc(var(--mantine-spacing-xs) / 1);
+	text-decoration: none;
+	color: var(--mantine-color-text);
+	font-size: var(--mantine-font-size-sm);
+	font-weight: 500;
+	transition: 0.25s all ease;
+
+	@include hover {
+		color: var(--mantine-color-pri-6);
+	}
+}
+
+.linkActive {
+	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+}
