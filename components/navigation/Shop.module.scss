@@ -1,0 +1,25 @@
+.root {
+	padding: calc(var(--mantine-spacing-xs) / 2) 0;
+	border-bottom: 1px solid light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+
+	@include hover {
+		background-color: transparent;
+
+		.label {
+			color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+		}
+
+		.chevron {
+			color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+		}
+	}
+}
+
+.label {
+	transition: 0.25s all ease;
+	font-weight: 500;
+}
+
+.chevron {
+	transition: 0.25s all ease;
+}

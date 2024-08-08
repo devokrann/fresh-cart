@@ -1,0 +1,31 @@
+.card {
+	background-color: light-dark(var(--mantine-color-pri-0), var(--mantine-color-pri-0));
+	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	padding: var(--mantine-spacing-xl);
+	height: 100%;
+}
+
+.title {
+	font-weight: bolder;
+	font-size: var(--mantine-font-size-xl);
+
+	@include larger-than($mantine-breakpoint-xs) {
+		font-size: calc(var(--mantine-font-size-xl) * 1.5);
+	}
+
+	@include larger-than($mantine-breakpoint-sm) {
+		font-size: calc(var(--mantine-font-size-xl) * 2);
+	}
+}
+
+.description {
+	font-weight: bold;
+
+	@include larger-than($mantine-breakpoint-xs) {
+		font-size: var(--mantine-font-size-lg);
+	}
+
+	@include larger-than($mantine-breakpoint-sm) {
+		font-size: var(--mantine-font-size-xl);
+	}
+}

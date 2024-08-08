@@ -1,0 +1,6 @@
+.card {
+	background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
+	border-radius: var(--mantine-radius-md);
+	padding: var(--mantine-spacing-lg);
+	box-shadow: var(--mantine-shadow-xs);
+}

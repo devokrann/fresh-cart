@@ -1,0 +1,17 @@
+.category {
+	transition: 0.25s all ease;
+	font-weight: 500;
+	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	text-align: center;
+
+	@include hover {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+}
+
+.title {
+	transition: 0.25s all ease;
+	font-size: calc(var(--mantine-font-size-xl) * 1.75);
+	font-weight: bold;
+	text-align: center;
+}
