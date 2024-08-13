@@ -26,7 +26,7 @@ export default function Post({ params }: { params: typeParams }) {
 
 			<Stack align="center">
 				<Text inherit c={"sl.4"} fz={36} fw={500} lh={1.2} w={{ md: "80%" }}>
-					&puo;{data?.description.quote.text}&puo;
+					&quot;{data?.description.quote.text}&quot;
 				</Text>
 				<Text inherit c={"dimmed"}>
 					- {data?.description.quote.person}

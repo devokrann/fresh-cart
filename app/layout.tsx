@@ -33,6 +33,8 @@ import { auth } from "@/auth";
 
 import AffixTheme from "@/components/affixi/Theme";
 
+import ProviderContextProducts from "@/providers/context/Products";
+
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -62,7 +64,9 @@ export default async function App({
 					withGlobalClasses={true}
 				>
 					<ModalsProvider>
-						<SessionProvider session={session}>{children}</SessionProvider>
+						<SessionProvider session={session}>
+							<ProviderContextProducts>{children}</ProviderContextProducts>
+						</SessionProvider>
 					</ModalsProvider>
 
 					<Notifications limit={3} />

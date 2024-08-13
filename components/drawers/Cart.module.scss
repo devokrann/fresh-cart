@@ -1,12 +1,8 @@
-// drawer
 .header {
 	border-bottom: 1px solid var(--mantine-color-default-border);
 	box-shadow: var(--mantine-shadow-xs);
 }
 
-// indicator
-.indicator {
-	@include hover {
-		cursor: pointer;
-	}
+.body {
+	padding-top: var(--mantine-spacing-md);
 }

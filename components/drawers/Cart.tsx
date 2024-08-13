@@ -1,24 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 
-import { ActionIcon, Center, Drawer, Indicator, Skeleton, Stack, Text } from "@mantine/core";
+import {
+	ActionIcon,
+	Box,
+	Button,
+	Center,
+	Divider,
+	Drawer,
+	Group,
+	Indicator,
+	Skeleton,
+	Stack,
+	Text,
+} from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconShoppingCart } from "@tabler/icons-react";
+import ProviderIndicatorProducts from "@/providers/indicators/Products";
+import CardPriductCart from "../card/product/Cart";
 
 import classes from "./Cart.module.scss";
 
-export default function Cart({ items }: { items?: any }) {
+import ContextProducts from "@/contexts/Products";
+
+export default function Cart() {
+	const productsContext = useContext(ContextProducts);
+
+	if (!productsContext) {
+		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	}
+
+	const { cart, setCart } = productsContext;
+
 	const [opened, { open, close }] = useDisclosure(false);
-	const mobile = useMediaQuery("(max-width: 36em)");
-	const tablet = useMediaQuery("(max-width: 48em)");
 
 	return (
 		<>
 			<Drawer
 				opened={opened}
 				onClose={close}
-				size={mobile ? 240 : tablet ? 320 : 320}
+				size={560}
 				title={
 					<Text component="span" inherit fw={500}>
 						Cart
@@ -34,42 +56,54 @@ export default function Cart({ items }: { items?: any }) {
 					title: classes.title,
 				}}
 			>
-				{!items ? (
+				{cart.length > 0 ? (
+					<Stack gap={"xl"}>
+						<Stack gap={0}>
+							{cart.map(product => (
+								<Box
+									key={product.title}
+									style={{
+										borderTop:
+											cart.indexOf(product) > 0
+												? "1px solid var(--mantine-color-default-border)"
+												: "",
+										paddingTop: cart.indexOf(product) > 0 ? "var(--mantine-spacing-xs)" : "",
+										paddingBottom:
+											cart.indexOf(product) < cart.length - 1 ? "var(--mantine-spacing-xs)" : "",
+									}}
+								>
+									<CardPriductCart data={product} />
+								</Box>
+							))}
+						</Stack>
+
+						<Group grow>
+							<Button variant="outline" onClick={() => setCart([])}>
+								Clear Cart
+							</Button>
+							<Button>Checkout</Button>
+						</Group>
+					</Stack>
+				) : (
 					<Stack align="center">
 						<Text ta={"center"} mt={"xl"} className="textResponsive">
 							Your cart is empty.
 						</Text>
 					</Stack>
-				) : (
-					`items`
 				)}
 			</Drawer>
 
 			{/* <Skeleton height={mobile ? 16 : tablet ? 20 : 20} circle /> */}
 
-			<Indicator
-				disabled={!items}
-				processing={false}
-				size={tablet ? 8 : 10}
-				offset={4}
-				onClick={open}
-				label={
-					items ? (
-						<Text component="span" inherit fw={500} fz={10}>
-							{items.length}
-						</Text>
-					) : undefined
-				}
-				className={classes.indicator}
-			>
+			<ProviderIndicatorProducts variant="cart">
 				<Center>
 					<ActionIcon onClick={open} variant="transparent">
 						<Center>
-							<IconShoppingCart size={mobile ? 16 : tablet ? 20 : 20} />
+							<IconShoppingCart size={24} />
 						</Center>
 					</ActionIcon>
 				</Center>
-			</Indicator>
+			</ProviderIndicatorProducts>
 		</>
 	);
 }

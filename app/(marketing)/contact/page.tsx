@@ -24,7 +24,7 @@ export default async function Contact() {
 		<LayoutPage>
 			{/* <TemplateEmailContact /> */}
 
-			<LayoutSection containerized={"md"}>
+			<LayoutSection padded containerized={"md"}>
 				<Stack gap={"xl"}>
 					<Stack>
 						<Title order={2} fw={500}>

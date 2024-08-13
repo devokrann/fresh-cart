@@ -12,7 +12,7 @@ import classes from "./Main.module.scss";
 
 export default async function Main() {
 	return (
-		<LayoutSection className={classes.navbar} shadowed visibleFrom="sm">
+		<LayoutSection className={classes.navbar} visibleFrom="sm">
 			<Container size={"responsive"}>
 				<NavigationMain />
 			</Container>

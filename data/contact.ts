@@ -1,10 +1,4 @@
-import {
-	IconBrandFacebook,
-	IconBrandInstagram,
-	IconBrandLinkedin,
-	IconBrandTwitter,
-	IconBrandYoutube,
-} from "@tabler/icons-react";
+import icons from "@/assets/icons";
 
 const companyName = "Fresh Cart";
 const appName = companyName;
@@ -17,27 +11,22 @@ const contact = {
 		{
 			title: `${companyName} @ Twitter`,
 			link: "#",
-			icon: IconBrandTwitter,
+			icon: icons.social.twitter,
 		},
 		{
 			title: `${companyName} @ Facebook`,
 			link: "#Facebook",
-			icon: IconBrandFacebook,
+			icon: icons.social.facebook,
 		},
 		{
 			title: `${companyName} @ Instagram`,
 			link: "#Instagram",
-			icon: IconBrandInstagram,
+			icon: icons.social.instagram,
 		},
 		{
 			title: `${companyName} @ LinkedIn`,
 			link: "#LinkedIn",
-			icon: IconBrandLinkedin,
-		},
-		{
-			title: `${companyName} @ YouTube`,
-			link: "#YouTube",
-			icon: IconBrandYoutube,
+			icon: icons.social.linkedin,
 		},
 	],
 	hours: [

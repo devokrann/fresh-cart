@@ -1,6 +1,6 @@
 .root {
 	padding: calc(var(--mantine-spacing-xs) / 2) 0;
-	border-bottom: 1px solid light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	border-bottom: 1px solid light-dark(var(--mantine-color-default-border), var(--mantine-color-default-border));
 
 	@include hover {
 		background-color: transparent;

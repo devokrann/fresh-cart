@@ -8,35 +8,31 @@ import { StaticImageData } from "next/image";
 import { Stack, Tabs, Image } from "@mantine/core";
 import { IconPhoto, IconMessageCircle, IconSettings } from "@tabler/icons-react";
 
-import image1 from "@/assets/images/products/product1/product-single-img-1.jpg";
-import image2 from "@/assets/images/products/product1/product-single-img-2.jpg";
-import image3 from "@/assets/images/products/product1/product-single-img-3.jpg";
-import image4 from "@/assets/images/products/product1/product-single-img-4.jpg";
-
 import classes from "./Product.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
+import images from "@/assets/images";
 
 const imagesSample = [
 	{
-		image: image1,
+		image: images.products.image1,
 		alt: "image1",
 	},
 	{
-		image: image2,
+		image: images.products.image2,
 		alt: "image2",
 	},
 	{
-		image: image3,
+		image: images.products.image3,
 		alt: "image3",
 	},
 	{
-		image: image4,
+		image: images.products.image4,
 		alt: "image4",
 	},
 ];
 
 interface typeImage {
-	image: StaticImageData;
+	image: string;
 	alt: string;
 }
 

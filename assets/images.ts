@@ -56,6 +56,8 @@ const images = {
 		image5: "/images/stores/stores-logo-5.svg",
 		image6: "/images/stores/stores-logo-6.svg",
 		image7: "/images/stores/stores-logo-7.svg",
+		image8: "/images/stores/stores-logo-8.svg",
+		image9: "/images/stores/stores-logo-9.svg",
 	},
 
 	about: "/images/about.jpg",

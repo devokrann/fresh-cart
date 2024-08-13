@@ -1,7 +1,7 @@
 import { StaticImageData } from "next/image";
 
 export interface typeProduct {
-	image: StaticImageData;
+	image: string;
 	category: string;
 	title: string;
 	rating: { value: number; raters: number };
@@ -13,4 +13,5 @@ export interface typeProduct {
 	};
 	shipping: { days: number };
 	available: boolean;
+	quantity?: number;
 }

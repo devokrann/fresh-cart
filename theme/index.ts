@@ -46,7 +46,7 @@ const projectName = createTheme({
 		to: "sec",
 		deg: 45,
 	},
-	defaultRadius: "sm",
+	defaultRadius: "md",
 	autoContrast: true,
 	luminanceThreshold: 0.3,
 	// fontFamily: "Arial, sans-serif",

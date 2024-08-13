@@ -42,9 +42,10 @@ export default function Categories() {
 					All Departments
 				</Button>
 			</MenuTarget>
+
 			<Menu.Dropdown>
-				<LayoutSection containerized="responsive">
-					<Grid className={classes.dropdownGrid} gutter={{ sm: "xl", md: "md" }}>
+				<LayoutSection containerized="responsive" px={0}>
+					<Grid gutter={{ md: "md", lg: "xl" }} className={classes.dropdownGrid}>
 						{links.menuMega.map(item => (
 							<GridCol key={item.title} span={{ base: 12, sm: 6, md: 3 }}>
 								<Stack gap={4}>
@@ -91,7 +92,7 @@ export default function Categories() {
 									>
 										Don&apos;t miss this offer today.
 									</Text>
-									<Button color="sl.4" c={"bg.0"} size="xs">
+									<Button color="black" size="xs">
 										Shop Now
 									</Button>
 								</Stack>

@@ -29,7 +29,7 @@ export default function Section({
 			{...restProps}
 		>
 			{containerized ? (
-				<Container size={typeof containerized == "boolean" ? "" : containerized}>
+				<Container size={typeof containerized == "boolean" ? "" : containerized} {...restProps}>
 					<React.Fragment>{children}</React.Fragment>
 				</Container>
 			) : (

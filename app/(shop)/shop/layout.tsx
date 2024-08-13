@@ -22,5 +22,5 @@ export default function LayoutShop({
 }: {
 	children: React.ReactNode;
 }) {
-	return <LayoutBody aside={{ right: { component: <AsideShop /> } }}>{children}</LayoutBody>;
+	return <LayoutBody aside={{ left: { component: <AsideShop /> }, gap: 64 }}>{children}</LayoutBody>;
 }

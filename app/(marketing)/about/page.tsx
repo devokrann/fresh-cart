@@ -63,7 +63,7 @@ export default async function About() {
 
 	return (
 		<LayoutPage>
-			<LayoutSection containerized={"responsive"}>
+			<LayoutSection padded shadowed containerized={"responsive"}>
 				<Grid align="center" gutter={{ base: "xl", sm: "md" }}>
 					<GridCol span={{ base: 12, sm: 6 }}>
 						<Center>
@@ -96,7 +96,7 @@ export default async function About() {
 				</Grid>
 			</LayoutSection>
 
-			<LayoutSection containerized={"responsive"}>
+			<LayoutSection padded shadowed containerized={"responsive"}>
 				<Stack gap={"xl"}>
 					<Grid gutter={"xl"} grow>
 						{data.about.map(item => (
@@ -117,14 +117,15 @@ export default async function About() {
 			</LayoutSection>
 
 			<LayoutSection
-				containerized={"responsive"}
+				padded
 				shadowed
-				bg={"light-dark(var(--mantine-color-pl-4),var(--mantine-color-pl-4))"}
-				c={"light-dark(var(--mantine-color-bg-0),var(--mantine-color-bg-0))"}
+				containerized={"responsive"}
+				bg={"light-dark(var(--mantine-color-pri-6),var(--mantine-color-pri-6))"}
+				c={"light-dark(var(--mantine-color-white),var(--mantine-color-white))"}
 			>
 				<Stack gap={"xl"}>
 					<Stack>
-						<Title order={2} fz={32} ta={"center"} fw={"bolder"}>
+						<Title order={2} fz={32} ta={"center"} fw={"bolder"} c={"white"}>
 							Trusted by retailers. Loved by customers.
 						</Title>
 						<Text ta={"center"}>

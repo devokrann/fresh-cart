@@ -1,10 +1,9 @@
 import React from "react";
 
-import { Avatar, Box, Grid, GridCol, Group, Skeleton } from "@mantine/core";
+import { ActionIcon, Avatar, Box, Center, Grid, GridCol, Group, Indicator, Skeleton, Text } from "@mantine/core";
 
 import LayoutSection from "@/layouts/Section";
 import DrawerCart from "@/components/drawers/Cart";
-import DrawerWishlist from "@/components/drawers/Wishlist";
 import FormSearchMain from "../forms/search/Main";
 import DrawerNavMain from "@/components/drawers/nav/Main";
 import BrandLandscape from "../brand/Landscape";
@@ -15,6 +14,8 @@ import classes from "./Main.module.scss";
 import { auth } from "@/auth";
 import ProviderAuthSignIn from "@/providers/auth/signIn";
 import MenuAvatar from "@/components/menus/Avatar";
+import { IconHeart, IconUser } from "@tabler/icons-react";
+import ProviderIndicatorProducts from "@/providers/indicators/Products";
 
 export default async function Main() {
 	const session = await auth();
@@ -39,17 +40,30 @@ export default async function Main() {
 				<GridCol span={{ base: 9, sm: 3 }}>
 					<Group justify="end">
 						<Group gap={"xs"}>
-							<DrawerWishlist />
-							<DrawerCart />
-						</Group>
+							<ProviderIndicatorProducts variant="wishlist">
+								<Center>
+									<ActionIcon variant="transparent">
+										<Center>
+											<IconHeart size={24} stroke={2} />
+										</Center>
+									</ActionIcon>
+								</Center>
+							</ProviderIndicatorProducts>
 
-						{!session?.user ? (
-							<ProviderAuthSignIn>
-								<Avatar size={32} color="pl" title="Sign In" style={{ cursor: "pointer" }} />
-							</ProviderAuthSignIn>
-						) : (
-							<MenuAvatar />
-						)}
+							<DrawerCart />
+
+							{!session?.user ? (
+								<ProviderAuthSignIn>
+									<ActionIcon variant="transparent">
+										<Center>
+											<IconUser size={24} stroke={2} />
+										</Center>
+									</ActionIcon>
+								</ProviderAuthSignIn>
+							) : (
+								<MenuAvatar />
+							)}
+						</Group>
 					</Group>
 				</GridCol>
 			</Grid>

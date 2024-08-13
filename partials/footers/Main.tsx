@@ -27,6 +27,8 @@ import icons from "@/assets/icons";
 
 import classes from "./Main.module.scss";
 
+import contact from "@/data/contact";
+
 const linkSets = [
 	{
 		title: "Get to Know Us",
@@ -66,24 +68,6 @@ const linkSets = [
 	},
 ];
 
-const socials = [
-	{
-		link: "#facebook",
-		alt: "facebook",
-		icon: icons.social.facebook,
-	},
-	{
-		link: "#twitter",
-		alt: "twitter",
-		icon: icons.social.twitter,
-	},
-	{
-		link: "#instagram",
-		alt: "instagram",
-		icon: icons.social.instagram,
-	},
-];
-
 const payment = [
 	{
 		link: "#amazon",
@@ -116,19 +100,19 @@ const appButtons = [
 	{
 		link: "#appStore",
 		alt: "App Store",
-		icon: icons.appStore,
+		icon: icons.other.appStore,
 	},
 	{
 		link: "#playStore",
 		alt: "Play Store",
-		icon: icons.playStore,
+		icon: icons.other.playStore,
 	},
 ];
 
 export default function Main() {
 	return (
-		<LayoutSection className={classes.footer}>
-			<LayoutSection containerized="responsive" shadowed padded="xl">
+		<LayoutSection className={classes.footer} padded={64}>
+			<LayoutSection containerized="responsive">
 				<Grid>
 					<GridCol span={{ base: 12, md: 4 }}>
 						<Flex direction={"column"} align={{ base: "center", md: "start" }} gap={"md"}>
@@ -179,7 +163,11 @@ export default function Main() {
 				</Grid>
 			</LayoutSection>
 
-			<LayoutSection containerized="responsive" bordered padded="md" visibleFrom="xs">
+			<LayoutSection containerized="responsive">
+				<Divider mt={"lg"} mb={2} />
+			</LayoutSection>
+
+			<LayoutSection containerized="responsive" padded="md" visibleFrom="xs">
 				<Flex
 					direction={{ base: "column", xs: "row" }}
 					align={"center"}
@@ -222,7 +210,11 @@ export default function Main() {
 				</Flex>
 			</LayoutSection>
 
-			<LayoutSection containerized="responsive" padded="md">
+			<LayoutSection containerized="responsive">
+				<Divider mb={"lg"} mt={2} />
+			</LayoutSection>
+
+			<LayoutSection containerized="responsive">
 				<Flex
 					direction={{ base: "column", xs: "row" }}
 					align={"center"}
@@ -236,18 +228,18 @@ export default function Main() {
 						</Anchor>
 						.
 					</Text>
-					<Group>
-						{socials.map(social => (
+					<Group gap={"xs"}>
+						{contact.socials.map(social => (
 							<a key={social.link} href={social.link}>
 								<Image
 									src={social.icon}
-									alt={social.alt}
-									title={social.alt}
+									alt={social.title}
+									title={social.title}
 									h={{ base: 24, md: 28 }}
+									loading="lazy"
 									component={NextImage}
 									width={1920}
 									height={1080}
-									priority
 								/>
 							</a>
 						))}
