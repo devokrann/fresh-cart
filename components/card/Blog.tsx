@@ -42,7 +42,7 @@ export default function Blog({
 						<Image
 							src={data.image}
 							alt={data.title}
-							h={orientation == "vertical" ? { base: 240, md: 200, lg: 240 } : { base: 240, md: 360 }}
+							h={orientation == "vertical" ? { base: 240, md: 200 } : { base: 240, md: 400 }}
 							component={NextImage}
 							width={1920}
 							height={1080}
