@@ -63,7 +63,7 @@ export default async function About() {
 
 	return (
 		<LayoutPage>
-			<LayoutSection padded shadowed containerized={"responsive"}>
+			<LayoutSection padded containerized={"responsive"}>
 				<Grid align="center" gutter={{ base: "xl", sm: "md" }}>
 					<GridCol span={{ base: 12, sm: 6 }}>
 						<Center>
@@ -98,9 +98,9 @@ export default async function About() {
 
 			<LayoutSection padded shadowed containerized={"responsive"}>
 				<Stack gap={"xl"}>
-					<Grid gutter={"xl"} grow>
+					<Grid gutter={"xl"} justify="center">
 						{data.about.map(item => (
-							<GridCol key={item.title} span={{ base: 12, sm: 6, md: 4 }}>
+							<GridCol key={item.title} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
 								<CardAbout data={item} />
 							</GridCol>
 						))}
@@ -120,7 +120,7 @@ export default async function About() {
 				padded
 				shadowed
 				containerized={"responsive"}
-				bg={"light-dark(var(--mantine-color-pri-6),var(--mantine-color-pri-6))"}
+				bg={"light-dark(var(--mantine-color-pri-8),var(--mantine-color-pri-8))"}
 				c={"light-dark(var(--mantine-color-white),var(--mantine-color-white))"}
 			>
 				<Stack gap={"xl"}>

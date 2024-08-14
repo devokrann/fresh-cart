@@ -32,9 +32,7 @@ export default function About({ data }: { data: typeAbout }) {
 						<Text className={classes.description}>{data.description}</Text>
 					</Stack>
 
-					<Button color="pl.4" c={"bg.0"}>
-						{data.cta}
-					</Button>
+					<Button color="black">{data.cta}</Button>
 				</Stack>
 			</Stack>
 		</Card>

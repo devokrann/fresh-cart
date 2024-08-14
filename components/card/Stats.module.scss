@@ -1,6 +1,6 @@
 .card {
-	background-color: light-dark(var(--mantine-color-pri-0), var(--mantine-color-pri-0));
-	color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	background-color: transparent;
+	color: inherit;
 	padding: var(--mantine-spacing-xl);
 	height: 100%;
 }
