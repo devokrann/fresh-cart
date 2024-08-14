@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { Box, Button, Center, Grid, GridCol, TextInput, Textarea } from "@mantine/core";
+import { Box, Button, Center, Grid, GridCol, Select, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
@@ -105,7 +105,7 @@ export default function Contact() {
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid pb={"md"}>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput
 						required
 						label={"Frist Name"}
@@ -113,7 +113,7 @@ export default function Contact() {
 						{...form.getInputProps("fname")}
 					/>
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput
 						required
 						label={"Last Name"}
@@ -121,10 +121,10 @@ export default function Contact() {
 						{...form.getInputProps("lname")}
 					/>
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
 				</GridCol>
 				<GridCol span={12}>
