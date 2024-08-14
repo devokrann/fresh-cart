@@ -18,11 +18,12 @@ import {
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconShoppingCart } from "@tabler/icons-react";
 import ProviderIndicatorProducts from "@/providers/indicators/Products";
-import CardPriductCart from "../card/product/Cart";
+import CardProductCart from "../card/product/Cart";
 
 import classes from "./Cart.module.scss";
 
 import ContextProducts from "@/contexts/Products";
+import Link from "next/link";
 
 export default function Cart() {
 	const productsContext = useContext(ContextProducts);
@@ -72,14 +73,14 @@ export default function Cart() {
 											cart.indexOf(product) < cart.length - 1 ? "var(--mantine-spacing-xs)" : "",
 									}}
 								>
-									<CardPriductCart data={product} />
+									<CardProductCart data={product} />
 								</Box>
 							))}
 						</Stack>
 
 						<Group grow>
-							<Button variant="outline" onClick={() => setCart([])}>
-								Clear Cart
+							<Button variant="outline" component={Link} href={"/shop/cart"} onClick={close}>
+								Cart Details
 							</Button>
 							<Button>Checkout</Button>
 						</Group>

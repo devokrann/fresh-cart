@@ -1,5 +1,6 @@
 .tab {
-	padding: var(--mantine-spacing-md) 0;
+	padding: 0;
+	padding-top: var(--mantine-spacing-md);
 	transition: 0.25s all ease;
 
 	.image {
@@ -22,7 +23,6 @@
 
 	@include larger-than($mantine-breakpoint-xs) {
 		padding: 0;
-		padding-right: var(--mantine-spacing-md);
 
 		&[data-active] {
 			border-top: 0px solid transparent;
@@ -31,8 +31,7 @@
 	}
 
 	@include larger-than($mantine-breakpoint-md) {
-		padding: var(--mantine-spacing-md) 0;
-		padding-right: 0;
+		padding-top: var(--mantine-spacing-md);
 
 		&[data-active] {
 			border-top: 2px solid transparent;

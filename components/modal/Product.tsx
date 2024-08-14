@@ -16,10 +16,11 @@ import {
 	Rating,
 	Group,
 	Divider,
+	Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-import { IconEye, IconHeart, IconShoppingCart } from "@tabler/icons-react";
+import { IconEye, IconHeart, IconShoppingCart, IconX } from "@tabler/icons-react";
 
 import TabsProduct from "../tabs/Product";
 import FormProductModal from "@/partials/forms/product/Modal";
@@ -41,38 +42,40 @@ export default function Product({ data }: { data: typeProduct }) {
 		},
 	];
 
+	const closeButton = (
+		<ActionIcon color="gray" variant="subtle" onClick={close}>
+			<IconX size={16} stroke={2} />
+		</ActionIcon>
+	);
+
 	return (
 		<>
-			<Modal
-				opened={opened}
-				onClose={close}
-				centered
-				size={1080}
-				title={
-					<Text component="span" inherit fw={"bold"} fz={"xl"}>
-						{/* <Text component="span" inherit c={"pl.4"}>
-						{data.title}
-						</Text>{" "} */}
-						Product Details
-					</Text>
-				}
-			>
+			<Modal opened={opened} onClose={close} centered size={1080} withCloseButton={false} h={"fit-content"}>
 				<Grid gutter={"xl"}>
-					<GridCol span={{ base: 12, md: 6, lg: 6.5 }}>
-						<TabsProduct />
+					<GridCol span={{ base: 12, md: 6 }}>
+						<Stack>
+							<Box style={{ alignSelf: "end" }} hiddenFrom="md">
+								{closeButton}
+							</Box>
+							<TabsProduct />
+						</Stack>
 					</GridCol>
 
-					<GridCol span={{ base: 12, md: 6, lg: 5.5 }}>
-						<Stack gap={"xl"} justify="space-between" h={"100%"}>
+					<GridCol span={{ base: 12, md: 6 }}>
+						<Stack>
+							<Box style={{ alignSelf: "end" }} visibleFrom="md">
+								{closeButton}
+							</Box>
+
 							<Text c={"sl.4"} fw={500}>
 								{data.category}
 							</Text>
 
-							<Stack gap={"md"} justify="space-between">
+							<Stack justify="space-between">
 								<Title order={2} fw={"bold"} fz={{ lg: 36 }} lh={0.5}>
 									{data.title}
 								</Title>
-								<Group gap={"xs"} c={"sl.4"} fw={500}>
+								<Group gap={"xs"} c={"pri"} fw={500}>
 									<Rating
 										value={data.rating.value}
 										fractions={getFraction(data.rating.value)}
@@ -105,11 +108,11 @@ export default function Product({ data }: { data: typeProduct }) {
 
 							<FormProductModal data={data} />
 
-							<Divider />
+							<Divider visibleFrom="lg" />
 
-							<Stack gap={"sm"} justify="space-between" mb={40} c={"dimmed"} fw={500}>
+							<Stack gap={4} justify="space-between" c={"dimmed"} fw={500} visibleFrom="lg">
 								{metadata.map(item => (
-									<Grid key={item.label}>
+									<Grid gutter={0} key={item.label}>
 										<GridCol span={{ base: 6 }}>
 											<Text inherit>{item.label}:</Text>
 										</GridCol>
@@ -125,7 +128,7 @@ export default function Product({ data }: { data: typeProduct }) {
 			</Modal>
 
 			<Tooltip label={"Quick View"} withArrow fz={"sm"}>
-				<ActionIcon size={32} c={"bg.0"} onClick={open}>
+				<ActionIcon size={32} onClick={open}>
 					<IconEye size={20} stroke={1.5} />
 				</ActionIcon>
 			</Tooltip>

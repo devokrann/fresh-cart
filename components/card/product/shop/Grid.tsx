@@ -30,19 +30,19 @@ import {
 	IconShoppingCartX,
 } from "@tabler/icons-react";
 
-import ModalProduct from "../../modal/Product";
+import ModalProduct from "../../../modal/Product";
 
 import link from "@/handlers/parsers/string/link";
 import getFraction from "@/handlers/fraction";
 
-import classes from "./Shop.module.scss";
+import classes from "./Grid.module.scss";
 
 import { typeProduct } from "@/types/product";
 
 import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
-export default function Shop({ data }: { data: typeProduct }) {
+export default function Grid({ data }: { data: typeProduct }) {
 	const productsContext = useContext(ContextProducts);
 
 	if (!productsContext) {
