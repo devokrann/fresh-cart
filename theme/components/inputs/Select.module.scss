@@ -48,7 +48,6 @@
 
 .option {
 	border-radius: var(--mantine-radius-md);
-	color: var(--mantine-color-text);
 	font-size: var(--mantine-font-size-xs);
 
 	@include larger-than($mantine-breakpoint-xs) {
@@ -56,6 +55,10 @@
 	}
 
 	&:hover {
+		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+	}
+
+	&[data-active] {
 		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
 	}
 }
