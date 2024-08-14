@@ -17,11 +17,14 @@ import {
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import CardProductShop from "@/components/card/product/Shop";
+import CardProductShopGrid from "@/components/card/product/shop/Grid";
+import CardProductShopList from "@/components/card/product/shop/List";
+import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 
 import blog from "@/data/blog";
 import products from "@/data/products";
-import { IconGridDots, IconLayoutGrid, IconList } from "@tabler/icons-react";
+import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
+import stores from "@/data/stores";
 
 export default function Shop() {
 	return (
@@ -29,9 +32,29 @@ export default function Shop() {
 			<LayoutPage padded stacked="lg">
 				<LayoutSection>
 					<Card bg={"gray.1"} p={40}>
-						<Title order={2} fz={40} c={"dark.6"}>
-							Snacks & Munchies
-						</Title>
+						<Stack align="start">
+							<Title order={2} fz={40} c={"dark.6"}>
+								Snacks & Munchies
+							</Title>
+
+							<Stack align="start">
+								<Stack gap={0}>
+									<Title order={2} fz={"xl"} fw={"bold"} lh={1}>
+										{stores[0].title}
+									</Title>
+									<Text fz={"sm"} c={"gray.6"}>
+										Whatever the occasion, we&apos;ve got you covered.
+									</Text>
+								</Stack>
+
+								<InputAutocompleteStores
+									w={{ md: 320 }}
+									placeholder={`Search ${stores[0].title}`}
+									rightSection={<IconSearch size={16} stroke={2} />}
+									data={products.map(p => p.title)}
+								/>
+							</Stack>
+						</Stack>
 					</Card>
 				</LayoutSection>
 
@@ -107,9 +130,15 @@ export default function Shop() {
 
 				<LayoutSection>
 					<Grid>
-						{products.map(product => (
+						{/* {products.map(product => (
 							<GridCol key={product.title} span={{ base: 12, md: 4, lg: 3 }}>
-								<CardProductShop data={product} />
+								<CardProductShopGrid data={product} />
+							</GridCol>
+						))} */}
+
+						{products.map(product => (
+							<GridCol key={product.title} span={12}>
+								<CardProductShopList data={product} />
 							</GridCol>
 						))}
 					</Grid>

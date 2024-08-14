@@ -31,7 +31,7 @@ export default function NotFound() {
 								</Title>
 								<Stack gap={0}>
 									<Text ta={{ base: "center", md: "start" }} fz={"sm"}>
-										We can’t find the page you’re looking for.
+										We can&apos;t find the page you&apos;re looking for.
 									</Text>
 									<Text ta={{ base: "center", md: "start" }} fz={"sm"}>
 										Check out our help center or head back to home.
@@ -40,15 +40,16 @@ export default function NotFound() {
 							</Stack>
 
 							<Group>
+								<Button component={Link} href={"/"} color="pri">
+									Back to Home
+								</Button>
 								<Button
 									component={Link}
 									href={"#/help-center"}
+									variant="outline"
 									rightSection={<IconArrowRight size={16} stroke={1.5} />}
 								>
 									Help Center
-								</Button>
-								<Button component={Link} href={"/"} color="sl.4">
-									Back to Home
 								</Button>
 							</Group>
 						</Flex>
