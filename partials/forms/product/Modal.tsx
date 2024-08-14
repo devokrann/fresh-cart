@@ -73,13 +73,14 @@ export default function Modal({ data }: { data: typeProduct }) {
 
 	return (
 		<form onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
-			<Stack gap={"lg"}>
+			<Stack>
 				{data.variants.capacity && (
 					<ChipGroup {...form.getInputProps(`capacity`)}>
 						<Group mt={"sm"}>
 							{data.variants.capacity.map(variant => (
 								<Chip
 									radius={"md"}
+									size="lg"
 									key={variant}
 									value={`${variant}`}
 									checked={
@@ -101,6 +102,7 @@ export default function Modal({ data }: { data: typeProduct }) {
 							{data.variants.weight.map(variant => (
 								<Chip
 									radius={"md"}
+									size="lg"
 									key={variant}
 									value={`${variant}`}
 									checked={
@@ -119,9 +121,9 @@ export default function Modal({ data }: { data: typeProduct }) {
 				<Group gap={0}>
 					<ActionIcon
 						variant="outline"
-						color="gray.4"
+						color="gray"
 						mr={-1}
-						c={"gray.6"}
+						c={"gray"}
 						size={36}
 						className={classes.actionIconLeft}
 						onClick={() => handlersRef.current?.decrement()}
@@ -143,9 +145,9 @@ export default function Modal({ data }: { data: typeProduct }) {
 					/>
 					<ActionIcon
 						variant="outline"
-						color="gray.4"
+						color="gray"
 						ml={-0.5}
-						c={"gray.6"}
+						c={"gray"}
 						size={36}
 						className={classes.actionIconRight}
 						onClick={() => handlersRef.current?.increment()}
@@ -155,17 +157,11 @@ export default function Modal({ data }: { data: typeProduct }) {
 				</Group>
 
 				<Group>
-					<Button
-						color="sl.4"
-						c={"bg.0"}
-						size={"md"}
-						leftSection={<IconShoppingCart size={20} stroke={1.5} />}
-						type="submit"
-					>
+					<Button size={"md"} leftSection={<IconShoppingCart size={20} stroke={1.5} />} type="submit">
 						Add to Cart
 					</Button>
 					<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>
-						<ActionIcon size={40} color="gray.6" variant="light" c={"gray.6"}>
+						<ActionIcon size={40} color="gray" variant="light">
 							<IconHeart size={20} stroke={1.5} />
 						</ActionIcon>
 					</Tooltip>

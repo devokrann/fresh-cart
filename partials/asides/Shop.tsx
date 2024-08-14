@@ -35,7 +35,7 @@ export default function Shop() {
 						</Title>
 
 						<Stack>
-							<InputAutocompleteStores />
+							<InputAutocompleteStores data={stores.map(s => s.title)} />
 
 							<Stack gap={"xs"}>
 								{stores.map(store => (

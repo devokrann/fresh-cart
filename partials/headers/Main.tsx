@@ -16,6 +16,7 @@ import ProviderAuthSignIn from "@/providers/auth/signIn";
 import MenuAvatar from "@/components/menus/Avatar";
 import { IconHeart, IconUser } from "@tabler/icons-react";
 import ProviderIndicatorProducts from "@/providers/indicators/Products";
+import Link from "next/link";
 
 export default async function Main() {
 	const session = await auth();
@@ -42,7 +43,7 @@ export default async function Main() {
 						<Group gap={"xs"}>
 							<ProviderIndicatorProducts variant="wishlist">
 								<Center>
-									<ActionIcon variant="transparent">
+									<ActionIcon variant="transparent" component={Link} href={"/shop/wishlist"}>
 										<Center>
 											<IconHeart size={24} stroke={2} />
 										</Center>
