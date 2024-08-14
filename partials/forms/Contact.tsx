@@ -141,34 +141,16 @@ export default function Contact() {
 						label={"Message"}
 						placeholder="Write your message here..."
 						autosize
+						resize="vertical"
 						minRows={3}
 						maxRows={10}
 						{...form.getInputProps("message")}
 					/>
 				</GridCol>
 				<GridCol span={12}>
-					<Grid mt={"md"}>
-						<GridCol span={{ base: 6 }}>
-							{/* <Center>
-								<Button
-									variant="light"
-									fullWidth
-									type="reset"
-									onClick={() => form.reset()}
-									disabled={submitted}
-								>
-									Clear
-								</Button>
-							</Center> */}
-						</GridCol>
-						<GridCol span={{ base: 6 }}>
-							<Center>
-								<Button fullWidth type="submit" loading={submitted}>
-									{submitted ? "Sending" : "Send"}
-								</Button>
-							</Center>
-						</GridCol>
-					</Grid>
+					<Button type="submit" loading={submitted} mt={"md"}>
+						{submitted ? "Sending" : "Send"}
+					</Button>
 				</GridCol>
 			</Grid>
 		</Box>

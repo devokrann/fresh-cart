@@ -27,7 +27,7 @@ export default async function Contact() {
 			<LayoutSection padded containerized={"md"}>
 				<Stack gap={"xl"}>
 					<Stack>
-						<Title order={2} fw={500}>
+						<Title order={2} fw={"bold"}>
 							Retailer Inquiries
 						</Title>
 						<Text fz={"lg"}>
