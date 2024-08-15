@@ -31,16 +31,27 @@ export default function Cart() {
 	};
 
 	const itemSubtotal = { label: "Item Subtotal", value: getTotal() };
-	const serviceFee = { label: "Service Fee", value: 3 * cart.length };
-	const subTotal = { label: "Subtotal", value: itemSubtotal.value + serviceFee.value };
+	const shipping = { label: "Shipping", value: Math.ceil(getTotal() * 0.1) };
+	const serviceFee = { label: "Service Fee", value: Math.ceil(3 * cart.length) };
+	const tax = { label: "Tax", value: Math.ceil(getTotal() * 0) };
+	const discount = { label: "Discount", value: Math.ceil(getTotal() * 0.15) };
+	const subTotal = {
+		label: "Subtotal",
+		value: Math.ceil(itemSubtotal.value + shipping.value + serviceFee.value + tax.value - discount.value),
+	};
 
-	const data = [itemSubtotal, serviceFee, subTotal];
+	const data = [itemSubtotal, shipping, serviceFee, tax, discount, subTotal];
 
 	const rows = data.map(item => (
 		<Table.Tr key={item.label} fw={data.indexOf(item) == data.length - 1 ? "bold" : undefined}>
 			<Table.Td>{item.label}</Table.Td>
-			<Table.Td ta={"end"}>
-				<NumberFormatter prefix="$ " suffix=".00" value={item.value} />
+			<Table.Td ta={"end"} c={item.label == "Discount" ? "red" : undefined}>
+				<NumberFormatter
+					thousandSeparator
+					prefix={item.label == "Discount" ? "- $ " : "$ "}
+					suffix=".00"
+					value={item.value}
+				/>
 			</Table.Td>
 		</Table.Tr>
 	));
@@ -63,7 +74,7 @@ export default function Cart() {
 								Go to Checkout
 							</Text>
 							<Text component="span" inherit>
-								<NumberFormatter prefix="$ " suffix=".00" value={subTotal.value} />
+								<NumberFormatter thousandSeparator prefix="$ " suffix=".00" value={subTotal.value} />
 							</Text>
 						</Group>
 					</Paper>

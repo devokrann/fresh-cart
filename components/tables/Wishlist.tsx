@@ -8,6 +8,8 @@ import {
 	ActionIcon,
 	Anchor,
 	Badge,
+	Button,
+	Card,
 	Center,
 	Checkbox,
 	Group,
@@ -26,9 +28,11 @@ import {
 } from "@mantine/core";
 
 import ContextProducts from "@/contexts/Products";
-import { IconTrash } from "@tabler/icons-react";
+import { IconClearAll, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Wishlist.module.scss";
+import Link from "next/link";
+import NotificationEmpty from "../notification/Empty";
 
 export default function Wishlist() {
 	const productsContext = useContext(ContextProducts);
@@ -107,6 +111,11 @@ export default function Wishlist() {
 				)}
 			</TableTd>
 			<TableTd>
+				<Button size="xs" variant="outline" leftSection={<IconShoppingCartPlus size={16} stroke={2} />}>
+					Add to Cart
+				</Button>
+			</TableTd>
+			<TableTd>
 				<ActionIcon size={32} color="red" variant="subtle">
 					<IconTrash size={24} stroke={2} />
 				</ActionIcon>
@@ -114,30 +123,59 @@ export default function Wishlist() {
 		</TableTr>
 	));
 
-	return (
+	return wishlist.length > 0 ? (
 		<Table
 			classNames={classes}
 			withColumnBorders={false}
-			style={{ borderRadius: "var(--mantine-radius-md)", overflow: "hidden" }}
+			captionSide="top"
+			style={{
+				borderRadius: "var(--mantine-radius-md)",
+				borderBottomRightRadius: "var(--mantine-radius-md)",
+				overflow: "hidden",
+			}}
 		>
 			<TableThead>
 				<TableTr>
-					<TableTh />
+					<TableTh style={{ borderTopLeftRadius: "var(--mantine-radius-md)" }} />
 					<TableTh>Image</TableTh>
 					<TableTh ta={"start"}>Product</TableTh>
 					<TableTh>Price</TableTh>
 					<TableTh>Status</TableTh>
 					<TableTh />
+					<TableTh style={{ borderTopRightRadius: "var(--mantine-radius-md)" }} />
 				</TableTr>
 			</TableThead>
 
 			<TableTbody>{rows}</TableTbody>
 
-			<TableCaption opacity={selectedRows.length > 0 ? 1 : 0}>
-				<Anchor underline="hover" inherit>
-					Remove selected products ({selectedRows.length})
-				</Anchor>
+			<TableCaption display={selectedRows.length > 0 ? undefined : "none"}>
+				<Group justify="space-between">
+					<Button
+						variant="subtle"
+						color="gray"
+						leftSection={<IconClearAll size={16} stroke={2} />}
+						onClick={() => setSelectedRows([])}
+					>
+						Clear Selection ({selectedRows.length})
+					</Button>
+
+					<Group>
+						<Button variant="subtle" color="red" leftSection={<IconTrash size={16} stroke={2} />}>
+							Remove selected items ({selectedRows.length})
+						</Button>
+
+						<Button
+							variant="subtle"
+							color="green"
+							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
+						>
+							Add selected items to cart ({selectedRows.length})
+						</Button>
+					</Group>
+				</Group>
 			</TableCaption>
 		</Table>
+	) : (
+		<NotificationEmpty label="wishlist" />
 	);
 }

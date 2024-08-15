@@ -27,6 +27,7 @@ import {
 	IconMapPin,
 	IconBellRinging,
 	IconDashboard,
+	IconHeart,
 } from "@tabler/icons-react";
 
 import classes from "./Avatar.module.scss";
@@ -51,26 +52,31 @@ export default function Avatar() {
 				link: `/dashboard`,
 				label: "Overview",
 			},
-			{
-				icon: IconPackage,
-				link: `/dashboard/orders`,
-				label: "My Orders",
-			},
 		],
 		user: [
 			{
 				icon: IconUser,
-				link: `/account/settings/profile`,
+				link: `/account/profile`,
 				label: "Profile Settings",
 			},
 			{
+				icon: IconHeart,
+				link: `/account/wishlist`,
+				label: "My Wishlist",
+			},
+			{
+				icon: IconPackage,
+				link: `/account/orders`,
+				label: "My Orders",
+			},
+			{
 				icon: IconCoins,
-				link: `/account/settings/payment`,
+				link: `/account/payment`,
 				label: "Payment Details",
 			},
 			{
 				icon: IconMapPin,
-				link: `/account/settings/addresses`,
+				link: `/account/addresses`,
 				label: "Shipping Addresses",
 			},
 			{
@@ -80,7 +86,7 @@ export default function Avatar() {
 			},
 			{
 				icon: IconBellRinging,
-				link: `/account/settings/notifications`,
+				link: `/account/notifications`,
 				label: "Notifications",
 			},
 		],

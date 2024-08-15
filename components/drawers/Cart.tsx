@@ -16,9 +16,10 @@ import {
 	Text,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { IconShoppingCart } from "@tabler/icons-react";
+import { IconMoodEmpty, IconShoppingCart } from "@tabler/icons-react";
 import ProviderIndicatorProducts from "@/providers/indicators/Products";
 import CardProductCart from "../card/product/Cart";
+import NotificationEmpty from "../notification/Empty";
 
 import classes from "./Cart.module.scss";
 
@@ -58,8 +59,16 @@ export default function Cart() {
 				}}
 			>
 				{cart.length > 0 ? (
-					<Stack gap={"xl"}>
-						<Stack gap={0}>
+					<Stack gap={"xl"} justify="space-between">
+						<Stack
+							gap={0}
+							pt={"md"}
+							px={"xs"}
+							style={{
+								height: "calc(100vh - 144px)",
+								overflowY: "scroll",
+							}}
+						>
 							{cart.map(product => (
 								<Box
 									key={product.title}
@@ -78,19 +87,17 @@ export default function Cart() {
 							))}
 						</Stack>
 
-						<Group grow>
-							<Button variant="outline" component={Link} href={"/shop/cart"} onClick={close}>
-								Cart Details
+						<Group grow px={"md"}>
+							<Button variant="outline" onClick={close} component={Link} href={"/shop/cart"}>
+								View Cart
 							</Button>
-							<Button>Checkout</Button>
+							<Button component={Link} href={"/shop/checkout"}>
+								Checkout
+							</Button>
 						</Group>
 					</Stack>
 				) : (
-					<Stack align="center">
-						<Text ta={"center"} mt={"xl"} className="textResponsive">
-							Your cart is empty.
-						</Text>
-					</Stack>
+					<NotificationEmpty label="cart" />
 				)}
 			</Drawer>
 
@@ -98,7 +105,7 @@ export default function Cart() {
 
 			<ProviderIndicatorProducts variant="cart">
 				<Center>
-					<ActionIcon onClick={open} variant="transparent">
+					<ActionIcon onClick={open} variant="transparent" color="gray">
 						<Center>
 							<IconShoppingCart size={24} />
 						</Center>

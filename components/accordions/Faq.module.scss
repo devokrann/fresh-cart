@@ -1,24 +1,20 @@
 .item {
-	border-radius: var(--mantine-radius-sm);
+	border-radius: var(--mantine-radius-md);
 	overflow: hidden;
-	border: 1px solid light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
-	box-shadow: var(--mantine-shadow-xs);
 }
 
 .control {
-	border-radius: var(--mantine-radius-sm);
+	border-radius: var(--mantine-radius-md);
 	transition: 0.25s all ease;
 
 	@include hover {
-		background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
+		background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
 	}
 }
 
 .label {
-	color: light-dark(var(--mantine-color-pri-7), var(--mantine-color-pri-7));
 	font-weight: 500;
 }
 
 .chevron {
-	color: light-dark(var(--mantine-color-pri-7), var(--mantine-color-pri-7));
 }
