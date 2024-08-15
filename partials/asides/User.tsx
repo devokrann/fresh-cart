@@ -10,8 +10,10 @@ import {
 	IconBellRinging,
 	IconChevronRight,
 	IconCoins,
+	IconHeart,
 	IconLogout,
 	IconMapPin,
+	IconPackage,
 	IconSettings,
 	IconUser,
 } from "@tabler/icons-react";
@@ -26,27 +28,37 @@ export default function User() {
 	const navLinkItems = [
 		{
 			icon: IconUser,
-			link: `/settings/profile`,
+			link: `/account/profile`,
 			label: "Profile Settings",
 		},
 		{
+			icon: IconHeart,
+			link: `/account/wishlist`,
+			label: "My Wishlist",
+		},
+		{
+			icon: IconPackage,
+			link: `/account/orders`,
+			label: "My Orders",
+		},
+		{
 			icon: IconCoins,
-			link: `/settings/payment`,
+			link: `/account/payment`,
 			label: "Payment Details",
 		},
 		{
 			icon: IconMapPin,
-			link: `/settings/addresses`,
+			link: `/account/addresses`,
 			label: "Shipping Addresses",
 		},
 		{
 			icon: IconSettings,
-			link: `/settings/account`,
+			link: `/account/settings`,
 			label: "Account Settings",
 		},
 		{
 			icon: IconBellRinging,
-			link: `/settings/notifications`,
+			link: `/account/notifications`,
 			label: "Notifications",
 		},
 	];

@@ -43,7 +43,12 @@ export default async function Main() {
 						<Group gap={"xs"}>
 							<ProviderIndicatorProducts variant="wishlist">
 								<Center>
-									<ActionIcon variant="transparent" component={Link} href={"/shop/wishlist"}>
+									<ActionIcon
+										variant="transparent"
+										component={Link}
+										href={"/account/wishlist"}
+										color="gray"
+									>
 										<Center>
 											<IconHeart size={24} stroke={2} />
 										</Center>
@@ -55,7 +60,7 @@ export default async function Main() {
 
 							{!session?.user ? (
 								<ProviderAuthSignIn>
-									<ActionIcon variant="transparent">
+									<ActionIcon variant="transparent" color="gray">
 										<Center>
 											<IconUser size={24} stroke={2} />
 										</Center>
