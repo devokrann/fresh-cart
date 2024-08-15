@@ -1,20 +1,14 @@
 import React from "react";
 
-import { Metadata } from "next";
-
 import LayoutBody from "@/layouts/Body";
-
+import { Metadata } from "next";
 import contact from "@/data/contact";
 
-export interface typeParams {
-	blogId: string;
-}
-
 export const metadata: Metadata = {
-	title: { default: "Blog", template: `%s - Blog - ${contact.name.app}` },
+	title: { default: "Product", template: `%s - Product - Shop - ${contact.name.app}` },
 };
 
-export default function LayoutBlog({
+export default function Product({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;

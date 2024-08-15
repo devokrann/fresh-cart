@@ -11,7 +11,7 @@ import LayoutSection from "@/layouts/Section";
 import images from "@/assets/images";
 import contact from "@/data/contact";
 
-export default function Notify({
+export default function LayoutNotify({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;

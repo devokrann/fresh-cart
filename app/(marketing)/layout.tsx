@@ -7,15 +7,16 @@ import HeaderMain from "@/partials/headers/Main";
 
 import AffixTop from "@/components/affixi/Top";
 
-export default function Marketing({
+export default function LayoutMarketing({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;
 }) {
 	return (
 		<LayoutBody header={<HeaderMain />} nav={<NavbarMain />} footer={<FooterMain />}>
-			<AffixTop />
 			<main>{children}</main>
+
+			<AffixTop />
 		</LayoutBody>
 	);
 }

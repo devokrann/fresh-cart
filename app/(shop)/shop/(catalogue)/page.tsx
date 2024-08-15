@@ -28,7 +28,6 @@ import stores from "@/data/stores";
 
 export default function Shop() {
 	return (
-		<LayoutPage>
 			<LayoutPage padded stacked="lg">
 				<LayoutSection>
 					<Card bg={"gray.1"} p={40}>
@@ -150,6 +149,5 @@ export default function Shop() {
 					</Group>
 				</LayoutSection>
 			</LayoutPage>
-		</LayoutPage>
 	);
 }

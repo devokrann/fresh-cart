@@ -9,11 +9,14 @@ import FormUserProfileDetails from "@/partials/forms/user/profile/Details";
 import initialize from "@/handlers/parsers/string/initialize";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Profile" };
 
 export default async function Profile() {
 	const session = await auth();
 
-	!session?.user && redirect("/");
+	// !session?.user && redirect("/");
 
 	return (
 		<LayoutPage stacked>

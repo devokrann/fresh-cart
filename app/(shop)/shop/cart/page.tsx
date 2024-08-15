@@ -17,7 +17,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import { IconArrowRight, IconMail, IconPhone, IconTrash } from "@tabler/icons-react";
+import { IconArrowRight, IconChevronLeft, IconMail, IconPhone, IconRefresh, IconTrash } from "@tabler/icons-react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
@@ -61,10 +61,16 @@ export default async function Cart() {
 							<TableCart />
 
 							<Group justify="space-between">
-								<Button component={Link} href={"/shop"}>
+								<Button
+									component={Link}
+									href={"/shop"}
+									leftSection={<IconChevronLeft size={16} stroke={2} />}
+								>
 									Continue Shopping
 								</Button>
-								<Button color="black">Update Cart</Button>
+								<Button color="black" leftSection={<IconRefresh size={16} stroke={2} />}>
+									Update Cart
+								</Button>
 							</Group>
 						</Stack>
 					</GridCol>

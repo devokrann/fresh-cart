@@ -29,18 +29,18 @@ import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
 
-export const metadata: Metadata = { title: "Wishlist" };
+export const metadata: Metadata = { title: "Orders" };
 
-export default async function Wishlist() {
+export default async function Orders() {
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"responsive"}>
+			<LayoutSection>
 				<Grid gutter={{ md: 48 }}>
 					<GridCol span={12}>
 						<Group align="start" justify="space-between">
 							<Stack gap={0}>
 								<Title order={2} fw={"bold"}>
-									My Wishlist
+									My Orders
 								</Title>
 								<Text fz={"lg"}>There are {"5"} products in your wishlist.</Text>
 							</Stack>
