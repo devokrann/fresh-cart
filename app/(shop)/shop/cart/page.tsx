@@ -17,7 +17,15 @@ import {
 	Title,
 } from "@mantine/core";
 
-import { IconArrowRight, IconChevronLeft, IconMail, IconPhone, IconRefresh, IconTrash } from "@tabler/icons-react";
+import {
+	IconArrowRight,
+	IconChevronLeft,
+	IconChevronRight,
+	IconMail,
+	IconPhone,
+	IconRefresh,
+	IconTrash,
+} from "@tabler/icons-react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
@@ -25,6 +33,8 @@ import FormContact from "@/partials/forms/Contact";
 import AccordionFaq from "@/components/accordions/Faq";
 import TableCart from "@/components/tables/Cart";
 import CardShopCart from "@/components/card/shop/Cart";
+
+import ProviderProductCart from "@/providers/products/Cart";
 
 import TemplateEmailContact from "@/templates/email/Contact";
 
@@ -44,15 +54,20 @@ export default async function Cart() {
 								<Title order={2} fw={"bold"}>
 									My Cart
 								</Title>
-								<Text fz={"lg"}>There are {"5"} products in your cart.</Text>
+								<Text inherit>There are {"5"} products in your cart.</Text>
 							</Stack>
 
-							<ButtonGroup>
-								<Button variant="outline" leftSection={<IconTrash size={16} stroke={2} />}>
-									Clear Cart
+							<Group gap={"xs"}>
+								<ProviderProductCart operation={{ type: "clear", unmount: true }}>
+									<Button variant="outline" leftSection={<IconTrash size={16} stroke={2} />}>
+										Clear Cart
+									</Button>
+								</ProviderProductCart>
+
+								<Button color="black" leftSection={<IconRefresh size={16} stroke={2} />}>
+									Update Cart
 								</Button>
-								<Button rightSection={<IconArrowRight size={16} stroke={2} />}>Checkout</Button>
-							</ButtonGroup>
+							</Group>
 						</Group>
 					</GridCol>
 
@@ -64,12 +79,19 @@ export default async function Cart() {
 								<Button
 									component={Link}
 									href={"/shop"}
+									variant="outline"
+									c={"pri.6"}
 									leftSection={<IconChevronLeft size={16} stroke={2} />}
 								>
 									Continue Shopping
 								</Button>
-								<Button color="black" leftSection={<IconRefresh size={16} stroke={2} />}>
-									Update Cart
+
+								<Button
+									component={Link}
+									href={"/shop/checkout"}
+									rightSection={<IconChevronRight size={16} stroke={2} />}
+								>
+									Proceed to Checkout
 								</Button>
 							</Group>
 						</Stack>

@@ -34,9 +34,9 @@ import TemplateEmailContact from "@/templates/email/Contact";
 import contact from "@/data/contact";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Order Complete" };
+export const metadata: Metadata = { title: "Order Placed" };
 
-export default async function OrderComplete() {
+export default async function OrderPlaced() {
 	return (
 		<LayoutPage>
 			<LayoutSection padded={120} containerized={"xs"}>
@@ -57,15 +57,12 @@ export default async function OrderComplete() {
 							Your Order Has Been Placed!
 						</Title>
 						<Text fz={"lg"} ta={"center"}>
-							Your order{" "}
-							<Anchor inherit href="#" underline="always">
-								673290789
-							</Anchor>{" "}
-							has been completed. Your order details are shown for your personal accont.
+							Thank you, {"Julie"}. Your order has been completed. Your order hasn&apos;t shipped yet but
+							we will send you an email when it does.
 						</Text>
 					</Stack>
 
-					<Button size="lg" component={Link} href={"#"}>
+					<Button size="lg" component={Link} href={"/account/orders"}>
 						View Orders
 					</Button>
 				</Stack>

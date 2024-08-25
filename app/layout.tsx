@@ -31,8 +31,6 @@ import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
 
-import AffixTheme from "@/components/affixi/Theme";
-
 import ProviderContextProducts from "@/providers/context/Products";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
@@ -69,8 +67,7 @@ export default async function App({
 						</SessionProvider>
 					</ModalsProvider>
 
-					<Notifications limit={3} />
-					<AffixTheme />
+					<Notifications limit={3} position="top-center" />
 				</MantineProvider>
 
 				<SpeedInsights />

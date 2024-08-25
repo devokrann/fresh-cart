@@ -59,7 +59,7 @@ export default function Post({ params }: { params: typeParams }) {
 		<LayoutPage padded stacked="xl">
 			<LayoutSection containerized={"md"}>
 				<Stack gap={"xl"}>
-					<Stack>
+					<Stack align="center">
 						<Anchor
 							underline="never"
 							component={Link}

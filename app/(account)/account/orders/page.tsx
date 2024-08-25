@@ -23,7 +23,7 @@ import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormContact from "@/partials/forms/Contact";
 import AccordionFaq from "@/components/accordions/Faq";
-import TableWishlist from "@/components/tables/Wishlist";
+import TableOrders from "@/components/tables/orders/Main";
 
 import TemplateEmailContact from "@/templates/email/Contact";
 
@@ -37,20 +37,18 @@ export default async function Orders() {
 			<LayoutSection>
 				<Grid gutter={{ md: 48 }}>
 					<GridCol span={12}>
-						<Group align="start" justify="space-between">
+						<Group>
 							<Stack gap={0}>
 								<Title order={2} fw={"bold"}>
 									My Orders
 								</Title>
-								<Text fz={"lg"}>There are {"5"} products in your wishlist.</Text>
+								<Text fz={"lg"}>You have placed {"5"} orders.</Text>
 							</Stack>
-
-							<Button leftSection={<IconTrash size={16} stroke={2} />}>Clear Whishlist</Button>
 						</Group>
 					</GridCol>
 
 					<GridCol span={12}>
-						<TableWishlist />
+						<TableOrders />
 					</GridCol>
 				</Grid>
 			</LayoutSection>

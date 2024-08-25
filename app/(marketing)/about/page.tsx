@@ -120,7 +120,7 @@ export default async function About() {
 				padded
 				shadowed
 				containerized={"responsive"}
-				bg={"light-dark(var(--mantine-color-pri-8),var(--mantine-color-pri-8))"}
+				bg={"light-dark(var(--mantine-color-pri-6),var(--mantine-color-pri-light))"}
 				c={"light-dark(var(--mantine-color-white),var(--mantine-color-white))"}
 			>
 				<Stack gap={"xl"}>

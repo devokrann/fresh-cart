@@ -25,6 +25,8 @@ import FormContact from "@/partials/forms/Contact";
 import AccordionFaq from "@/components/accordions/Faq";
 import TableWishlist from "@/components/tables/Wishlist";
 
+import ProviderProductWishlist from "@/providers/products/Wishlist";
+
 import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
@@ -42,10 +44,12 @@ export default async function Wishlist() {
 								<Title order={2} fw={"bold"}>
 									My Wishlist
 								</Title>
-								<Text fz={"lg"}>There are {"5"} products in your wishlist.</Text>
+								<Text inherit>There are {"5"} products in your wishlist.</Text>
 							</Stack>
 
-							<Button leftSection={<IconTrash size={16} stroke={2} />}>Clear Whishlist</Button>
+							<ProviderProductWishlist operation={{ type: "clear", unmount: true }}>
+								<Button leftSection={<IconTrash size={16} stroke={2} />}>Clear Whishlist</Button>
+							</ProviderProductWishlist>
 						</Group>
 					</GridCol>
 

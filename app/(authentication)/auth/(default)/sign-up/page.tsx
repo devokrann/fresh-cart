@@ -5,7 +5,7 @@ import NextImage from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Box, Center, Flex, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
@@ -29,7 +29,30 @@ export default async function SignUp() {
 
 	return (
 		<LayoutPage>
-			<FormAuthSignUp />
+			<LayoutSection padded containerized={"responsive"}>
+				<Grid align="center">
+					<GridCol span={{ base: 12, md: 6 }}>
+						<LayoutSection containerized="xs">
+							<Stack>
+								<Image
+									src={images.auth.signup}
+									alt={"Sign Up"}
+									radius={"md"}
+									component={NextImage}
+									width={1920}
+									height={1080}
+									priority
+								/>
+							</Stack>
+						</LayoutSection>
+					</GridCol>
+					<GridCol span={{ base: 12, md: 6 }}>
+						<LayoutSection containerized="xs">
+							<FormAuthSignUp />
+						</LayoutSection>
+					</GridCol>
+				</Grid>
+			</LayoutSection>
 		</LayoutPage>
 	);
 }
