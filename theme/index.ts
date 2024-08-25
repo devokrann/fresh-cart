@@ -7,6 +7,7 @@ import title from "./components/title";
 import text from "./components/text";
 
 import {
+	Autocomplete,
 	Badge,
 	Button,
 	Container,
@@ -97,6 +98,7 @@ const projectName = createTheme({
 	components: {
 		PasswordInput: PasswordInput.extend(input.password),
 		Select: Select.extend(input.select),
+		Autocomplete: Autocomplete.extend(input.autocomplete),
 		TextInput: TextInput.extend(input.text),
 		Textarea: Textarea.extend(input.textarea),
 		Title: Title.extend(title),
