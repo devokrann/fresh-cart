@@ -1,7 +1,7 @@
 import { Stack, Text, Title } from "@mantine/core";
 import React from "react";
 
-export default function Header({ data }: { data: { title: string; desc: string } }) {
+export default function Header({ data }: { data: { title: string; desc: string | React.ReactNode } }) {
 	return (
 		<Stack gap={"xs"}>
 			<Title order={2} ta={{ base: "center", md: "start" }}>

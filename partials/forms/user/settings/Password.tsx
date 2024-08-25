@@ -35,9 +35,11 @@ export default function Password() {
 		validate: {
 			passwordCurrent: value => password(value, 8, 24),
 			password: (value, values) =>
-				value == values.passwordCurrent
-					? "Current and new passwords cannot be the same"
-					: password(value, 8, 24),
+				value.length > 0
+					? value == values.passwordCurrent
+						? "Current and new passwords cannot be the same"
+						: password(value, 8, 24)
+					: "Please fill out this field",
 			passwordConfirm: (value, values) => compare.string(value, values.password, "Password"),
 		},
 	});

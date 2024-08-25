@@ -8,12 +8,12 @@ import images from "@/assets/images";
 
 export default function Landscape() {
 	return (
-		<Anchor underline="never" component={Link} c={"dark.4"} href={"/"}>
+		<Anchor underline="never" component={Link} c={"var(--mantine-color-text)"} href={"/"}>
 			<Group gap={"xs"}>
 				<Image
 					src={images.brand.icon}
 					alt="FreshCart"
-					h={{ sm: 32, md: 40 }}
+					h={{ base: 24, sm: 32, md: 40 }}
 					component={NextImage}
 					width={1920}
 					height={1080}

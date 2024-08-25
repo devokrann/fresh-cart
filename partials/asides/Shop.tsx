@@ -23,7 +23,7 @@ export default function Shop() {
 						</Title>
 
 						<Stack gap={0}>
-							<NavShop data={categories.products} />
+							<NavShop data={categories} />
 						</Stack>
 					</Stack>
 				</LayoutSection>
@@ -73,7 +73,9 @@ export default function Shop() {
 				</LayoutSection>
 
 				<Group grow>
-					<Button variant="outline">Reset</Button>
+					<Button variant="outline" color={"pri.6"}>
+						Reset
+					</Button>
 					<Button>Apply</Button>
 				</Group>
 

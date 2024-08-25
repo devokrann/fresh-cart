@@ -32,7 +32,7 @@ export default function Shop() {
 		<LayoutSection
 			containerized="responsive"
 			padded
-			bg={"light-dark(var(--mantine-color-gray-0),var(--mantine-color-gray-0))"}
+			bg={"light-dark(var(--mantine-color-gray-0),var(--mantine-color-gray-light))"}
 		>
 			<Grid>
 				{data.map(item => (

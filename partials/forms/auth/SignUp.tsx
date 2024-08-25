@@ -385,81 +385,87 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			<Transition mounted={!verify} transition="fade" duration={0}>
 				{styles => (
 					<div style={styles}>
-						<LayoutSection padded containerized={"xs"}>
-							<Stack gap={40} px={{ md: 40 }}>
-								<AuthHeader
-									data={{
-										title: "Create Your Account",
-										desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
-									}}
-								/>
-
-								<Box
-									component="form"
-									onSubmit={form.onSubmit(values => handleSignUp(values))}
-									noValidate
-								>
-									<Stack gap={40}>
-										<Grid>
-											<GridCol span={{ base: 12, sm: 12 }}>
-												<TextInput
-													required
-													label={"Email"}
-													placeholder="Your Email"
-													{...form.getInputProps("email")}
-												/>
-											</GridCol>
-											<GridCol span={{ base: 12, xs: 12 }}>
-												<PasswordInput
-													required
-													label={"Password"}
-													placeholder="Your password"
-													{...form.getInputProps("password")}
-												/>
-											</GridCol>
-											<GridCol span={{ base: 12, xs: 12 }}>
-												<PasswordInput
-													required
-													label={"Confirm Password"}
-													placeholder="Confirm your password"
-													{...form.getInputProps("passwordConfirm")}
-												/>
-											</GridCol>
-											<GridCol span={12} mt={"lg"}>
-												<Center>
-													<Button
-														w={{ base: "100%", xs: "50%", md: "100%" }}
-														type="submit"
-														loading={submitted}
-													>
-														{submitted ? "Signing Up" : "Sign Up"}
-													</Button>
-												</Center>
-											</GridCol>
-										</Grid>
-
-										<Divider label="or continue with" />
-
-										<AuthProviders />
-
-										<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
-											Already have an account?{" "}
-											<Anchor
-												inherit
-												fw={500}
-												underline="hover"
-												onClick={async e => {
-													e.preventDefault();
-													await authSignIn();
-												}}
-											>
-												Sign In
+						<Stack gap={"xl"}>
+							<AuthHeader
+								data={{
+									title: "Create Your Account",
+									desc: (
+										<Text inherit component="span">
+											By continuing, you agree to our{" "}
+											<Anchor inherit component={Link} href="#">
+												Terms of Service
+											</Anchor>{" "}
+											&{" "}
+											<Anchor inherit component={Link} href="#">
+												Privacy Policy
 											</Anchor>
+											.
 										</Text>
-									</Stack>
-								</Box>
-							</Stack>
-						</LayoutSection>
+									),
+								}}
+							/>
+
+							<Box component="form" onSubmit={form.onSubmit(values => handleSignUp(values))} noValidate>
+								<Stack gap={40}>
+									<Grid>
+										<GridCol span={{ base: 12, sm: 12 }}>
+											<TextInput
+												required
+												label={"Email"}
+												placeholder="Your Email"
+												{...form.getInputProps("email")}
+											/>
+										</GridCol>
+										<GridCol span={{ base: 12, xs: 12 }}>
+											<PasswordInput
+												required
+												label={"Password"}
+												placeholder="Your password"
+												{...form.getInputProps("password")}
+											/>
+										</GridCol>
+										<GridCol span={{ base: 12, xs: 12 }}>
+											<PasswordInput
+												required
+												label={"Confirm Password"}
+												placeholder="Confirm your password"
+												{...form.getInputProps("passwordConfirm")}
+											/>
+										</GridCol>
+										<GridCol span={12} mt={"lg"}>
+											<Center>
+												<Button
+													w={{ base: "100%", xs: "50%", md: "100%" }}
+													type="submit"
+													loading={submitted}
+												>
+													{submitted ? "Signing Up" : "Sign Up"}
+												</Button>
+											</Center>
+										</GridCol>
+									</Grid>
+
+									<Divider label="or continue with" />
+
+									<AuthProviders />
+
+									<Text fz={{ base: "xs", lg: "sm" }} ta={"center"}>
+										Already have an account?{" "}
+										<Anchor
+											inherit
+											fw={500}
+											underline="hover"
+											onClick={async e => {
+												e.preventDefault();
+												await authSignIn();
+											}}
+										>
+											Sign In
+										</Anchor>
+									</Text>
+								</Stack>
+							</Box>
+						</Stack>
 					</div>
 				)}
 			</Transition>
@@ -467,91 +473,85 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 			<Transition mounted={verify} transition="fade" duration={0}>
 				{styles => (
 					<div style={styles}>
-						<LayoutSection padded containerized={"xs"}>
-							<Stack gap={40} px={{ md: 40 }}>
-								<AuthHeader
-									data={{
-										title: "Verify Your Account",
-										desc: `A one-time code has been sent to the provided email ${form.values.email}. Enter
+						<Stack gap={"xl"}>
+							<AuthHeader
+								data={{
+									title: "Verify Your Account",
+									desc: `A one-time code has been sent to the provided email ${form.values.email}. Enter
 										the code below to verify.`,
-									}}
-								/>
+								}}
+							/>
 
-								<Box
-									component="form"
-									onSubmit={form2.onSubmit(values => handleVerify(values))}
-									noValidate
-								>
-									<Stack gap={"xl"}>
-										<Grid>
-											<GridCol span={{ base: 12 }}>
-												<Stack gap={4} align="end">
-													<TextInput
-														required
-														label={`One-time Code`}
-														placeholder="Your Code"
-														{...form2.getInputProps("otp")}
-														w={"100%"}
-													/>
-													<Anchor
-														underline="hover"
-														inherit
-														fz={"xs"}
-														ta={"end"}
-														w={"fit-content"}
-														onClick={() => switchContext()}
-													>
-														Change email
-													</Anchor>
-												</Stack>
-											</GridCol>
-											<GridCol span={{ base: 12 }}>
-												<Grid mt={"md"}>
-													<GridCol span={{ base: 12, xs: 6 }}>
-														<Button
-															fullWidth
-															loading={requested}
-															variant="light"
-															onClick={() => handleRequest()}
-														>
-															{requested ? "Requesting" : "Request Another"}
-														</Button>
-													</GridCol>
-													<GridCol span={{ base: 12, xs: 6 }}>
-														<Button fullWidth type="submit" loading={submitted}>
-															{submitted ? "Verifying" : "Verify"}
-														</Button>
-													</GridCol>
-												</Grid>
-											</GridCol>
-										</Grid>
-
-										<Transition mounted={time != undefined} transition="fade" duration={0}>
-											{styles => (
-												<Box
-													style={{ ...styles, transition: "0.25s all ease" }}
-													opacity={requested ? "0" : "1"}
+							<Box component="form" onSubmit={form2.onSubmit(values => handleVerify(values))} noValidate>
+								<Stack gap={"xl"}>
+									<Grid>
+										<GridCol span={{ base: 12 }}>
+											<Stack gap={4} align="end">
+												<TextInput
+													required
+													label={`One-time Code`}
+													placeholder="Your Code"
+													{...form2.getInputProps("otp")}
+													w={"100%"}
+												/>
+												<Anchor
+													underline="hover"
+													inherit
+													fz={"xs"}
+													ta={"end"}
+													w={"fit-content"}
+													onClick={() => switchContext()}
 												>
-													<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>
-														<Text c={"dimmed"} inherit>
-															If the email you provided is valid, you should have received
-															it. Remember to check your spam/junk folder(s).
+													Change email
+												</Anchor>
+											</Stack>
+										</GridCol>
+										<GridCol span={{ base: 12 }}>
+											<Grid mt={"md"}>
+												<GridCol span={{ base: 12, xs: 6 }}>
+													<Button
+														fullWidth
+														loading={requested}
+														variant="light"
+														onClick={() => handleRequest()}
+													>
+														{requested ? "Requesting" : "Request Another"}
+													</Button>
+												</GridCol>
+												<GridCol span={{ base: 12, xs: 6 }}>
+													<Button fullWidth type="submit" loading={submitted}>
+														{submitted ? "Verifying" : "Verify"}
+													</Button>
+												</GridCol>
+											</Grid>
+										</GridCol>
+									</Grid>
+
+									<Transition mounted={time != undefined} transition="fade" duration={0}>
+										{styles => (
+											<Box
+												style={{ ...styles, transition: "0.25s all ease" }}
+												opacity={requested ? "0" : "1"}
+											>
+												<Stack ta={"center"} fz={{ base: "xs", xs: "sm" }}>
+													<Text c={"dimmed"} inherit>
+														If the email you provided is valid, you should have received it.
+														Remember to check your spam/junk folder(s).
+													</Text>
+													<Text c={"dimmed"} inherit>
+														You can otherwise request another code in{" "}
+														<Text component="span" inherit c={"pri"} fw={500}>
+															{time?.minutes} minutes
 														</Text>
-														<Text c={"dimmed"} inherit>
-															You can otherwise request another code in{" "}
-															<Text component="span" inherit c={"pri"} fw={500}>
-																{time?.minutes} minutes
-															</Text>
-															.
-														</Text>
-													</Stack>
-												</Box>
-											)}
-										</Transition>
-									</Stack>
-								</Box>
-							</Stack>
-						</LayoutSection>
+														.
+													</Text>
+												</Stack>
+											</Box>
+										)}
+									</Transition>
+								</Stack>
+							</Box>
+						</Stack>
 					</div>
 				)}
 			</Transition>
