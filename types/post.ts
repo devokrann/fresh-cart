@@ -1,15 +1,13 @@
-import { StaticImageData } from "next/image";
+import { typeUser } from "./user";
 
-export interface typeBlog {
+export interface typePost {
 	image: string;
 	title: string;
-	description: { preview: string; quote: { text: string; person: string } };
+	description: { quote: { text: string; person: string }; preview: string; prose: string[] };
 	date: string;
 	length: number;
 	category: string;
-	author: {
-		image: string;
-		name: string;
-		position: string;
-	};
+
+	// relationships
+	author: typeUser;
 }

@@ -1,9 +1,7 @@
-import { StaticImageData } from "next/image";
-
 export interface typeStore {
-	image: StaticImageData;
+	image: string;
 	title: string;
 	goods: string[];
-	delivery: { available: boolean; time?: string };
 	distance: number;
+	delivery: { available: boolean; time?: string };
 }

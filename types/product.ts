@@ -1,17 +1,30 @@
-import { StaticImageData } from "next/image";
+import { typeRating } from "./rating";
+
+export interface typeVariant {
+	id: string;
+	image: string;
+	available: boolean;
+	price: { former: number | null; present: number };
+	unit: { type: "mass" | "volume" | "size"; value: string };
+}
 
 export interface typeProduct {
-	image: string;
-	category: string;
+	id: string;
 	title: string;
-	rating: { value: number; raters: number };
-	price: { former?: number; present: number };
-	badge?: { color: string; label: string };
-	variants: {
-		weight?: number[];
-		capacity?: number[];
-	};
-	shipping: { days: number };
+	desc: string;
+	category: string;
+	code: string;
+	brand: string;
 	available: boolean;
-	quantity?: number;
+	shipping: { days: number };
+	status: { sale: boolean; hot: boolean };
+	variants: typeVariant[];
+
+	// relationships
+	rating: typeRating;
+}
+
+export interface typeProductVariant {
+	product: typeProduct;
+	variant: typeVariant;
 }
