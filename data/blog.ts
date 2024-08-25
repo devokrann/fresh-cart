@@ -1,6 +1,7 @@
 import images from "@/assets/images";
+import { typePost } from "@/types/post";
 
-const blog = [
+const blog: typePost[] = [
 	{
 		image: images.blogs.image1,
 		title: "No-Boil Baked Penne with Meatballs",

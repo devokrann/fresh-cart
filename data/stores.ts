@@ -1,6 +1,7 @@
 import images from "@/assets/images";
+import { typeStore } from "@/types/store";
 
-const stores = [
+const stores: typeStore[] = [
 	{
 		image: images.stores.image1,
 		title: "E-Grocery Mart",
