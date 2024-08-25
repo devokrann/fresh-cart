@@ -25,12 +25,12 @@ body {
 
 body {
 	@include light {
-		color: var(--mantine-color-dark-4);
+		color: var(--mantine-color-dark-6);
 		background-color: var(--mantine-color-body);
 	}
 
 	@include dark {
-		color: var(--mantine-color-dark-4);
+		color: var(--mantine-color-dark-1);
 		background-color: var(--mantine-color-body);
 	}
 }
