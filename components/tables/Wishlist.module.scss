@@ -17,3 +17,12 @@
 	padding: var(--mantine-spacing-xs);
 	border-radius: var(--mantine-radius-md);
 }
+
+.link {
+	transition: 0.25s all ease;
+	color: var(--mantine-color-text);
+
+	@include hover {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+}

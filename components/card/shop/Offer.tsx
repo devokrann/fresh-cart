@@ -12,7 +12,7 @@ export default function Offer({ discount }: { discount: number }) {
 
 			<Stack align="start">
 				<Stack gap={4}>
-					<Title order={2} fz={28} lh={1}>
+					<Title order={2} fz={28} lh={1} c={"dark.6"}>
 						Fresh Fruits
 					</Title>
 					<Text fz={"sm"} c={"dark.4"}>

@@ -8,7 +8,7 @@ import { StaticImageData } from "next/image";
 import { Stack, Tabs, Image, Grid, GridCol } from "@mantine/core";
 import { IconPhoto, IconMessageCircle, IconSettings } from "@tabler/icons-react";
 
-import classes from "./Product.module.scss";
+import classes from "./Images.module.scss";
 import { useMediaQuery } from "@mantine/hooks";
 import images from "@/assets/images";
 
@@ -36,7 +36,7 @@ interface typeImage {
 	alt: string;
 }
 
-export default function Product({ images = imagesSample }: { images?: typeImage[] }) {
+export default function Images({ images = imagesSample }: { images?: typeImage[] }) {
 	const mobile = useMediaQuery("(max-width: 36em)");
 	const tablet = useMediaQuery("(min-width: 48em)");
 	const desktop = useMediaQuery("(min-width: 62em)");

@@ -11,6 +11,7 @@ import {
 	Drawer,
 	Group,
 	Indicator,
+	NumberFormatter,
 	Skeleton,
 	Stack,
 	Text,
@@ -25,6 +26,8 @@ import classes from "./Cart.module.scss";
 
 import ContextProducts from "@/contexts/Products";
 import Link from "next/link";
+import compoundId from "@/handlers/parsers/string/compoundId";
+import total from "@/handlers/total";
 
 export default function Cart() {
 	const productsContext = useContext(ContextProducts);
@@ -58,8 +61,8 @@ export default function Cart() {
 					title: classes.title,
 				}}
 			>
-				{cart.length > 0 ? (
-					<Stack gap={"xl"} justify="space-between">
+				<Stack gap={"xl"} justify="space-between" style={{ height: "calc(100vh - 80px)" }}>
+					{cart.length > 0 ? (
 						<Stack
 							gap={0}
 							pt={"md"}
@@ -69,26 +72,48 @@ export default function Cart() {
 								overflowY: "scroll",
 							}}
 						>
-							{cart.map(product => (
+							{cart.map(item => (
 								<Box
-									key={product.title}
+									key={compoundId.getCompoundId(item)}
 									style={{
 										borderTop:
-											cart.indexOf(product) > 0
+											cart.indexOf(item) > 0
 												? "1px solid var(--mantine-color-default-border)"
 												: "",
-										paddingTop: cart.indexOf(product) > 0 ? "var(--mantine-spacing-xs)" : "",
+										paddingTop: cart.indexOf(item) > 0 ? "var(--mantine-spacing-xs)" : "",
 										paddingBottom:
-											cart.indexOf(product) < cart.length - 1 ? "var(--mantine-spacing-xs)" : "",
+											cart.indexOf(item) < cart.length - 1 ? "var(--mantine-spacing-xs)" : "",
 									}}
 								>
-									<CardProductCart data={product} />
+									<CardProductCart data={item} />
 								</Box>
 							))}
 						</Stack>
+					) : (
+						<NotificationEmpty label="cart" />
+					)}
 
-						<Group grow px={"md"}>
-							<Button variant="outline" onClick={close} component={Link} href={"/shop/cart"}>
+					<Stack gap={"xs"} px={"md"}>
+						<Group fz={"xl"} justify="space-between">
+							<Text inherit>Subtotal: </Text>
+							<Text inherit fw={"bold"}>
+								<NumberFormatter
+									prefix="$ "
+									suffix=".00"
+									value={total.getTotal(cart)}
+									thousandSeparator
+								/>
+							</Text>
+						</Group>
+
+						<Group grow>
+							<Button
+								variant="outline"
+								onClick={close}
+								component={Link}
+								href={"/shop/cart"}
+								color="pri.6"
+							>
 								View Cart
 							</Button>
 							<Button component={Link} href={"/shop/checkout"}>
@@ -96,9 +121,7 @@ export default function Cart() {
 							</Button>
 						</Group>
 					</Stack>
-				) : (
-					<NotificationEmpty label="cart" />
-				)}
+				</Stack>
 			</Drawer>
 
 			{/* <Skeleton height={mobile ? 16 : tablet ? 20 : 20} circle /> */}
@@ -107,7 +130,7 @@ export default function Cart() {
 				<Center>
 					<ActionIcon onClick={open} variant="transparent" color="gray">
 						<Center>
-							<IconShoppingCart size={24} />
+							<IconShoppingCart size={24} stroke={1} />
 						</Center>
 					</ActionIcon>
 				</Center>

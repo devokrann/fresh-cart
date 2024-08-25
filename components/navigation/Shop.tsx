@@ -9,20 +9,17 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 import classes from "./Shop.module.scss";
 
-interface typeMenuShop {
-	title: string;
-	subcategories: string[];
-}
+import { typeCategories } from "@/types/categories";
 
-export default function Shop({ data, ...restProps }: { data: typeMenuShop[] } & React.ComponentProps<typeof Burger>) {
+export default function Shop({ data, ...restProps }: { data: typeCategories[] } & React.ComponentProps<typeof Burger>) {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const pathname = usePathname();
 	const mobile = useMediaQuery("(max-width: 36em)");
 
 	return data.map(link => {
 		const subCategories =
-			link.subcategories &&
-			link.subcategories.map(subLink => (
+			link.subCategories &&
+			link.subCategories.map(subLink => (
 				<NavLink
 					key={subLink}
 					label={subLink}

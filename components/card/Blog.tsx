@@ -19,7 +19,7 @@ import {
 
 import classes from "./Blog.module.scss";
 
-import { typeBlog } from "@/types/post";
+import { typePost } from "@/types/post";
 import link from "@/handlers/parsers/string/link";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ export default function Blog({
 	data,
 	orientation = "vertical",
 }: {
-	data: typeBlog;
+	data: typePost;
 	orientation?: "vertical" | "horizontal";
 }) {
 	return (
@@ -60,7 +60,7 @@ export default function Blog({
 					h={"100%"}
 					px={orientation == "vertical" ? undefined : { base: 0, md: "lg" }}
 				>
-					<Anchor underline="never" component={Link} href={`#/blog/category/${link.linkify(data.category)}`}>
+					<Anchor underline="never" component={Link} href={`/blog/categories/${link.linkify(data.category)}`}>
 						<Text className={classes.category} fw={500}>
 							{data.category}
 						</Text>

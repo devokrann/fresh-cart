@@ -28,6 +28,9 @@ import {
 	IconBellRinging,
 	IconDashboard,
 	IconHeart,
+	IconStar,
+	IconHelpCircle,
+	IconInfoCircle,
 } from "@tabler/icons-react";
 
 import classes from "./Avatar.module.scss";
@@ -35,6 +38,7 @@ import classes from "./Avatar.module.scss";
 import initialize from "@/handlers/parsers/string/initialize";
 
 import { useSession } from "next-auth/react";
+import users from "@/data/users";
 
 export default function Avatar() {
 	const session = useSession();
@@ -43,22 +47,8 @@ export default function Avatar() {
 
 	const sizeAvatar = mobile ? 28 : 36;
 
-	const user = session.data?.user;
-
 	const menuItems = {
-		app: [
-			{
-				icon: IconDashboard,
-				link: `/dashboard`,
-				label: "Overview",
-			},
-		],
-		user: [
-			{
-				icon: IconUser,
-				link: `/account/profile`,
-				label: "Profile Settings",
-			},
+		activity: [
 			{
 				icon: IconHeart,
 				link: `/account/wishlist`,
@@ -70,6 +60,18 @@ export default function Avatar() {
 				label: "My Orders",
 			},
 			{
+				icon: IconStar,
+				link: `/account/reviews`,
+				label: "My Reviews",
+			},
+		],
+		user: [
+			{
+				icon: IconUser,
+				link: `/account/profile`,
+				label: "Profile Settings",
+			},
+			{
 				icon: IconCoins,
 				link: `/account/payment`,
 				label: "Payment Details",
@@ -77,17 +79,24 @@ export default function Avatar() {
 			{
 				icon: IconMapPin,
 				link: `/account/addresses`,
-				label: "Shipping Addresses",
-			},
-			{
-				icon: IconSettings,
-				link: `/account/settings`,
-				label: "Account Settings",
+				label: "Addresses",
 			},
 			{
 				icon: IconBellRinging,
 				link: `/account/notifications`,
 				label: "Notifications",
+			},
+		],
+		help: [
+			{
+				icon: IconHelpCircle,
+				link: `/help`,
+				label: "Help Center",
+			},
+			{
+				icon: IconInfoCircle,
+				link: `/legal/terms-and-conditions`,
+				label: "Terms and Conditions",
 			},
 		],
 		danger: [
@@ -100,29 +109,24 @@ export default function Avatar() {
 		],
 	};
 
+	// sample user
+	const user = users[2];
+
 	return (
-		<Menu position={"bottom-end"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
+		<Menu position={"bottom"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
 			<MenuTarget>
-				{user ? (
-					!user?.image ? (
-						<MantineAvatar
-							size={sizeAvatar}
-							title={user.name ? user.name : "User"}
-							className={classes.avatar}
-						>
-							{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
-						</MantineAvatar>
-					) : (
-						<MantineAvatar
-							src={user.image}
-							alt={user.name ? user.name : "User"}
-							size={sizeAvatar}
-							title={user.name ? user.name : "User"}
-							className={classes.avatar}
-						/>
-					)
+				{!user?.image ? (
+					<MantineAvatar size={sizeAvatar} title={user.name ? user.name : "User"} className={classes.avatar}>
+						{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
+					</MantineAvatar>
 				) : (
-					<span></span>
+					<MantineAvatar
+						src={user.image}
+						alt={user.name ? user.name : "User"}
+						size={sizeAvatar}
+						title={user.name ? user.name : "User"}
+						className={classes.avatar}
+					/>
 				)}
 			</MenuTarget>
 
@@ -151,8 +155,8 @@ export default function Avatar() {
 
 				<MenuDivider />
 
-				<MenuLabel>Dashboard</MenuLabel>
-				{menuItems.app.map(item => (
+				<MenuLabel>Activity</MenuLabel>
+				{menuItems.activity.map(item => (
 					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
 						{item.label}
 					</MenuItem>
@@ -166,6 +170,15 @@ export default function Avatar() {
 						{item.label}
 					</MenuItem>
 				))}
+
+				{/* <MenuDivider />
+
+				<MenuLabel>Customer Care</MenuLabel>
+				{menuItems.help.map(item => (
+					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
+						{item.label}
+					</MenuItem>
+				))} */}
 
 				<MenuDivider />
 

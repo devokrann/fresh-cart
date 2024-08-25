@@ -63,7 +63,7 @@ export default function Store({ data }: { data: typeStore }) {
 						</Stack>
 
 						<Stack gap={0} c={"dimmed"} fz={"sm"} fw={500}>
-							<Text inherit c={data.delivery.time ? "sl.4" : undefined}>
+							<Text inherit c={data.delivery.time ? "pri" : undefined}>
 								Delivery{data.delivery.time && ` by ${data.delivery.time}`}
 							</Text>
 							<Text inherit>Pickup Available</Text>

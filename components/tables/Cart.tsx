@@ -32,9 +32,17 @@ import ContextProducts from "@/contexts/Products";
 import InputNumberProduct from "../inputs/number/Product";
 import NotificationEmpty from "../notification/Empty";
 
+import total from "@/handlers/total";
+
+import ProviderProductCart from "@/providers/products/Cart";
+
 import { IconClearAll, IconGift, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Cart.module.scss";
+import Link from "next/link";
+import link from "@/handlers/parsers/string/link";
+import variant from "@/handlers/variant";
+import { typeCart } from "@/types/cart";
 
 export default function Cart() {
 	const productsContext = useContext(ContextProducts);
@@ -48,20 +56,17 @@ export default function Cart() {
 	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
 	const rows = cart.map(item => (
-		<TableTr
-			key={item.title}
-			bg={selectedRows.includes(item.title) ? "var(--mantine-color-gray-light)" : undefined}
-		>
+		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
 			<TableTd>
 				<Center>
 					<Checkbox
 						aria-label="Select row"
-						checked={selectedRows.includes(item.title)}
+						checked={selectedRows.includes(item.id)}
 						onChange={event =>
 							setSelectedRows(
 								event.currentTarget.checked
-									? [...selectedRows, item.title]
-									: selectedRows.filter(position => position !== item.title)
+									? [...selectedRows, item.id]
+									: selectedRows.filter(position => position !== item.id)
 							)
 						}
 					/>
@@ -70,8 +75,8 @@ export default function Cart() {
 			<TableTd>
 				<Center>
 					<Image
-						src={item.image}
-						alt={item.title}
+						src={item.variant.image}
+						alt={item.product.title}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -83,29 +88,30 @@ export default function Cart() {
 			</TableTd>
 			<TableTd ta={"start"}>
 				<Stack gap={0}>
-					<Title order={2} fz={"md"} fw={500}>
-						{item.title}
-					</Title>
-					{item.variants.capacity && (
-						<Text inherit fz={"sm"}>
-							{item.variants.capacity[0]} ml
-						</Text>
-					)}
-					{item.variants.weight && (
-						<Text inherit fz={"sm"}>
-							{item.variants.weight[0]} g
-						</Text>
-					)}
+					<Anchor
+						underline="never"
+						component={Link}
+						href={`/shop/products/${link.linkify(item.product.title)}`}
+						className={classes.link}
+					>
+						<Title order={2} fz={"md"} fw={"bold"}>
+							{item.product.title}
+						</Title>
+					</Anchor>
+
+					<Text inherit fz={"sm"}>
+						{item.variant.unit.value} {variant.getUnit(item.variant)}
+					</Text>
 				</Stack>
 			</TableTd>
 			<TableTd>
 				<InputNumberProduct data={item} />
 			</TableTd>
 			<TableTd>
-				{item.quantity && <NumberFormatter prefix="$ " value={item.price.present * item.quantity} />}
+				{item.quantity && <NumberFormatter prefix="$ " value={item.variant.price.present * item.quantity} />}
 			</TableTd>
 			<TableTd>
-				{item.available ? (
+				{item.variant.available ? (
 					<Badge radius={"md"} color="green" c={"white"}>
 						In Stock
 					</Badge>
@@ -116,31 +122,23 @@ export default function Cart() {
 				)}
 			</TableTd>
 			<TableTd>
-				<ActionIcon size={32} color="red" variant="subtle">
-					<IconTrash size={24} stroke={2} />
-				</ActionIcon>
+				<ProviderProductCart
+					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
+				>
+					<ActionIcon size={32} color="red" variant="subtle">
+						<IconTrash size={24} stroke={2} />
+					</ActionIcon>
+				</ProviderProductCart>
 			</TableTd>
 		</TableTr>
 	));
 
 	const mininumDiscountPrice = 300;
 
-	const getTotal = () => {
-		let total = 0;
-
-		cart.map(p => {
-			if (p.quantity) {
-				total += p.price.present * p.quantity;
-			}
-		});
-
-		return total;
-	};
-
-	const [value, setValue] = useState(getTotal());
+	const [value, setValue] = useState(total.getTotal(cart));
 
 	useEffect(() => {
-		setValue(getTotal());
+		setValue(total.getTotal(cart));
 	}, [cart]);
 
 	return cart.length > 0 ? (
@@ -169,7 +167,7 @@ export default function Cart() {
 
 			<TableCaption>
 				<Stack p={"xs"} ta={"start"}>
-					{getTotal() > mininumDiscountPrice ? (
+					{total.getTotal(cart) > mininumDiscountPrice ? (
 						<Text inherit>
 							You&apos;ve spent more than{" "}
 							<Text component="span" inherit fw={"bold"}>
@@ -185,7 +183,7 @@ export default function Cart() {
 						<Text inherit>
 							Spend{" "}
 							<Text component="span" inherit fw={"bold"}>
-								${mininumDiscountPrice - getTotal()}
+								${mininumDiscountPrice - total.getTotal(cart)}
 							</Text>{" "}
 							more to get{" "}
 							<Text component="span" inherit fw={"bold"}>
@@ -221,19 +219,16 @@ export default function Cart() {
 						Clear Selection ({selectedRows.length})
 					</Button>
 
-					<Group>
+					<ProviderProductCart
+						operation={{
+							type: "remove",
+							items: selectedRows.map(r => cart.find(p => p.id == r)).filter(p => p != undefined),
+						}}
+					>
 						<Button variant="subtle" color="red" leftSection={<IconTrash size={16} stroke={2} />}>
 							Remove selected items ({selectedRows.length})
 						</Button>
-
-						<Button
-							variant="subtle"
-							color="green"
-							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
-						>
-							Add selected items to cart ({selectedRows.length})
-						</Button>
-					</Group>
+					</ProviderProductCart>
 				</Group>
 			</TableCaption>
 		</Table>

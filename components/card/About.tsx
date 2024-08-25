@@ -29,7 +29,7 @@ export default function About({ data }: { data: typeAbout }) {
 						<Title className={classes.title} order={2}>
 							{data.title}
 						</Title>
-						<Text className={classes.description}>{data.description}</Text>
+						<Text c={"dimmed"}>{data.description}</Text>
 					</Stack>
 
 					<Button color="black">{data.cta}</Button>

@@ -22,18 +22,21 @@ import { useDisclosure } from "@mantine/hooks";
 
 import { IconEye, IconHeart, IconShoppingCart, IconX } from "@tabler/icons-react";
 
-import TabsProduct from "../tabs/Product";
-import FormProductModal from "@/partials/forms/product/Modal";
+import TabsProduct from "../tabs/product/Images";
+import SelectorVariant from "@/components/selector/Variant";
 
 import getFraction from "@/handlers/fraction";
 
 import { typeProduct } from "@/types/product";
+import React from "react";
 
-export default function Product({ data }: { data: typeProduct }) {
+export default function Product({ data, children }: { data: typeProduct; children: React.ReactNode }) {
+	const variant = data.variants[0];
+
 	const [opened, { open, close }] = useDisclosure(false);
 
 	const metadata = [
-		{ label: "Product Code", value: "FBB00255" },
+		{ label: "Product Code", value: data.code },
 		{ label: "Availability", value: data.available ? "In Stock" : "Out of Stock" },
 		{ label: "Type", value: data.category },
 		{
@@ -77,8 +80,8 @@ export default function Product({ data }: { data: typeProduct }) {
 								</Title>
 								<Group gap={"xs"} c={"pri"} fw={500}>
 									<Rating
-										value={data.rating.value}
-										fractions={getFraction(data.rating.value)}
+										value={data.rating.rating}
+										fractions={getFraction(data.rating.rating)}
 										readOnly
 									/>
 									<Text inherit lh={0.5}>
@@ -89,16 +92,17 @@ export default function Product({ data }: { data: typeProduct }) {
 
 							<Group gap={4} fz={24}>
 								<Text inherit lh={0.5} fw={500}>
-									${data.price.present}
+									${variant.price.present}
 								</Text>
-								{data.price.former && (
+								{variant.price.former && (
 									<Group>
 										<Text inherit lh={0.5} c={"dimmed"} td={"line-through"} fw={500}>
-											${data.price.former}
+											${variant.price.former}
 										</Text>
 
 										<Text inherit lh={0.5} c={"red.9"} fz={"md"}>
-											{100 - Math.floor((data.price.present / data.price.former) * 100)}% off
+											{100 - Math.floor((variant.price.present / variant.price.former) * 100)}%
+											off
 										</Text>
 									</Group>
 								)}
@@ -106,7 +110,7 @@ export default function Product({ data }: { data: typeProduct }) {
 
 							<Divider />
 
-							<FormProductModal data={data} />
+							<SelectorVariant data={data} />
 
 							<Divider visibleFrom="lg" />
 
@@ -127,11 +131,7 @@ export default function Product({ data }: { data: typeProduct }) {
 				</Grid>
 			</Modal>
 
-			<Tooltip label={"Quick View"} withArrow fz={"sm"}>
-				<ActionIcon size={32} onClick={open}>
-					<IconEye size={20} stroke={1.5} />
-				</ActionIcon>
-			</Tooltip>
+			<div onClick={open}>{children}</div>
 		</>
 	);
 }

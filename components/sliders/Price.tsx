@@ -6,12 +6,16 @@ import { NumberFormatter, RangeSlider, Stack, Text } from "@mantine/core";
 import products from "@/data/products";
 
 export default function Price() {
+	let variant;
+
 	const getMinPrice = () => {
 		let min = 0;
 
 		products.map(p => {
-			if (min == 0 || p.price.present < min) {
-				min = p.price.present;
+			variant = p.variants[0];
+
+			if (min == 0 || variant.price.present < min) {
+				min = variant.price.present;
 			}
 		});
 
@@ -22,15 +26,19 @@ export default function Price() {
 		let max = 0;
 
 		products.map(p => {
-			if (max == 0 || p.price.present > max) {
-				max = p.price.present;
+			variant = p.variants[0];
+
+			if (max == 0 || variant.price.present > max) {
+				max = variant.price.present;
 			}
 		});
 
 		return max;
 	};
 
-	const [range, setRange] = useState<[number, number]>([getMinPrice(), getMaxPrice()]);
+	const defaults = { min: getMinPrice() * 3, max: getMaxPrice() * 0.8 };
+
+	const [range, setRange] = useState<[number, number]>([defaults.min, defaults.max]);
 
 	return (
 		<Stack gap={"xs"} fz={"xs"}>
@@ -40,7 +48,7 @@ export default function Price() {
 				min={getMinPrice()}
 				max={getMaxPrice()}
 				step={1}
-				defaultValue={[getMinPrice() * 3, getMaxPrice() * 0.8]}
+				defaultValue={[defaults.min, defaults.max]}
 				onChange={setRange}
 			/>
 

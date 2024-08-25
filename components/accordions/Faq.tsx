@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Accordion, AccordionControl, AccordionItem, AccordionPanel } from "@mantine/core";
+import { Accordion, AccordionControl, AccordionItem, AccordionPanel, Stack } from "@mantine/core";
 
 import classes from "./Faq.module.scss";
 
@@ -29,7 +29,7 @@ export default function Faq({
 				control: classes.control,
 			}}
 		>
-			{items}
+			<Stack gap={4}>{items}</Stack>
 		</Accordion>
 	);
 }

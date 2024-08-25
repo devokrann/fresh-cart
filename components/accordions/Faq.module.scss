@@ -1,6 +1,8 @@
 .item {
 	border-radius: var(--mantine-radius-md);
 	overflow: hidden;
+	box-shadow: var(--mantine-shadow-xs);
+	border: 1px solod transparent;
 }
 
 .control {
