@@ -23,7 +23,7 @@ import { ModalsProvider } from "@mantine/modals";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import projectName from "@/theme";
+import projectName, { resolver } from "@/theme";
 
 import contact from "@/data/contact";
 
@@ -56,6 +56,7 @@ export default async function App({
 			<body className={noto.className}>
 				<MantineProvider
 					theme={projectName}
+					cssVariablesResolver={resolver}
 					defaultColorScheme="light"
 					classNamesPrefix="next-template"
 					withStaticClasses={false}

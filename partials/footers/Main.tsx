@@ -35,7 +35,7 @@ const linkSets = [
 		links: [
 			{ label: "Company", link: "#company" },
 			{ label: "Blog", link: "#blog" },
-			{ label: "Help Center", link: "#help" },
+			{ label: "Help Center", link: "/help" },
 			{ label: "Our Value", link: "#value" },
 		],
 	},

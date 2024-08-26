@@ -5,39 +5,45 @@ const appName = companyName;
 
 const contact = {
 	name: { company: companyName, app: appName },
-	phones: [{ type: "main", label: "(254) 123 456-789", value: "+254123456789" }],
-	emails: [{ type: "main", value: "info@freshcart.com" }],
+	phones: [
+		{ label: "Customers", value: "+1 50 537 53 082" },
+		{ label: "Franchise", value: "+1 50 537 53 000" },
+	],
+	emails: [
+		{ label: "Customers", value: "customers@freshcart.com" },
+		{ label: "Franchise", value: "franchise@freshcart.com" },
+	],
 	socials: [
 		{
-			title: `${companyName} @ Twitter`,
-			link: "#",
 			icon: icons.social.twitter,
+			link: "#",
+			label: `${companyName} @ Twitter`,
 		},
 		{
-			title: `${companyName} @ Facebook`,
-			link: "#Facebook",
 			icon: icons.social.facebook,
+			link: "#Facebook",
+			label: `${companyName} @ Facebook`,
 		},
 		{
-			title: `${companyName} @ Instagram`,
-			link: "#Instagram",
 			icon: icons.social.instagram,
+			link: "#Instagram",
+			label: `${companyName} @ Instagram`,
 		},
 		{
-			title: `${companyName} @ LinkedIn`,
-			link: "#LinkedIn",
 			icon: icons.social.linkedin,
+			link: "#LinkedIn",
+			label: `${companyName} @ LinkedIn`,
 		},
 	],
 	hours: [
-		{ label: "days", value: "Mon - Fri" },
-		{ label: "times", value: "8 AM - 5 PM" },
+		{ label: "days", value: "Mon - Fri 8:00 - 18:00" },
+		{ label: "times", value: "Sut - Sun 10:00 - 16:00" },
 	],
 	locations: [
 		{
-			place: "Main Office",
-			label: "410 Terry Ave. North, Seattle, WA 98109",
 			link: "#",
+			label: "Main",
+			value: "New York 11741, USA 396 Lillian Bolavandy, Holbrook",
 		},
 	],
 };

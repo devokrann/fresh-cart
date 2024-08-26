@@ -7,6 +7,7 @@ import { typePage } from "@/types/layout";
 export default function Page({
 	children,
 	padded,
+	margined,
 	stacked,
 	...restProps
 }: typePage & React.ComponentProps<typeof Box & typeof Stack>) {
@@ -16,6 +17,7 @@ export default function Page({
 			w={"100%"}
 			gap={stacked ? (typeof stacked == "boolean" ? 64 : stacked) : undefined}
 			py={padded ? (typeof padded == "boolean" ? 64 : padded) : undefined}
+			my={margined ? (typeof margined == "boolean" ? 64 : margined) : undefined}
 			{...restProps}
 		>
 			{children}

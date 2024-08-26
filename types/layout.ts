@@ -22,10 +22,12 @@ export interface typeBody {
 		};
 	};
 	footer?: React.ReactNode;
+	margined?: boolean | number | sizes;
 }
 
 export interface typePage {
 	padded?: boolean | number | sizes;
+	margined?: boolean | number | sizes;
 	stacked?: boolean | number | sizes;
 	children: React.ReactNode;
 }

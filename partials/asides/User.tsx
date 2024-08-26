@@ -78,7 +78,7 @@ export default function User() {
 			},
 			{
 				icon: IconInfoCircle,
-				link: `/legal/terms-and-conditions`,
+				link: `/help/terms-and-conditions`,
 				label: "Terms and Conditions",
 			},
 		],
@@ -93,7 +93,7 @@ export default function User() {
 	};
 
 	return (
-		<LayoutSection padded>
+		<LayoutSection padded pos={"sticky"} top={0}>
 			<Stack gap={48} align="center">
 				<AvatarAside />
 
