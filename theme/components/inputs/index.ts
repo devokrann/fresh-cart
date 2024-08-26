@@ -3,6 +3,7 @@ import classesSelect from "./Select.module.scss";
 import classesText from "./Text.module.scss";
 import classesTextarea from "./Textarea.module.scss";
 import classesAutocomplete from "./Autocomplete.module.scss";
+import classesNumber from "./Number.module.scss";
 
 const input = {
 	password: { classNames: classesPassword },
@@ -10,6 +11,7 @@ const input = {
 	text: { classNames: classesText },
 	textarea: { classNames: classesTextarea },
 	autocomplete: { classNames: classesAutocomplete },
+	number: { classNames: classesNumber },
 };
 
 export default input;

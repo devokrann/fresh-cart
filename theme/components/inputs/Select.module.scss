@@ -1,5 +1,11 @@
 .input {
 	&[data-variant="default"] {
+		background-color: var(--mantine-color-body);
+		border-color: var(--mantine-color-pri-6);
+
+		&:focus {
+			border-color: var(--mantine-color-pri-6);
+		}
 	}
 }
 
@@ -16,6 +22,12 @@
 }
 
 .dropdown {
+	background-color: var(--mantine-color-body);
+	border-color: var(--mantine-color-pri-6);
+
+	&:focus {
+		border-color: var(--mantine-color-pri-6);
+	}
 }
 
 .option {

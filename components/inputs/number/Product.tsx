@@ -19,7 +19,9 @@ export default function Product({ data }: { data: typeCart }) {
 				operation={{ type: "decrease", items: [{ product: data.product, variant: data.variant }] }}
 			>
 				<ActionIcon
-					variant="default"
+					variant="outline"
+					color="var(--mantine-color-default-border)"
+					c="var(--mantine-color-text)"
 					disabled={value == 1}
 					onClick={() => handlersRef.current?.decrement()}
 					style={{
@@ -55,7 +57,9 @@ export default function Product({ data }: { data: typeCart }) {
 				operation={{ type: "increase", items: [{ product: data.product, variant: data.variant }] }}
 			>
 				<ActionIcon
-					variant="default"
+					variant="outline"
+					color="var(--mantine-color-default-border)"
+					c="var(--mantine-color-text)"
 					disabled={value == 99}
 					onClick={() => handlersRef.current?.increment()}
 					style={{

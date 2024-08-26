@@ -10,8 +10,12 @@ import {
 	Autocomplete,
 	Badge,
 	Button,
+	CSSVariablesResolver,
 	Container,
+	Divider,
+	NavLink,
 	Notification,
+	NumberInput,
 	PasswordInput,
 	Select,
 	Text,
@@ -21,6 +25,8 @@ import {
 	createTheme,
 	rem,
 } from "@mantine/core";
+import divider from "./components/divider";
+import navlink from "./components/navlink";
 
 const projectName = createTheme({
 	focusRing: "auto",
@@ -100,11 +106,31 @@ const projectName = createTheme({
 		Select: Select.extend(input.select),
 		Autocomplete: Autocomplete.extend(input.autocomplete),
 		TextInput: TextInput.extend(input.text),
+		NumberInput: NumberInput.extend(input.number),
 		Textarea: Textarea.extend(input.textarea),
 		Title: Title.extend(title),
+		Divider: Divider.extend(divider),
 		Text: Text.extend(text),
 		Container: Container.extend(container),
 		Notification: Notification.extend(notification),
+		NavLink: NavLink.extend(navlink),
+	},
+
+	// other: {
+	// 	priDark: "#004800",
+	// 	bodyDark: "#001900",
+	// },
+});
+
+// override mantine css variable defaults
+export const resolver: CSSVariablesResolver = theme => ({
+	variables: {},
+	light: {
+		// "--mantine-color-default-border": theme.other.deepOrangeLight,
+	},
+	dark: {
+		// "--mantine-color-body": theme.other.bodyDark,
+		// "--mantine-color-default-border": theme.other.priDark,
 	},
 });
 

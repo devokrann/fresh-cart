@@ -3,6 +3,8 @@
 	overflow: hidden;
 	box-shadow: var(--mantine-shadow-xs);
 	border: 1px solod transparent;
+
+	background-color: light-dark(var(--mantine-color-body), var(--mantine-color-gray-light));
 }
 
 .control {

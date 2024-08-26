@@ -1,8 +1,10 @@
 .card {
 	height: 100%;
+	background-color: light-dark(transparent, var(--mantine-color-gray-light));
+	border-color: light-dark(var(--mantine-color-default-border), transparent);
 }
 
 .header {
-	background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+	background-color: var(--mantine-color-gray-light);
 	padding: var(--mantine-spacing-md);
 }

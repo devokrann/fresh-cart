@@ -113,7 +113,12 @@ export default function Avatar() {
 	const user = users[2];
 
 	return (
-		<Menu position={"bottom"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
+		<Menu
+			position={"bottom"}
+			withArrow
+			classNames={{ dropdown: classes.dropdown, item: classes.item,divider:classes.divider }}
+			width={mobile ? 200 : 240}
+		>
 			<MenuTarget>
 				{!user?.image ? (
 					<MantineAvatar size={sizeAvatar} title={user.name ? user.name : "User"} className={classes.avatar}>

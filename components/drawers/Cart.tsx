@@ -52,14 +52,7 @@ export default function Cart() {
 					</Text>
 				}
 				position="right"
-				classNames={{
-					body: classes.body,
-					header: classes.header,
-					inner: classes.inner,
-					overlay: classes.overlay,
-					root: classes.root,
-					title: classes.title,
-				}}
+				classNames={classes}
 			>
 				<Stack gap={"xl"} justify="space-between" style={{ height: "calc(100vh - 80px)" }}>
 					{cart.length > 0 ? (

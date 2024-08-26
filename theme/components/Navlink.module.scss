@@ -1,0 +1,7 @@
+.root {
+	@include hover {
+		@include dark {
+			background-color: var(--mantine-color-default-border);
+		}
+	}
+}
