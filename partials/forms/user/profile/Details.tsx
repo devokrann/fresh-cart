@@ -8,7 +8,6 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
 import { useSession } from "next-auth/react";
 import text from "@/handlers/validators/form/special/text";
 import email from "@/handlers/validators/form/special/email";
@@ -63,18 +62,18 @@ export default function Details() {
 				} else {
 					setSubmitted(true);
 
-					await request
-						.post(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
-							method: "POST",
-							body: JSON.stringify(parse(formValues)),
-							headers: {
-								"Content-Type": "application/json",
-								Accept: "application/json",
-							},
-						})
-						.then(res => {
-							console.log(res);
-						});
+					const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
+						method: "POST",
+						body: JSON.stringify(parse(formValues)),
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "application/json",
+						},
+					});
+
+					const result = await response.json();
+
+					console.log(result);
 				}
 			} catch (error) {
 				notifications.show({

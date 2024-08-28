@@ -14,8 +14,6 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import password from "@/handlers/validators/form/special/password";
 import compare from "@/handlers/validators/form/special/compare";
 
-import request from "@/hooks/request";
-
 import { Session, User } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 
@@ -56,7 +54,7 @@ export default function Password() {
 			if (form.isValid()) {
 				setSending(true);
 
-				const res = await request.post(
+				const response = await fetch(
 					process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/password`,
 					{
 						method: "POST",
@@ -71,7 +69,9 @@ export default function Password() {
 					}
 				);
 
-				if (!res) {
+				const result = await response.json();
+
+				if (!result) {
 					notifications.show({
 						id: "password-reset-failed-no-response",
 						icon: <IconX size={16} stroke={1.5} />,
@@ -81,7 +81,7 @@ export default function Password() {
 						variant: "failed",
 					});
 				} else {
-					if (!res.user.exists) {
+					if (!result.user.exists) {
 						notifications.show({
 							id: "password-reset-failed-not-found",
 							icon: <IconX size={16} stroke={1.5} />,
@@ -96,7 +96,7 @@ export default function Password() {
 							router.replace("/auth/sign-up")
 						);
 					} else {
-						if (!res.user.password.match) {
+						if (!result.user.password.match) {
 							notifications.show({
 								id: "password-reset-failed-unauthorized",
 								icon: <IconX size={16} stroke={1.5} />,

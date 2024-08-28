@@ -10,8 +10,6 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
-
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 
@@ -46,7 +44,7 @@ export default function Delete() {
 			try {
 				setSubmitted(true);
 
-				const res = await request.post(
+				const response = await fetch(
 					process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/delete`,
 					{
 						method: "POST",
@@ -55,7 +53,9 @@ export default function Delete() {
 					}
 				);
 
-				if (!res) {
+				const result = await response.json();
+
+				if (!result) {
 					notifications.show({
 						id: "account-deletion-failed-no-response",
 						icon: <IconX size={16} stroke={1.5} />,
@@ -65,7 +65,7 @@ export default function Delete() {
 						variant: "failed",
 					});
 				} else {
-					if (!res.user.exists) {
+					if (!result.user.exists) {
 						notifications.show({
 							id: "password-reset-failed-not-found",
 							icon: <IconX size={16} stroke={1.5} />,
@@ -78,7 +78,7 @@ export default function Delete() {
 						form.reset();
 						await handleSignOut();
 					} else {
-						if (!res.user.password.match) {
+						if (!result.user.password.match) {
 							notifications.show({
 								id: "password-reset-failed-not-found",
 								icon: <IconX size={16} stroke={1.5} />,

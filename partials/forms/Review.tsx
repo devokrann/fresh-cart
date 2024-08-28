@@ -13,8 +13,6 @@ import email from "@/handlers/validators/form/special/email";
 import phone from "@/handlers/validators/form/special/phone";
 import capitalize from "@/handlers/parsers/string/capitalize";
 
-import request from "@/hooks/request";
-
 import { typeRating } from "@/types/form";
 
 export default function Review() {

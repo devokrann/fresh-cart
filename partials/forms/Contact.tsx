@@ -13,8 +13,6 @@ import email from "@/handlers/validators/form/special/email";
 import phone from "@/handlers/validators/form/special/phone";
 import capitalize from "@/handlers/parsers/string/capitalize";
 
-import request from "@/hooks/request";
-
 import { typeContact } from "@/types/form";
 
 export default function Contact() {
@@ -56,36 +54,36 @@ export default function Contact() {
 			try {
 				setSubmitted(true);
 
-				await request
-					.post(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						if (!res) {
-							notifications.show({
-								id: "form-contact-failed-no-response",
-								icon: <IconX size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
-								variant: "failed",
-							});
-						} else {
-							notifications.show({
-								id: "form-contact-success",
-								icon: <IconCheck size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Form Submitted",
-								message: "Someone will get back to you within 24 hours",
-								variant: "success",
-							});
-						}
+				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
+
+				const result = await response.json();
+
+				if (!result) {
+					notifications.show({
+						id: "form-contact-failed-no-response",
+						icon: <IconX size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: "Server Unavailable",
+						message: `There was no response from the server.`,
+						variant: "failed",
 					});
+				} else {
+					notifications.show({
+						id: "form-contact-success",
+						icon: <IconCheck size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: "Form Submitted",
+						message: "Someone will get back to you within 24 hours",
+						variant: "success",
+					});
+				}
 			} catch (error) {
 				notifications.show({
 					id: "form-contact-failed",

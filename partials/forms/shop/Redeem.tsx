@@ -10,7 +10,6 @@ import { notifications } from "@mantine/notifications";
 
 import { IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
 import email from "@/handlers/validators/form/special/email";
 import converter from "@/utilities/converter";
 

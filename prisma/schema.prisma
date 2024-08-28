@@ -8,9 +8,9 @@
 // npx prisma db push -> sync database
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   // previewFeatures = ["postgresqlExtensions"] // enables postgresql extensions
-  previewFeatures = ["driverAdapters"]
+  // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -21,15 +21,17 @@ datasource db {
 
 model User {
   id            String          @id @default(cuid())
-  email         String          @unique
-  verified      Boolean         @default(false)
-  password      String?
   name          String?
-  image         String?
+  email         String          @unique
   emailVerified DateTime?       @map(name: "email_verified")
+  image         String?
   accounts      Account[]
   sessions      Session[]
-  Authenticator Authenticator[] // Optional for WebAuthn support
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+  // end next auth config
+  verified      Boolean         @default(false)
+  password      String?
   role          Role            @default(USER)
   posts         Post[]
   otps          Otp[]
@@ -57,10 +59,11 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String   @map("user_id")
+  // end next auth config
   createdAt         DateTime @default(now()) @map(name: "created_at")
   updatedAt         DateTime @updatedAt @map(name: "updated_at")
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String   @unique @map("user_id")
 
   @@id([provider, providerAccountId])
   @@map("accounts")
@@ -69,12 +72,32 @@ model Account {
 model Session {
   sessionToken String   @unique @map(name: "session_token")
   expires      DateTime
+  // end next auth config
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @map("user_id")
+  device       Devices?
   createdAt    DateTime @default(now()) @map(name: "created_at")
   updatedAt    DateTime @updatedAt @map(name: "updated_at")
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String   @unique @map("user_id")
 
   @@map("sessions")
+}
+
+model Devices {
+  id        String   @id @default(cuid())
+  ip        String?
+  city      String?
+  region    String?
+  country   String?
+  loc       String?
+  org       String?
+  timezone  String?
+  os        String?
+  session   Session  @relation(fields: [token], references: [sessionToken], onDelete: Cascade)
+  token     String   @unique @map("session_token")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+  @@map("devices")
 }
 
 model VerificationToken {
@@ -101,6 +124,8 @@ model Authenticator {
   @@id([userId, credentialID])
   @@map("authenticators")
 }
+
+// non-next-auth models
 
 model Profile {
   id        String   @id @default(cuid())

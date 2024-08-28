@@ -35,8 +35,6 @@ import Link from "next/link";
 export default async function Main() {
 	const session = await auth();
 
-	// if (!session?.user) return null;
-
 	return (
 		<LayoutSection containerized="responsive" padded="xs" className={classes.header}>
 			<Grid align="center">
@@ -77,7 +75,7 @@ export default async function Main() {
 
 								<DrawerCart />
 
-								{session?.user ? (
+								{!session?.user ? (
 									<ProviderAuthSignIn>
 										<ActionIcon variant="transparent" color="gray">
 											<Center>

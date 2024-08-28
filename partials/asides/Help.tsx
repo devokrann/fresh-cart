@@ -5,8 +5,6 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import AvatarAside from "@/components/avatars/Aside";
-
 import { Anchor, Divider, NavLink, Stack, Title } from "@mantine/core";
 import {
 	IconBellRinging,

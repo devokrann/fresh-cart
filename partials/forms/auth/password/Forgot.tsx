@@ -10,7 +10,6 @@ import { notifications } from "@mantine/notifications";
 
 import { IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
 import email from "@/handlers/validators/form/special/email";
 import converter from "@/utilities/converter";
 
@@ -50,7 +49,7 @@ export default function Forgot() {
 				// // test request body
 				// console.log(parse(formValues));
 
-				const res = await request.post(process.env.NEXT_PUBLIC_API_URL + `/api/auth/password/forgot`, {
+				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/auth/password/forgot`, {
 					method: "POST",
 					body: JSON.stringify(parse(formValues)),
 					headers: {
@@ -59,7 +58,9 @@ export default function Forgot() {
 					},
 				});
 
-				if (!res) {
+				const result = await response.json();
+
+				if (!result) {
 					notifications.show({
 						id: "password-forgot-failed-no-response",
 						icon: <IconX size={16} stroke={1.5} />,
@@ -68,7 +69,7 @@ export default function Forgot() {
 						variant: "failed",
 					});
 				} else {
-					if (!res.user.exists) {
+					if (!result.user.exists) {
 						notifications.show({
 							id: "password-forgot-failed-not-found",
 							icon: <IconX size={16} stroke={1.5} />,
@@ -82,16 +83,16 @@ export default function Forgot() {
 						// redirect to sign up page
 						router.replace("/auth/sign-up");
 					} else {
-						if (!res.user.otl.exists) {
+						if (!result.user.otl.exists) {
 							form.reset();
 
 							// redirect to notification page
 							router.replace("/api/auth/verify-request");
 						} else {
-							if (!res.user.otl.expired) {
-								if (!res.user.otl.valid) {
+							if (!result.user.otl.expired) {
+								if (!result.user.otl.valid) {
 									// reset time
-									setTime(converter.millSec(res.user.otl.expiry));
+									setTime(converter.millSec(result.user.otl.expiry));
 								} else {
 									setTime(undefined);
 									form.reset();
