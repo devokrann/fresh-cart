@@ -38,7 +38,6 @@ import classes from "./Avatar.module.scss";
 import initialize from "@/handlers/parsers/string/initialize";
 
 import { useSession } from "next-auth/react";
-import users from "@/data/users";
 
 export default function Avatar() {
 	const session = useSession();
@@ -109,27 +108,30 @@ export default function Avatar() {
 		],
 	};
 
-	// sample user
-	const user = users[2];
-
 	return (
 		<Menu
 			position={"bottom"}
 			withArrow
-			classNames={{ dropdown: classes.dropdown, item: classes.item,divider:classes.divider }}
+			classNames={{ dropdown: classes.dropdown, item: classes.item, divider: classes.divider }}
 			width={mobile ? 200 : 240}
 		>
 			<MenuTarget>
-				{!user?.image ? (
-					<MantineAvatar size={sizeAvatar} title={user.name ? user.name : "User"} className={classes.avatar}>
-						{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
+				{!session.data?.user.image ? (
+					<MantineAvatar
+						size={sizeAvatar}
+						title={session.data?.user.name ? session.data?.user.name : "User"}
+						className={classes.avatar}
+					>
+						{session.data?.user.name
+							? initialize(session.data?.user.name)
+							: session.data?.user.email?.charAt(0).toUpperCase()}
 					</MantineAvatar>
 				) : (
 					<MantineAvatar
-						src={user.image}
-						alt={user.name ? user.name : "User"}
+						src={session.data?.user.image}
+						alt={session.data?.user.name ? session.data?.user.name : "User"}
 						size={sizeAvatar}
-						title={user.name ? user.name : "User"}
+						title={session.data?.user.name ? session.data?.user.name : "User"}
 						className={classes.avatar}
 					/>
 				)}
@@ -141,16 +143,15 @@ export default function Avatar() {
 						<Skeleton height={8} radius="xl" />
 					) : (
 						<Stack gap={"xs"}>
-							{user?.name && (
+							{session.data?.user.name && (
 								<Text fz={"sm"} lh={1} ta={"center"}>
-									{user?.name}
+									{session.data?.user.name}
 								</Text>
 							)}
 							<Text fz={"xs"} lh={1} ta={"center"}>
-								({user?.email})
+								({session.data?.user.email})
 							</Text>
 
-							{/* test expiry session */}
 							{/* <Text fz={"xs"} lh={1} ta={"center"}>
 								({session.data?.expires})
 							</Text> */}

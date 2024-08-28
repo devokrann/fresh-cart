@@ -1,5 +1,3 @@
-import { auth } from "@/auth";
-import users from "@/data/users";
 import initialize from "@/handlers/parsers/string/initialize";
 import { Avatar, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import { useSession } from "next-auth/react";
@@ -14,27 +12,29 @@ export default function Aside() {
 				<Avatar
 					src={session.data.user.image}
 					alt={session.data.user.name ? session.data.user.name : "User"}
+					title={session.data?.user.name ? session.data?.user.name : "User"}
 					w={{ base: 56, md: 120, lg: 56 }}
 					h={{ base: 56, md: 120, lg: 56 }}
 				/>
-			) : session?.data?.user.name ? (
+			) : (
 				<Avatar
-					alt={session.data.user.name}
+					alt={session.data?.user.name ? session.data?.user.name : "User"}
+					title={session.data?.user.name ? session.data?.user.name : "User"}
 					w={{ base: 56, md: 120, lg: 56 }}
 					h={{ base: 56, md: 120, lg: 56 }}
 				>
-					{initialize(session.data.user.name)}
+					{session.data?.user.name
+						? initialize(session.data?.user.name)
+						: session.data?.user.email?.charAt(0).toUpperCase()}
 				</Avatar>
-			) : (
-				<Avatar w={{ base: 56, md: 120, lg: 56 }} h={{ base: 56, md: 120, lg: 56 }} src={users[2].image} />
 			)}
 
 			<Stack gap={0}>
 				<Title order={3} fz={"md"} ta={{ base: "center", lg: "start" }}>
-					{users[0].name}
+					{session.data?.user.name}
 				</Title>
 				<Text fz={"xs"} c={"dimmed"} ta={{ base: "center", lg: "start" }}>
-					{users[0].email}
+					{session.data?.user.email}
 				</Text>
 			</Stack>
 		</Flex>
