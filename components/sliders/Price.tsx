@@ -14,8 +14,8 @@ export default function Price() {
 		products.map(p => {
 			variant = p.variants[0];
 
-			if (min == 0 || variant.price.present < min) {
-				min = variant.price.present;
+			if (min == 0 || variant.pricePresent < min) {
+				min = variant.pricePresent;
 			}
 		});
 
@@ -28,8 +28,8 @@ export default function Price() {
 		products.map(p => {
 			variant = p.variants[0];
 
-			if (max == 0 || variant.price.present > max) {
-				max = variant.price.present;
+			if (max == 0 || variant.pricePresent > max) {
+				max = variant.pricePresent;
 			}
 		});
 

@@ -41,7 +41,7 @@ export default function Product({ data, children }: { data: typeProduct; childre
 		{ label: "Type", value: data.category },
 		{
 			label: "Shipping",
-			value: `${data.shipping.days} day${data.shipping.days > 1 ? "s" : ""} (free pickup today)`,
+			value: `${data.shippingDays} day${data.shippingDays > 1 ? "s" : ""} (free pickup today)`,
 		},
 	];
 
@@ -78,7 +78,7 @@ export default function Product({ data, children }: { data: typeProduct; childre
 								<Title order={2} fw={"bold"} fz={{ lg: 36 }} lh={0.5}>
 									{data.title}
 								</Title>
-								<Group gap={"xs"} c={"pri"} fw={500}>
+								{/* <Group gap={"xs"} c={"pri"} fw={500}>
 									<Rating
 										value={data.rating.rating}
 										fractions={getFraction(data.rating.rating)}
@@ -87,22 +87,21 @@ export default function Product({ data, children }: { data: typeProduct; childre
 									<Text inherit lh={0.5}>
 										({data.rating.raters} reviews)
 									</Text>
-								</Group>
+								</Group> */}
 							</Stack>
 
 							<Group gap={4} fz={24}>
 								<Text inherit lh={0.5} fw={500}>
-									${variant.price.present}
+									${variant.pricePresent}
 								</Text>
-								{variant.price.former && (
+								{variant.priceFormer && (
 									<Group>
 										<Text inherit lh={0.5} c={"dimmed"} td={"line-through"} fw={500}>
-											${variant.price.former}
+											${variant.priceFormer}
 										</Text>
 
 										<Text inherit lh={0.5} c={"red.9"} fz={"md"}>
-											{100 - Math.floor((variant.price.present / variant.price.former) * 100)}%
-											off
+											{100 - Math.floor((variant.pricePresent / variant.priceFormer) * 100)}% off
 										</Text>
 									</Group>
 								)}

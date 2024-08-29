@@ -69,23 +69,23 @@ export default function List({ data }: { data: typeProduct }) {
 						</Stack>
 
 						<Stack className={classes.overlay}>
-							{data.status.sale && (
+							{data.sale && (
 								<Badge color={`red.9`} radius={"md"}>
 									sale
 								</Badge>
 							)}
 
-							{data.status.hot && (
+							{data.hot && (
 								<Badge color={`red.9`} radius={"md"}>
 									hot
 								</Badge>
 							)}
 
-							{variant.price.former && (
+							{variant.priceFormer && (
 								<Badge color={`green.9`} radius={"md"}>
 									-{" "}
 									{Math.floor(
-										((variant.price.former - variant.price.present) / variant.price.former) * 100
+										((variant.priceFormer - variant.pricePresent) / variant.priceFormer) * 100
 									)}{" "}
 									%
 								</Badge>
@@ -112,7 +112,7 @@ export default function List({ data }: { data: typeProduct }) {
 								</Anchor>
 							</Stack>
 
-							<Group gap={4} fz={"xs"} c={"dimmed"}>
+							{/* <Group gap={4} fz={"xs"} c={"dimmed"}>
 								<Rating
 									value={data.rating.rating}
 									fractions={getFraction(data.rating.rating)}
@@ -124,17 +124,17 @@ export default function List({ data }: { data: typeProduct }) {
 								<Text inherit lh={0.5}>
 									({data.rating.raters})
 								</Text>
-							</Group>
+							</Group> */}
 						</Stack>
 
 						<Stack>
 							<Group gap={4}>
 								<Text inherit lh={0.5}>
-									${variant.price.present}
+									${variant.pricePresent}
 								</Text>
-								{variant.price.former && (
+								{variant.priceFormer && (
 									<Text inherit lh={0.5} c={"dimmed"} td={"line-through"}>
-										${variant.price.former}
+										${variant.priceFormer}
 									</Text>
 								)}
 							</Group>
