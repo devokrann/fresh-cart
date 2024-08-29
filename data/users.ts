@@ -22,6 +22,12 @@ const users: typeUser[] = [
 		name: "Sandra Langevin",
 		email: "sandra.langevin@example.com",
 	},
+	{
+		image: images.avatars.avatar4,
+		name: "Dustin Warren",
+		email: "dustin.warren@example.com",
+		position: "Marketing Manager",
+	},
 ];
 
 export default users;
