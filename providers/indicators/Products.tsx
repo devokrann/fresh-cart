@@ -27,15 +27,12 @@ export default function Products({ children, variant }: { children: React.ReactN
 
 	return (
 		<Indicator
-			disabled={selector().length < 1}
 			offset={4}
 			size={"xl"}
 			label={
-				selector().length > 0 ? (
-					<Text component="span" inherit fz={10}>
-						{selector().length}
-					</Text>
-				) : undefined
+				<Text component="span" inherit fz={10}>
+					{selector().length}
+				</Text>
 			}
 		>
 			{children}

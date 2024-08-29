@@ -33,7 +33,7 @@ export default function Wishlist({
 	const [mounted, setMounted] = useState(wishlist.length > 0);
 
 	const addToWishlist = (set: typeProductVariant[]) => {
-		const itemsToIgnore = set.filter(item => array.isPresent(compoundId.getCompoundId(item), wishlist));
+		const itemsToIgnore = set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), wishlist));
 
 		if (itemsToIgnore.length != set.length) {
 			// Filter out all items already included
@@ -82,7 +82,7 @@ export default function Wishlist({
 	};
 
 	const removeFromWishlist = (set: typeProductVariant[]) => {
-		const itemsToRemove = set.filter(item => array.isPresent(compoundId.getCompoundId(item), wishlist));
+		const itemsToRemove = set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), wishlist));
 
 		if (itemsToRemove.length > 0) {
 			// Update the wishlist by filtering out all items in one go

@@ -33,7 +33,7 @@ export default function Cart({
 	const [mounted, setMounted] = useState(true);
 
 	const addToCart = (set: typeProductVariant[]) => {
-		const itemsToIgnore = set.filter(item => array.isPresent(compoundId.getCompoundId(item), cart));
+		const itemsToIgnore = set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), cart));
 
 		if (itemsToIgnore.length != set.length) {
 			// Filter out all items already included
@@ -84,7 +84,7 @@ export default function Cart({
 	};
 
 	const removeFromCart = (set: typeProductVariant[]) => {
-		const itemsToRemove = set.filter(item => array.isPresent(compoundId.getCompoundId(item), cart));
+		const itemsToRemove = set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), cart));
 
 		if (itemsToRemove.length > 0) {
 			// Update the cart by filtering out all items in one go
