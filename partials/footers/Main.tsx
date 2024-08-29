@@ -233,8 +233,8 @@ export default function Main() {
 							<a key={social.link} href={social.link}>
 								<Image
 									src={social.icon}
-									alt={social.title}
-									title={social.title}
+									alt={social.label}
+									title={social.label}
 									h={{ base: 24, md: 28 }}
 									loading="lazy"
 									component={NextImage}

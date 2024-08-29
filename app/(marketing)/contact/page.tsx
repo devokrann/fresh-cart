@@ -1,5 +1,7 @@
 import React from "react";
 
+import LoaderMain from "@/partials/loaders/Main";
+
 import { Metadata } from "next";
 
 import NextImage from "next/image";
@@ -88,7 +90,7 @@ export default async function Contact() {
 
 										<Stack gap={0} maw={{ lg: "70%" }}>
 											{item.desc.map(subItem => (
-												<Anchor href={subItem.link} inherit ta={"center"}>
+												<Anchor key={subItem.link} href={subItem.link} inherit ta={"center"}>
 													{subItem.value}
 												</Anchor>
 											))}
@@ -108,8 +110,8 @@ export default async function Contact() {
 							</Title>
 
 							<Text ta={"center"}>
-								We might already have what you're looking for. See our FAQs or head to our dedicated
-								Help Center.
+								We might already have what you&apos;re looking for. See our FAQs or head to our
+								dedicated Help Center.
 							</Text>
 						</Stack>
 
