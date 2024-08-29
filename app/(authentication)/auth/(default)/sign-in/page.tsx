@@ -23,7 +23,7 @@ export const metadata: Metadata = { title: "Sign In" };
 export default async function SignIn() {
 	const session = await auth();
 
-	!session && redirect("/");
+	session && redirect("/");
 
 	return (
 		<LayoutPage>
