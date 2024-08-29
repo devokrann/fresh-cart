@@ -1,27 +1,28 @@
-import { typeRating } from "./rating";
+import { typeReview } from "./review";
 
 export interface typeVariant {
-	id: string;
 	image: string;
 	available: boolean;
-	price: { former: number | null; present: number };
-	unit: { type: "mass" | "volume" | "size"; value: string };
+	priceFormer: number | null;
+	pricePresent: number;
+	unitType: "mass" | "volume" | "size";
+	unitValue: string;
 }
 
 export interface typeProduct {
-	id: string;
 	title: string;
 	desc: string;
 	category: string;
 	code: string;
 	brand: string;
 	available: boolean;
-	shipping: { days: number };
-	status: { sale: boolean; hot: boolean };
+	shippingDays: number;
+	sale: boolean;
+	hot: boolean;
 	variants: typeVariant[];
 
 	// relationships
-	rating: typeRating;
+	reviews: typeReview[];
 }
 
 export interface typeProductVariant {

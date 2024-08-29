@@ -3,18 +3,16 @@ import { typeCart } from "./cart";
 import { typeUser } from "./user";
 
 export interface typeOrder {
-	id: string;
-	datePlaced: string;
-	dateDelivered: string;
+	datePlaced: Date;
+	dateDelivered: Date | null;
 	subtotal: number;
-	tax: number;
+	taxFee: number;
 	serviceFee: number;
-	shipping: number;
+	shippingFee: number;
 	status: string | "processing" | "completed" | "canceled";
 
 	// relationships
 	user: typeUser;
 	products: typeCart[];
-	invoiceAddress: typeAddress;
-	shippingAddress: typeAddress;
+	addresses: typeAddress[];
 }
