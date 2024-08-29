@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 // npx prisma migrate dev --name init -> sync database
 // npx prisma db push -> sync database
 
@@ -19,39 +16,45 @@ datasource db {
   // directUrl = env("NEXT_DIRECT_URL") // uses a direct connection
 }
 
-model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?       @map(name: "email_verified")
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
-  // end next auth config
-  verified      Boolean         @default(false)
-  password      String?
-  role          Role            @default(USER)
-  posts         Post[]
-  otps          Otp[]
-  otls          Otl[]
-  profile       Profile?
-  createdAt     DateTime        @default(now()) @map(name: "created_at")
-  updatedAt     DateTime        @updatedAt @map(name: "updated_at")
-
-  @@map("users")
-}
-
 enum Role {
   USER
   ADMIN
 }
 
-model Account {
+model User {
+  id             String           @id @default(cuid())
+  name           String?
+  email          String           @unique
+  emailVerified  DateTime?        @map("email_verified")
+  image          String?
+  Accounts       Accounts[]
+  Sessions       Sessions[]
+  // Optional for WebAuthn support
+  Authenticator  Authenticator[]
+  // end next auth config
+  verified       Boolean          @default(false)
+  password       String?
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  role           Role             @default(USER)
+  otps           Otps[]
+  otls           Otls[]
+  profile        Profile?
+  reviews        Reviews[]
+  orders         Orders[]
+  cart           Cart[]
+  addresses      Addresses[]
+  wishlist       Wishlist[]
+  posts          Posts[]
+  paymentMethods PaymentMethods[]
+
+  @@map("users")
+}
+
+model Accounts {
   type              String
   provider          String
-  providerAccountId String   @map(name: "provider_account_id")
+  providerAccountId String   @map("provider_account_id")
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -62,22 +65,22 @@ model Account {
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String   @map("user_id")
   // end next auth config
-  createdAt         DateTime @default(now()) @map(name: "created_at")
-  updatedAt         DateTime @updatedAt @map(name: "updated_at")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
   @@id([provider, providerAccountId])
   @@map("accounts")
 }
 
-model Session {
-  sessionToken String   @unique @map(name: "session_token")
+model Sessions {
+  sessionToken String   @unique @map("session_token")
   expires      DateTime
   // end next auth config
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String   @map("user_id")
-  device       Devices?
-  createdAt    DateTime @default(now()) @map(name: "created_at")
-  updatedAt    DateTime @updatedAt @map(name: "updated_at")
+  devices      Devices?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("sessions")
 }
@@ -92,10 +95,10 @@ model Devices {
   org       String?
   timezone  String?
   os        String?
-  session   Session  @relation(fields: [token], references: [sessionToken], onDelete: Cascade)
-  token     String   @unique @map("session_token")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  sessions  Sessions @relation(fields: [sessionId], references: [sessionToken], onDelete: Cascade)
+  sessionId String   @unique @map("session_id")
 
   @@map("devices")
 }
@@ -111,15 +114,15 @@ model VerificationToken {
 
 // Optional for WebAuthn support
 model Authenticator {
-  credentialID         String  @unique @map(name: "credential_id")
-  providerAccountId    String  @map(name: "provider_account_id")
-  credentialPublicKey  String  @map(name: "credential_public_key")
+  credentialID         String  @unique @map("credential_id")
+  providerAccountId    String  @map("provider_account_id")
+  credentialPublicKey  String  @map("credential_public_key")
   counter              Int
-  credentialDeviceType String  @map(name: "credential_device_type")
-  credentialBackedUp   Boolean @map(name: "credential_backed_up")
+  credentialDeviceType String  @map("credential_device_type")
+  credentialBackedUp   Boolean @map("credential_backed_up")
   transports           String?
   user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId               String  @map(name: "user_id")
+  userId               String  @map("user_id")
 
   @@id([userId, credentialID])
   @@map("authenticators")
@@ -129,63 +132,265 @@ model Authenticator {
 
 model Profile {
   id        String   @id @default(cuid())
-  firstName String?  @map(name: "first_name")
-  lastName  String?  @map(name: "last_name")
+  firstName String?  @map("first_name")
+  lastName  String?  @map("last_name")
   bio       String?
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @unique @map("user_id")
 
   @@map("profiles")
 }
 
-model Post {
-  id          String    @id @default(cuid())
-  title       String
-  description String
-  published   Boolean   @default(false)
-  createdAt   DateTime  @default(now()) @map(name: "created_at")
-  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String    @unique @map("user_id")
-  category    Category? @relation(fields: [categoryId], references: [id])
-  categoryId  String?   @unique @map("category_id")
+model Posts {
+  id             String           @id @default(cuid())
+  title          String
+  description    String
+  published      Boolean          @default(false)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  user           User             @relation(fields: [userId], references: [id])
+  userId         String           @map("user_id")
+  BlogCategories BlogCategories[]
 
   @@unique([userId, title])
-  @@map(name: "posts")
+  @@map("posts")
 }
 
-model Category {
-  id    String @id @default(cuid())
-  name  String
-  posts Post[]
+model BlogCategories {
+  id        String   @id @default(cuid())
+  title     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  posts     Posts[]
 
-  @@map(name: "categories")
+  @@map("blog_categories")
 }
 
-model Otp {
+model Otps {
   id        String   @id @default(cuid())
   email     String   @unique
   otp       String
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  expiresAt DateTime @updatedAt @map(name: "expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  expiresAt DateTime @updatedAt @map("expires_at")
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @unique @map("user_id")
 
-  @@map(name: "otps")
+  @@map("otps")
 }
 
-model Otl {
+model Otls {
   id        String   @id @default(cuid())
   email     String   @unique
   otl       String
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  expiresAt DateTime @updatedAt @map(name: "expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  expiresAt DateTime @updatedAt @map("expires_at")
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @unique @map("user_id")
 
-  @@map(name: "otls")
+  @@map("otls")
+}
+
+model Products {
+  id           String     @id @default(cuid())
+  title        String
+  desc         String
+  category     String
+  code         String
+  brand        String
+  available    Boolean
+  shippingDays Int        @map("shipping_days")
+  sale         Boolean
+  hot          Boolean
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  variants     Variants[]
+  reviews      Reviews[]
+  cart         Cart[]
+  wishlist     Wishlist[]
+
+  @@map("products")
+}
+
+model ProductCategories {
+  id         String                 @id @default(cuid())
+  title      String
+  createdAt  DateTime               @default(now()) @map("created_at")
+  updatedAt  DateTime               @updatedAt @map("updated_at")
+  categories ProductSubCategories[]
+
+  @@map("product_categories")
+}
+
+model ProductSubCategories {
+  id         String             @id @default(cuid())
+  title      String
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+  categories ProductCategories? @relation(fields: [categoryId], references: [id])
+  categoryId String?            @map("category_id")
+
+  @@map("product_sub_categories")
+}
+
+model Variants {
+  id           String     @id @default(cuid())
+  image        String
+  available    Boolean
+  priceFormer  Int?       @map("price_former")
+  pricePresent Int        @map("price_present")
+  unitType     String     @map("unit_type")
+  unitValue    String     @map("unit_value")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  products     Products   @relation(fields: [productId], references: [id])
+  productId    String     @map("product_id")
+  cart         Cart[]
+  wishlist     Wishlist[]
+
+  @@map("variants")
+}
+
+model Reviews {
+  id        String     @id @default(cuid())
+  date      DateTime
+  rating    Int
+  title     String
+  desc      String
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  products  Products   @relation(fields: [productId], references: [id])
+  productId String     @map("product_id")
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @map("user_id")
+  purchases Purchases?
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+model Orders {
+  id            String      @id @default(cuid())
+  datePlaced    DateTime    @map("date_placed")
+  dateDelivered DateTime?   @map("date_delivered")
+  subtotal      Int
+  taxFee        Int         @map("tax_fee")
+  serviceFee    Int         @map("service_fee")
+  shippingFee   Int         @map("shipping_fee")
+  status        String
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  user          User        @relation(fields: [userId], references: [id])
+  userId        String      @map("user_id")
+  purchases     Purchases?
+  cart          Cart[]
+  addresses     Addresses[]
+
+  @@map("orders")
+}
+
+model Addresses {
+  id        String   @id @default(cuid())
+  title     String
+  fname     String
+  lname     String
+  street    String
+  city      String
+  zip       String
+  state     String
+  country   String
+  email     String?
+  phone     String?
+  type      String
+  default   Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  orders    Orders   @relation(fields: [orderId], references: [id])
+  orderId   String   @map("order_id")
+
+  @@map("addresses")
+}
+
+model Purchases {
+  id        String   @id @default(cuid())
+  verified  Boolean  @default(false)
+  date      DateTime
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  orders    Orders   @relation(fields: [orderId], references: [id])
+  orderId   String   @unique @map("order_id")
+  reviews   Reviews  @relation(fields: [reviewId], references: [id])
+  reviewId  String   @unique @map("review_id")
+
+  @@map("purchases")
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  products  Products @relation(fields: [productId], references: [id])
+  productId String   @map("product_id")
+  variants  Variants @relation(fields: [variantId], references: [id])
+  variantId String   @map("variant_id")
+  orders    Orders   @relation(fields: [orderId], references: [id])
+  orderId   String   @map("order_id")
+
+  @@unique([userId, productId, variantId, orderId])
+  @@map("cart")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  products  Products @relation(fields: [productId], references: [id])
+  productId String   @map("product_id")
+  variants  Variants @relation(fields: [variantId], references: [id])
+  variantId String   @map("variant_id")
+
+  @@unique([userId, productId, variantId])
+  @@map("wishlist")
+}
+
+model Stores {
+  id           String   @id @default(cuid())
+  image        String
+  title        String
+  goods        String
+  distance     Int
+  deliverable  Boolean
+  deliveryTime String?  @map("devlivery_time")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("stores")
+}
+
+model PaymentMethods {
+  id        String   @id @default(cuid())
+  title     String
+  name      String
+  number    String?
+  cvc       String?
+  email     String?
+  expiry    String?
+  type      String
+  default   Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+
+  @@map("payment_methods")
 }
