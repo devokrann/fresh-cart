@@ -33,20 +33,20 @@ import handlerVariant from "@/handlers/variant";
 export default function Variant({ data }: { data: typeProduct }) {
 	const variant = data.variants[0];
 
-	const [valueChip, setValueChip] = useState(variant.unit.value);
+	const [valueChip, setValueChip] = useState(variant.unitValue);
 
 	const handlersRef = useRef<NumberInputHandlers>(null);
 	const [valueNumber, setValueNumber] = useState<string | number>(1);
 
-	const variantControlled = data.variants.find(v => v.unit.value == valueChip);
+	const variantControlled = data.variants.find(v => v.unitValue == valueChip);
 
 	return (
 		<Stack>
 			<ChipGroup multiple={false} value={valueChip} onChange={setValueChip}>
 				<Group mt={"sm"}>
 					{data.variants.map(variant => (
-						<Chip radius={"md"} size="lg" key={variant.id} value={variant.unit.value}>
-							{variant.unit.value} {handlerVariant.getUnit(variant)}
+						<Chip radius={"md"} size="lg" key={variant.id} value={variant.unitValue}>
+							{variant.unitValue} {handlerVariant.getUnit(variant)}
 						</Chip>
 					))}
 				</Group>

@@ -88,7 +88,7 @@ export default function Cart({ data }: { data: typeCart }) {
 						</Anchor>
 
 						<Text fz={"sm"} c={"dimmed"}>
-							{data.variant.unit.value} {variant.getUnit(data.variant)}
+							{data.variant.unitValue} {variant.getUnit(data.variant)}
 						</Text>
 					</Stack>
 				</GridCol>
@@ -102,22 +102,22 @@ export default function Cart({ data }: { data: typeCart }) {
 						<Text
 							inherit
 							lh={1}
-							c={data.variant.price.former ? "var(--mantine-color-red-6)" : undefined}
+							c={data.variant.priceFormer ? "var(--mantine-color-red-6)" : undefined}
 							fw={"bold"}
 							ta={{ md: "end" }}
 						>
 							<NumberFormatter
 								prefix="$"
 								suffix=".00"
-								value={data.quantity * data.variant.price.present}
+								value={data.quantity * data.variant.pricePresent}
 							/>
 						</Text>
-						{data.variant.price.former && (
+						{data.variant.priceFormer && (
 							<Text inherit lh={1} c={"dimmed"} td={"line-through"} ta={{ md: "end" }}>
 								<NumberFormatter
 									prefix="$"
 									suffix=".00"
-									value={data.quantity * data.variant.price.former}
+									value={data.quantity * data.variant.priceFormer}
 								/>
 							</Text>
 						)}

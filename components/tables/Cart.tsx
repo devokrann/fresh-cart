@@ -36,7 +36,7 @@ import total from "@/handlers/total";
 
 import ProviderProductCart from "@/providers/products/Cart";
 
-import { IconClearAll, IconGift, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
+import { IconClearAll, IconGift, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Cart.module.scss";
 import Link from "next/link";
@@ -87,7 +87,7 @@ export default function Cart() {
 				</Center>
 			</TableTd>
 			<TableTd ta={"start"}>
-				<Stack gap={0}>
+				<Stack gap={0} align="start">
 					<Anchor
 						underline="never"
 						component={Link}
@@ -100,7 +100,7 @@ export default function Cart() {
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant.unit.value} {variant.getUnit(item.variant)}
+						{item.variant.unitValue} {variant.getUnit(item.variant)}
 					</Text>
 				</Stack>
 			</TableTd>
@@ -108,7 +108,7 @@ export default function Cart() {
 				<InputNumberProduct data={item} />
 			</TableTd>
 			<TableTd>
-				{item.quantity && <NumberFormatter prefix="$ " value={item.variant.price.present * item.quantity} />}
+				{item.quantity && <NumberFormatter prefix="$ " value={item.variant.pricePresent * item.quantity} />}
 			</TableTd>
 			<TableTd>
 				{item.variant.available ? (
@@ -125,7 +125,12 @@ export default function Cart() {
 				<ProviderProductCart
 					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
 				>
-					<ActionIcon size={32} color="red" variant="subtle">
+					<ActionIcon
+						size={32}
+						color="red.6"
+						variant="subtle"
+						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
 				</ProviderProductCart>
@@ -168,7 +173,7 @@ export default function Cart() {
 			<TableCaption>
 				<Stack p={"xs"} ta={"start"}>
 					{total.getTotal(cart) > mininumDiscountPrice ? (
-						<Text inherit>
+						<Text inherit c={"light-dark(var(--mantine-color-gray-6),var(--mantine-color-text))"}>
 							You&apos;ve spent more than{" "}
 							<Text component="span" inherit fw={"bold"}>
 								${mininumDiscountPrice}
@@ -180,7 +185,7 @@ export default function Cart() {
 							!
 						</Text>
 					) : (
-						<Text inherit>
+						<Text inherit c={"light-dark(var(--mantine-color-gray-6),var(--mantine-color-text))"}>
 							Spend{" "}
 							<Text component="span" inherit fw={"bold"}>
 								${mininumDiscountPrice - total.getTotal(cart)}
@@ -195,7 +200,13 @@ export default function Cart() {
 					<Box pos={"relative"}>
 						<Slider
 							label={null}
-							thumbChildren={<IconGift size={16} stroke={2} />}
+							thumbChildren={
+								<IconGift
+									size={16}
+									stroke={2}
+									color="light-dark(var(--mantine-color-pri-6),var(--mantine-color-white))"
+								/>
+							}
 							thumbSize={32}
 							value={value}
 							onChange={setValue}
@@ -210,14 +221,27 @@ export default function Cart() {
 
 			<TableCaption display={selectedRows.length > 0 ? undefined : "none"}>
 				<Group justify="space-between">
-					<Button
-						variant="subtle"
-						color="gray"
-						leftSection={<IconClearAll size={16} stroke={2} />}
-						onClick={() => setSelectedRows([])}
-					>
-						Clear Selection ({selectedRows.length})
-					</Button>
+					<Group gap={"xs"}>
+						<Button
+							variant="subtle"
+							color="gray"
+							leftSection={<IconClearAll size={16} stroke={2} />}
+							onClick={() => setSelectedRows([])}
+							size="xs"
+						>
+							Clear ({selectedRows.length})
+						</Button>
+
+						<Button
+							variant="subtle"
+							color="gray"
+							leftSection={<IconSelect size={16} stroke={2} />}
+							onClick={() => setSelectedRows(cart.map(i => i.id))}
+							size="xs"
+						>
+							Select All ({selectedRows.length})
+						</Button>
+					</Group>
 
 					<ProviderProductCart
 						operation={{
@@ -225,8 +249,14 @@ export default function Cart() {
 							items: selectedRows.map(r => cart.find(p => p.id == r)).filter(p => p != undefined),
 						}}
 					>
-						<Button variant="subtle" color="red" leftSection={<IconTrash size={16} stroke={2} />}>
-							Remove selected items ({selectedRows.length})
+						<Button
+							variant="subtle"
+							color="red.6"
+							leftSection={<IconTrash size={16} stroke={2} />}
+							onClick={() => setSelectedRows([])}
+							size="xs"
+						>
+							Remove ({selectedRows.length})
 						</Button>
 					</ProviderProductCart>
 				</Group>

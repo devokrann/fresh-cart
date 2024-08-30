@@ -15,7 +15,7 @@ export default function Cart() {
 	return (
 		<Card className={classes.card} withBorder>
 			<Stack gap={"xs"}>
-				<Title order={2} fz={"lg"} c={"dark.4"}>
+				<Title order={2} fz={"lg"}>
 					Summary
 				</Title>
 
@@ -23,13 +23,13 @@ export default function Cart() {
 
 				<Divider />
 
-				<Title order={3} fz={"md"} c={"dark.4"}>
+				<Title order={3} fz={"md"}>
 					Add Promo or Gift Card
 				</Title>
 
 				<FormShopRedeem />
 
-				<Text c="dimmed" fz={"xs"}>
+				<Text c="light-dark(var(--mantine-color-gray-6),var(--mantine-color-text))" fz={"xs"}>
 					Terms and conditions apply.
 				</Text>
 			</Stack>

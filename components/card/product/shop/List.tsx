@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import NextImage from "next/image";
 import Link from "next/link";
@@ -21,6 +21,7 @@ import {
 	Tooltip,
 	Grid,
 	GridCol,
+	Skeleton,
 } from "@mantine/core";
 
 import {
@@ -42,13 +43,13 @@ import classes from "./List.module.scss";
 import ProviderProductCart from "@/providers/products/Cart";
 import ProviderProductWishlist from "@/providers/products/Wishlist";
 
-import { typeProduct } from "@/types/product";
+import { typeProduct, typeVariant } from "@/types/product";
 
 import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
 export default function List({ data }: { data: typeProduct }) {
-	const variant = data.variants[0];
+	const defaultProductVariant = data.variants[0];
 
 	return (
 		<Card className={classes.card}>
@@ -57,7 +58,7 @@ export default function List({ data }: { data: typeProduct }) {
 					<CardSection pos={"relative"}>
 						<Stack p={"xl"}>
 							<Image
-								src={variant.image}
+								src={defaultProductVariant.image}
 								alt={data.title}
 								w={"100%"}
 								radius={"md"}
@@ -81,11 +82,13 @@ export default function List({ data }: { data: typeProduct }) {
 								</Badge>
 							)}
 
-							{variant.priceFormer && (
+							{defaultProductVariant.priceFormer && (
 								<Badge color={`green.9`} radius={"md"}>
 									-{" "}
 									{Math.floor(
-										((variant.priceFormer - variant.pricePresent) / variant.priceFormer) * 100
+										((defaultProductVariant.priceFormer - defaultProductVariant.pricePresent) /
+											defaultProductVariant.priceFormer) *
+											100
 									)}{" "}
 									%
 								</Badge>
@@ -98,7 +101,7 @@ export default function List({ data }: { data: typeProduct }) {
 						<Stack gap={"xs"}>
 							<Stack gap={4}>
 								<Text fz={"sm"} c={"dimmed"}>
-									{data.category}
+									{data.category.title}
 								</Text>
 								<Anchor
 									underline="never"
@@ -130,11 +133,12 @@ export default function List({ data }: { data: typeProduct }) {
 						<Stack>
 							<Group gap={4}>
 								<Text inherit lh={0.5}>
-									${variant.pricePresent}
+									${defaultProductVariant.pricePresent}
 								</Text>
-								{variant.priceFormer && (
+
+								{defaultProductVariant.priceFormer && (
 									<Text inherit lh={0.5} c={"dimmed"} td={"line-through"}>
-										${variant.priceFormer}
+										${defaultProductVariant.priceFormer}
 									</Text>
 								)}
 							</Group>
@@ -149,7 +153,10 @@ export default function List({ data }: { data: typeProduct }) {
 								</ModalProduct>
 
 								<ProviderProductWishlist
-									operation={{ type: "add", items: [{ product: data, variant }] }}
+									operation={{
+										type: "add",
+										items: [{ product: data, variant: defaultProductVariant }],
+									}}
 								>
 									<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>
 										<ActionIcon size={32}>
@@ -159,7 +166,10 @@ export default function List({ data }: { data: typeProduct }) {
 								</ProviderProductWishlist>
 
 								<ProviderProductCart
-									operation={{ type: "add", items: [{ product: data, variant: data.variants[0] }] }}
+									operation={{
+										type: "add",
+										items: [{ product: data, variant: defaultProductVariant }],
+									}}
 								>
 									<Tooltip label={"Add to Cart"} withArrow fz={"sm"}>
 										<ActionIcon size={32}>

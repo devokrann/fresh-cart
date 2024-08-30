@@ -27,18 +27,18 @@ import SelectorVariant from "@/components/selector/Variant";
 
 import getFraction from "@/handlers/fraction";
 
-import { typeProduct } from "@/types/product";
-import React from "react";
+import { typeProduct, typeVariant } from "@/types/product";
+import React, { useEffect, useState } from "react";
 
 export default function Product({ data, children }: { data: typeProduct; children: React.ReactNode }) {
-	const variant = data.variants[0];
+	const defaultProductVariant = data.variants[0];
 
 	const [opened, { open, close }] = useDisclosure(false);
 
 	const metadata = [
 		{ label: "Product Code", value: data.code },
 		{ label: "Availability", value: data.available ? "In Stock" : "Out of Stock" },
-		{ label: "Type", value: data.category },
+		{ label: "Type", value: data.category.title },
 		{
 			label: "Shipping",
 			value: `${data.shippingDays} day${data.shippingDays > 1 ? "s" : ""} (free pickup today)`,
@@ -71,7 +71,7 @@ export default function Product({ data, children }: { data: typeProduct; childre
 							</Box>
 
 							<Text c={"sl.4"} fw={500}>
-								{data.category}
+								{data.category.title}
 							</Text>
 
 							<Stack justify="space-between">
@@ -92,16 +92,22 @@ export default function Product({ data, children }: { data: typeProduct; childre
 
 							<Group gap={4} fz={24}>
 								<Text inherit lh={0.5} fw={500}>
-									${variant.pricePresent}
+									${defaultProductVariant.pricePresent}
 								</Text>
-								{variant.priceFormer && (
+								{defaultProductVariant.priceFormer && (
 									<Group>
 										<Text inherit lh={0.5} c={"dimmed"} td={"line-through"} fw={500}>
-											${variant.priceFormer}
+											${defaultProductVariant.priceFormer}
 										</Text>
 
 										<Text inherit lh={0.5} c={"red.9"} fz={"md"}>
-											{100 - Math.floor((variant.pricePresent / variant.priceFormer) * 100)}% off
+											{100 -
+												Math.floor(
+													(defaultProductVariant.pricePresent /
+														defaultProductVariant.priceFormer) *
+														100
+												)}
+											% off
 										</Text>
 									</Group>
 								)}

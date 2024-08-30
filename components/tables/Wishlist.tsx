@@ -28,7 +28,7 @@ import {
 } from "@mantine/core";
 
 import ContextProducts from "@/contexts/Products";
-import { IconClearAll, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
+import { IconClearAll, IconMoodEmpty, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Wishlist.module.scss";
 import Link from "next/link";
@@ -82,7 +82,7 @@ export default function Wishlist() {
 				</Center>
 			</TableTd>
 			<TableTd ta={"start"}>
-				<Stack gap={0}>
+				<Stack gap={0} align="start">
 					<Anchor
 						underline="never"
 						component={Link}
@@ -95,12 +95,12 @@ export default function Wishlist() {
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant.unit.value} {variant.getUnit(item.variant)}
+						{item.variant.unitValue} {variant.getUnit(item.variant)}
 					</Text>
 				</Stack>
 			</TableTd>
 			<TableTd>
-				<NumberFormatter prefix="$ " value={item.variant.price.present} />
+				<NumberFormatter prefix="$ " value={item.variant.pricePresent} />
 			</TableTd>
 			<TableTd>
 				{item.variant.available ? (
@@ -120,7 +120,12 @@ export default function Wishlist() {
 					<ProviderProductCart
 						operation={{ type: "add", items: [{ product: item.product, variant: item.variant }] }}
 					>
-						<Button size="xs" variant="outline" leftSection={<IconShoppingCartPlus size={16} stroke={2} />}>
+						<Button
+							variant="outline"
+							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
+							onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+							size="xs"
+						>
 							Add to Cart
 						</Button>
 					</ProviderProductCart>
@@ -130,7 +135,12 @@ export default function Wishlist() {
 				<ProviderProductWishlist
 					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
 				>
-					<ActionIcon size={32} color="red" variant="subtle">
+					<ActionIcon
+						size={32}
+						color="red.6"
+						variant="subtle"
+						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
 				</ProviderProductWishlist>
@@ -165,14 +175,26 @@ export default function Wishlist() {
 
 			<TableCaption display={selectedRows.length > 0 ? undefined : "none"}>
 				<Group justify="space-between">
-					<Button
-						variant="subtle"
-						color="gray"
-						leftSection={<IconClearAll size={16} stroke={2} />}
-						onClick={() => setSelectedRows([])}
-					>
-						Clear Selection ({selectedRows.length})
-					</Button>
+					<Group gap={"xs"}>
+						<Button
+							variant="subtle"
+							color="gray"
+							leftSection={<IconClearAll size={16} stroke={2} />}
+							onClick={() => setSelectedRows([])}
+							size="xs"
+						>
+							Clear ({selectedRows.length})
+						</Button>
+						<Button
+							variant="subtle"
+							color="gray"
+							leftSection={<IconSelect size={16} stroke={2} />}
+							onClick={() => setSelectedRows(wishlist.map(i => i.id))}
+							size="xs"
+						>
+							Select All ({selectedRows.length})
+						</Button>
+					</Group>
 
 					<Group>
 						<ProviderProductWishlist
@@ -181,8 +203,14 @@ export default function Wishlist() {
 								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
 							}}
 						>
-							<Button variant="subtle" color="red" leftSection={<IconTrash size={16} stroke={2} />}>
-								Remove selected items ({selectedRows.length})
+							<Button
+								variant="subtle"
+								color="red.6"
+								leftSection={<IconTrash size={16} stroke={2} />}
+								onClick={() => setSelectedRows([])}
+								size="xs"
+							>
+								Remove ({selectedRows.length})
 							</Button>
 						</ProviderProductWishlist>
 
@@ -202,10 +230,12 @@ export default function Wishlist() {
 							>
 								<Button
 									variant="subtle"
-									color="green"
+									color="green.6"
 									leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
+									onClick={() => setSelectedRows([])}
+									size="xs"
 								>
-									Add selected items to cart ({selectedRows.length})
+									Add to cart ({selectedRows.length})
 								</Button>
 							</ProviderProductCart>
 						</ProviderProductWishlist>

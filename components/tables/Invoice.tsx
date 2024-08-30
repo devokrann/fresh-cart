@@ -23,7 +23,7 @@ export default function Invoice() {
 
 		cart.map(p => {
 			if (p.quantity) {
-				total += p.variant.price.present * p.quantity;
+				total += p.variant.pricePresent * p.quantity;
 			}
 		});
 
@@ -45,7 +45,7 @@ export default function Invoice() {
 	const rows = data.map(item => (
 		<Table.Tr key={item.label} fw={data.indexOf(item) == data.length - 1 ? "bold" : undefined}>
 			<Table.Td>{item.label}</Table.Td>
-			<Table.Td ta={"end"} c={item.label == "Discount" ? "red" : undefined}>
+			<Table.Td ta={"end"} c={item.label == "Discount" ? "red.6" : undefined}>
 				{item.label == "Discount" ? "- " : ""}{" "}
 				<NumberFormatter thousandSeparator prefix={"$ "} suffix=".00" value={item.value} />
 			</Table.Td>
