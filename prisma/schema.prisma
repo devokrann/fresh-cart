@@ -27,8 +27,8 @@ model User {
   email          String           @unique
   emailVerified  DateTime?        @map("email_verified")
   image          String?
-  Accounts       Accounts[]
-  Sessions       Sessions[]
+  accounts       Accounts[]
+  sessions       Sessions[]
   // Optional for WebAuthn support
   Authenticator  Authenticator[]
   // end next auth config
@@ -144,15 +144,15 @@ model Profile {
 }
 
 model Posts {
-  id             String           @id @default(cuid())
-  title          String
-  description    String
-  published      Boolean          @default(false)
-  createdAt      DateTime         @default(now()) @map("created_at")
-  updatedAt      DateTime         @updatedAt @map("updated_at")
-  user           User             @relation(fields: [userId], references: [id])
-  userId         String           @map("user_id")
-  BlogCategories BlogCategories[]
+  id          String           @id @default(cuid())
+  title       String
+  description String
+  published   Boolean          @default(false)
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  user        User             @relation(fields: [userId], references: [id])
+  userId      String           @map("user_id")
+  categories  BlogCategories[]
 
   @@unique([userId, title])
   @@map("posts")

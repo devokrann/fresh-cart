@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 		const { userId, sessionToken, tokenExpiry, device, ...locationData } = await req.json();
 
 		// find current session
-		const currentSession = await prisma.session.findUnique({ where: { sessionToken } });
+		const currentSession = await prisma.sessions.findUnique({ where: { sessionToken } });
 
 		if (!currentSession) {
 			// create session
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 				return Response.json({ session: { exists: true, expired: false, data: currentSession } });
 			} else {
 				// delete expired session
-				await prisma.session.delete({ where: { sessionToken } });
+				await prisma.sessions.delete({ where: { sessionToken } });
 
 				// create new session
 				await createSession({
@@ -66,8 +66,8 @@ const createSession = async (fields: {
 					create: [
 						{
 							sessionToken: fields.token,
-							os: fields.device ? fields.device.os : null,
-							...fields.locationData,
+							// os: fields.device ? fields.device.os : null,
+							// ...fields.locationData,
 							expires: fields.tokenExpiry,
 						},
 					],

@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 			return Response.json({ user: { exists: false } });
 		} else {
 			// query database for link
-			const otlRecord = await prisma.otl.findUnique({ where: { email } });
+			const otlRecord = await prisma.otls.findUnique({ where: { email } });
 			// handle null password field for oauth sign-up's
 			const samplePassword = "@72@^0nH*Nl%&^@y!Kh%mU#wFb&B@cBStl%O9a3QHc#134J65D@rplg35t1J^L@w";
 
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 					});
 				} else {
 					// delete expired otl record
-					await prisma.otl.delete({ where: { email } });
+					await prisma.otls.delete({ where: { email } });
 
 					// create new otl value
 					const otlValueNew = await createOtlValue({
