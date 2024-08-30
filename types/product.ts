@@ -1,6 +1,8 @@
+import { typeCategory } from "./categories";
 import { typeReview } from "./review";
 
 export interface typeVariant {
+	id: string;
 	image: string;
 	available: boolean;
 	priceFormer: number | null;
@@ -10,9 +12,9 @@ export interface typeVariant {
 }
 
 export interface typeProduct {
+	id: string;
 	title: string;
 	desc: string;
-	category: string;
 	code: string;
 	brand: string;
 	available: boolean;
@@ -22,6 +24,7 @@ export interface typeProduct {
 	variants: typeVariant[];
 
 	// relationships
+	category: typeCategory;
 	reviews: typeReview[];
 }
 
