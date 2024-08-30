@@ -121,7 +121,7 @@ export default function Redeem() {
 					<TextInput required placeholder="Promo or Gift Card" {...form.getInputProps("code")} />
 				</GridCol>
 				<GridCol span={{ base: 12 }}>
-					<Button fullWidth type="submit" variant="outline" color="black" loading={sending}>
+					<Button fullWidth type="submit" variant="outline" color="gray" loading={sending}>
 						{sending ? "Redeeming" : "Redeem"}
 					</Button>
 				</GridCol>

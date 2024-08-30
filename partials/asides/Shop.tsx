@@ -5,11 +5,10 @@ import { Autocomplete, Button, Card, Checkbox, Group, Rating, Stack, Title } fro
 import LayoutSection from "@/layouts/Section";
 import NavShop from "@/components/navigation/Shop";
 import SliderPrice from "@/components/sliders/Price";
-import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import InputCheckboxStores from "@/components/inputs/checkbox/Stores";
 import CardShopOffer from "@/components/card/shop/Offer";
+import FormShopStores from "../forms/shop/Stores";
 
-import categories from "@/data/categories";
 import stores from "@/data/stores";
 
 export default function Shop() {
@@ -23,7 +22,7 @@ export default function Shop() {
 						</Title>
 
 						<Stack gap={0}>
-							<NavShop data={categories} />
+							<NavShop />
 						</Stack>
 					</Stack>
 				</LayoutSection>
@@ -34,15 +33,7 @@ export default function Shop() {
 							Stores
 						</Title>
 
-						<Stack>
-							<InputAutocompleteStores data={stores.map(s => s.title)} />
-
-							<Stack gap={"xs"}>
-								{stores.map(store => (
-									<InputCheckboxStores key={store.title} title={store.title} />
-								))}
-							</Stack>
-						</Stack>
+						<FormShopStores />
 					</Stack>
 				</LayoutSection>
 
