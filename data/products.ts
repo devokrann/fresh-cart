@@ -612,3 +612,5 @@ const products: typeProduct[] = [
 		hot: false,
 	},
 ];
+
+export default products;

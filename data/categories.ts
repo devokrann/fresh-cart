@@ -1,6 +1,6 @@
-import { typeCategories } from "@/types/categories";
+import { typeCategory } from "@/types/categories";
 
-const categories: typeCategories[] = [
+const categories: typeCategory[] = [
 	{
 		title: "Dairy, Bread & Eggs",
 		subCategories: [
@@ -89,5 +89,3 @@ const categories: typeCategories[] = [
 		subCategories: ["Chicken", "Sausage, Salami & Ham", "Exotic Meat", "Eggs", "Frozen Non-Veg Snacks"],
 	},
 ];
-
-export default categories;
