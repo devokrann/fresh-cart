@@ -195,32 +195,36 @@ model Otls {
 }
 
 model Products {
-  id           String     @id @default(cuid())
-  title        String
-  desc         String
-  category     String
-  code         String
-  brand        String
-  available    Boolean
-  shippingDays Int        @map("shipping_days")
-  sale         Boolean
-  hot          Boolean
-  createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @updatedAt @map("updated_at")
-  variants     Variants[]
-  reviews      Reviews[]
-  cart         Cart[]
-  wishlist     Wishlist[]
+  id            String                @id @default(cuid())
+  title         String
+  desc          String
+  code          String
+  brand         String
+  available     Boolean
+  shippingDays  Int                   @map("shipping_days")
+  sale          Boolean
+  hot           Boolean
+  createdAt     DateTime              @default(now()) @map("created_at")
+  updatedAt     DateTime              @updatedAt @map("updated_at")
+  variants      Variants[]
+  reviews       Reviews[]
+  cart          Cart[]
+  wishlist      Wishlist[]
+  category      ProductCategories     @relation(fields: [categoryId], references: [id])
+  categoryId    String                @map("category_id")
+  subCategory   ProductSubCategories? @relation(fields: [subCategoryId], references: [id])
+  subCategoryId String?               @map("sub_category_id")
 
   @@map("products")
 }
 
 model ProductCategories {
-  id         String                 @id @default(cuid())
-  title      String
-  createdAt  DateTime               @default(now()) @map("created_at")
-  updatedAt  DateTime               @updatedAt @map("updated_at")
-  categories ProductSubCategories[]
+  id            String                 @id @default(cuid())
+  title         String
+  createdAt     DateTime               @default(now()) @map("created_at")
+  updatedAt     DateTime               @updatedAt @map("updated_at")
+  subCategories ProductSubCategories[]
+  Products      Products[]
 
   @@map("product_categories")
 }
@@ -230,8 +234,9 @@ model ProductSubCategories {
   title      String
   createdAt  DateTime           @default(now()) @map("created_at")
   updatedAt  DateTime           @updatedAt @map("updated_at")
-  categories ProductCategories? @relation(fields: [categoryId], references: [id])
+  category   ProductCategories? @relation(fields: [categoryId], references: [id])
   categoryId String?            @map("category_id")
+  Products   Products[]
 
   @@map("product_sub_categories")
 }
