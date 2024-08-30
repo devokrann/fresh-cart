@@ -2,7 +2,7 @@ import { typeVariant } from "@/types/product";
 
 const variant = {
 	getUnit(variant: typeVariant) {
-		switch (variant.unit.type) {
+		switch (variant.unitType) {
 			case "volume":
 				return "ml";
 			case "mass":

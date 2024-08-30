@@ -6,7 +6,7 @@ const total = {
 
 		products.map(p => {
 			if (p.quantity) {
-				total += p.variant.price.present * p.quantity;
+				total += p.variant.pricePresent * p.quantity;
 			}
 		});
 

@@ -1,7 +1,12 @@
 import { typeCart } from "@/types/cart";
 
 const getCart = async (): Promise<typeCart[]> => {
-	return [];
+	try {
+		return [];
+	} catch (error) {
+		return [];
+		console.error("X-> Error fetching cart", error);
+	}
 };
 
 export default getCart;
