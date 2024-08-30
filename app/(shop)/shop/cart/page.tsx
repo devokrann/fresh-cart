@@ -59,7 +59,11 @@ export default async function Cart() {
 
 							<Group gap={"xs"}>
 								<ProviderProductCart operation={{ type: "clear", unmount: true }}>
-									<Button variant="outline" leftSection={<IconTrash size={16} stroke={2} />}>
+									<Button
+										variant="outline"
+										color="green.6"
+										leftSection={<IconTrash size={16} stroke={2} />}
+									>
 										Clear Cart
 									</Button>
 								</ProviderProductCart>

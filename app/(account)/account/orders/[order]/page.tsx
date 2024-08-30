@@ -28,7 +28,6 @@ import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import CarouselShop from "@/components/carousel/Shop";
 
 import blog from "@/data/blog";
-import products from "@/data/products";
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
 import stores from "@/data/stores";
 import link from "@/handlers/parsers/string/link";
@@ -70,8 +69,8 @@ export default function Order({ params }: { params: typeParams }) {
 									<BadgeOrder status={data.status} />
 								</Group>
 								<Text inherit>
-									Order <u>{data.id}</u> was placed on <u>{data.datePlaced}</u> and is currently being
-									prepared.
+									Order <u>{data.id}</u> was placed on <u>{data.datePlaced.toDateString()}</u> and is
+									currently being prepared.
 								</Text>
 								<Text inherit>
 									If you have any questions, please feel free to contact us, our customer service

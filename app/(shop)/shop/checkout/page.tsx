@@ -4,6 +4,7 @@ import { Metadata } from "next";
 
 import {
 	Anchor,
+	Box,
 	Button,
 	ButtonGroup,
 	Card,
@@ -67,11 +68,21 @@ export default async function Checkout() {
 						</Group>
 					</GridCol>
 
-					<GridCol span={{ md: 7, lg: 8 }}>
-						<AccordionCheckout />
-					</GridCol>
+					<GridCol span={12}>
+						<Grid gutter={{ md: 48 }}>
+							<GridCol span={{ md: 7, lg: 8 }}>
+								<Box pos={"sticky"} top={48}>
+									<AccordionCheckout />
+								</Box>
+							</GridCol>
 
-					<GridCol span={{ md: 5, lg: 4 }}>{<CardShopCheckout />}</GridCol>
+							<GridCol span={{ md: 5, lg: 4 }}>
+								<Box pos={"sticky"} top={48}>
+									<CardShopCheckout />
+								</Box>
+							</GridCol>
+						</Grid>
+					</GridCol>
 				</Grid>
 			</LayoutSection>
 		</LayoutPage>
