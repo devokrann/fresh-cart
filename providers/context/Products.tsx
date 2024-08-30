@@ -11,7 +11,6 @@ import getWishlist from "@/handlers/database/getWishlist";
 import getCart from "@/handlers/database/getCart";
 import getOrders from "@/handlers/database/getOrders";
 import array from "@/utilities/array";
-import postProducts from "@/handlers/database/addProducts";
 
 enum ProductArrays {
 	CART = "cart",
