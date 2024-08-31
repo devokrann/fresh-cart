@@ -7,5 +7,7 @@ export interface typeReview {
 	title: string;
 	desc: string;
 
+	// rels
 	purchase: typePurchase;
+	user: typeUser;
 }

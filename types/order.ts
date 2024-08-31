@@ -3,6 +3,7 @@ import { typeCart } from "./cart";
 import { typeUser } from "./user";
 
 export interface typeOrder {
+	id: string;
 	datePlaced: Date;
 	dateDelivered: Date | null;
 	subtotal: number;

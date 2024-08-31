@@ -1,6 +1,8 @@
+import { typeBlogPostCategory } from "./categories";
 import { typeUser } from "./user";
 
 export interface typePost {
+	id: string;
 	image: string;
 	title: string;
 	description: string;
@@ -8,7 +10,7 @@ export interface typePost {
 	quoter: string;
 	date: string;
 	length: number;
-	category: string;
+	category: typeBlogPostCategory;
 
 	// relationships
 	user: typeUser;
