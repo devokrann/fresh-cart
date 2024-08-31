@@ -12,7 +12,7 @@ const orders: typeOrder[] = [
 		shippingFee: 234,
 		status: "canceled",
 		user: users[0],
-		// products: [cart[0], cart[1], cart[2]],
+		orderedProducts: [cart[0], cart[1], cart[2]],
 		addresses: [addresses[0], addresses[1]],
 	},
 	{
@@ -24,7 +24,7 @@ const orders: typeOrder[] = [
 		shippingFee: 234,
 		status: "completed",
 		user: users[0],
-		// products: [cart[0], cart[1], cart[2]],
+		orderedProducts: [cart[0], cart[1], cart[2]],
 		addresses: [addresses[0], addresses[1]],
 	},
 	{
@@ -36,7 +36,7 @@ const orders: typeOrder[] = [
 		shippingFee: 234,
 		status: "processing",
 		user: users[0],
-		// products: [cart[0], cart[1], cart[2]],
+		orderedProducts: [cart[0], cart[1], cart[2]],
 		addresses: [addresses[0], addresses[1]],
 	},
 	{
@@ -48,7 +48,7 @@ const orders: typeOrder[] = [
 		shippingFee: 234,
 		status: "processing",
 		user: users[0],
-		// products: [cart[0], cart[1], cart[2]],
+		orderedProducts: [cart[0], cart[1], cart[2]],
 		addresses: [addresses[0], addresses[1]],
 	},
 ];
