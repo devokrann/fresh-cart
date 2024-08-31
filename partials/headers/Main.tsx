@@ -29,7 +29,8 @@ import { auth } from "@/auth";
 import ProviderAuthSignIn from "@/providers/auth/signIn";
 import MenuAvatar from "@/components/menus/Avatar";
 import { IconHeart, IconUser } from "@tabler/icons-react";
-import ProviderIndicatorProducts from "@/providers/indicators/Products";
+import IndicatorWishlist from "@/components/indicators/Wishlist";
+
 import Link from "next/link";
 
 export default async function Main() {
@@ -58,7 +59,7 @@ export default async function Main() {
 							<Divider orientation="vertical" />
 
 							<Group gap={"xs"}>
-								<ProviderIndicatorProducts variant="wishlist">
+								<IndicatorWishlist>
 									<Center>
 										<ActionIcon
 											variant="transparent"
@@ -71,7 +72,7 @@ export default async function Main() {
 											</Center>
 										</ActionIcon>
 									</Center>
-								</ProviderIndicatorProducts>
+								</IndicatorWishlist>
 
 								<DrawerCart />
 
