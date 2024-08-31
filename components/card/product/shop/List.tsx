@@ -40,8 +40,8 @@ import getFraction from "@/handlers/fraction";
 
 import classes from "./List.module.scss";
 
-import ProviderProductCart from "@/providers/products/Cart";
-import ProviderProductWishlist from "@/providers/products/Wishlist";
+import OperatorCart from "@/components/operators/Cart";
+import OperatorWishlist from "@/components/operators/Wishlist";
 
 import { typeProduct, typeVariant } from "@/types/product";
 
@@ -152,7 +152,7 @@ export default function List({ data }: { data: typeProduct }) {
 									</Tooltip>
 								</ModalProduct>
 
-								<ProviderProductWishlist
+								<OperatorWishlist
 									operation={{
 										type: "add",
 										items: [{ product: data, variant: defaultProductVariant }],
@@ -163,9 +163,9 @@ export default function List({ data }: { data: typeProduct }) {
 											<IconHeart size={20} stroke={1.5} />
 										</ActionIcon>
 									</Tooltip>
-								</ProviderProductWishlist>
+								</OperatorWishlist>
 
-								<ProviderProductCart
+								<OperatorCart
 									operation={{
 										type: "add",
 										items: [{ product: data, variant: defaultProductVariant }],
@@ -176,7 +176,7 @@ export default function List({ data }: { data: typeProduct }) {
 											<IconShoppingCart size={20} stroke={1.5} />
 										</ActionIcon>
 									</Tooltip>
-								</ProviderProductCart>
+								</OperatorCart>
 							</Group>
 						</Stack>
 					</Stack>

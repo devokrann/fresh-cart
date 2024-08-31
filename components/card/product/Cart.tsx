@@ -48,7 +48,7 @@ import classes from "./Cart.module.scss";
 import ContextProducts from "@/contexts/Products";
 
 import InputNumberProduct from "@/components/inputs/number/Product";
-import ProviderProductCart from "@/providers/products/Cart";
+import OperatorCart from "@/components/operators/Cart";
 
 import variant from "@/handlers/variant";
 
@@ -125,7 +125,7 @@ export default function Cart({ data }: { data: typeCart }) {
 				</GridCol>
 
 				<GridCol span={{ base: 12, md: 1 }}>
-					<ProviderProductCart
+					<OperatorCart
 						operation={{
 							type: "remove",
 							items: [{ product: data.product, variant: data.variant }],
@@ -134,7 +134,7 @@ export default function Cart({ data }: { data: typeCart }) {
 						<ActionIcon size={24} color="gray" variant="subtle">
 							<IconX size={16} stroke={2} />
 						</ActionIcon>
-					</ProviderProductCart>
+					</OperatorCart>
 				</GridCol>
 			</Grid>
 		</Card>

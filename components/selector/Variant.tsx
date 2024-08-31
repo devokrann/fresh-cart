@@ -25,8 +25,8 @@ import classes from "./Variant.module.scss";
 import { typeProduct } from "@/types/product";
 import { notifications } from "@mantine/notifications";
 
-import ProviderProductCart from "@/providers/products/Cart";
-import ProviderProductWishlist from "@/providers/products/Wishlist";
+import OperatorCart from "@/components/operators/Cart";
+import OperatorWishlist from "@/components/operators/Wishlist";
 
 import handlerVariant from "@/handlers/variant";
 
@@ -105,7 +105,7 @@ export default function Variant({ data }: { data: typeProduct }) {
 			</Group>
 
 			<Group>
-				<ProviderProductCart
+				<OperatorCart
 					operation={{
 						type: "add",
 						items: [{ product: data, variant: variantControlled ? variantControlled : variant }],
@@ -115,9 +115,9 @@ export default function Variant({ data }: { data: typeProduct }) {
 					<Button size={"md"} leftSection={<IconShoppingCart size={20} stroke={1.5} />}>
 						Add to Cart
 					</Button>
-				</ProviderProductCart>
+				</OperatorCart>
 
-				<ProviderProductWishlist
+				<OperatorWishlist
 					operation={{
 						type: "add",
 						items: [{ product: data, variant: variantControlled ? variantControlled : variant }],
@@ -128,7 +128,7 @@ export default function Variant({ data }: { data: typeProduct }) {
 							<IconHeart size={20} stroke={1.5} />
 						</ActionIcon>
 					</Tooltip>
-				</ProviderProductWishlist>
+				</OperatorWishlist>
 			</Group>
 		</Stack>
 	);

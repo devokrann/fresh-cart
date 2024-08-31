@@ -68,16 +68,16 @@ export default function Products({ data }: { data: typeCart[] }) {
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant.unit.value} {variant.getUnit(item.variant)}
+						{item.variant.unitValue} {variant.getUnit(item.variant)}
 					</Text>
 				</Stack>
 			</TableTd>
 			<TableTd>
-				<NumberFormatter prefix="$ " value={item.variant.price.present} />
+				<NumberFormatter prefix="$ " value={item.variant.pricePresent} />
 			</TableTd>
 			<TableTd>{item.quantity}</TableTd>
 			<TableTd>
-				<NumberFormatter prefix="$ " value={item.variant.price.present * item.quantity} thousandSeparator />
+				<NumberFormatter prefix="$ " value={item.variant.pricePresent * item.quantity} thousandSeparator />
 			</TableTd>
 		</TableTr>
 	));

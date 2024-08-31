@@ -15,6 +15,7 @@ import {
 	Group,
 	Image,
 	NumberFormatter,
+	Skeleton,
 	Slider,
 	Stack,
 	Table,
@@ -28,13 +29,13 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextProducts from "@/contexts/Products";
+import ContextCart from "@/contexts/user/Cart";
 import InputNumberProduct from "../inputs/number/Product";
 import NotificationEmpty from "../notification/Empty";
 
 import total from "@/handlers/total";
 
-import ProviderProductCart from "@/providers/products/Cart";
+import OperatorCart from "@/components/operators/Cart";
 
 import { IconClearAll, IconGift, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
@@ -45,20 +46,30 @@ import variant from "@/handlers/variant";
 import { typeCart } from "@/types/cart";
 
 export default function Cart() {
-	const productsContext = useContext(ContextProducts);
+	const cartContext = useContext(ContextCart);
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	if (!cartContext) {
+		throw new Error("ChildComponent must be used within a ContextCart.Provider");
 	}
 
-	const { cart, setCart } = productsContext;
+	const { cart, setCart } = cartContext;
 
 	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
-	const rows = cart.map(item => (
+	const widths = {
+		checkBox: "5%",
+		image: "15%",
+		product: "30%",
+		amount: "20%",
+		price: "10%",
+		status: "10%",
+		remove: "10%",
+	};
+
+	const rows = cart?.map(item => (
 		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
-			<TableTd>
-				<Center>
+			<TableTd w={widths.checkBox}>
+				<Stack align="end">
 					<Checkbox
 						aria-label="Select row"
 						checked={selectedRows.includes(item.id)}
@@ -70,9 +81,9 @@ export default function Cart() {
 							)
 						}
 					/>
-				</Center>
+				</Stack>
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.image}>
 				<Center>
 					<Image
 						src={item.variant.image}
@@ -86,7 +97,7 @@ export default function Cart() {
 					/>
 				</Center>
 			</TableTd>
-			<TableTd ta={"start"}>
+			<TableTd w={widths.product} ta={"start"}>
 				<Stack gap={0} align="start">
 					<Anchor
 						underline="never"
@@ -104,13 +115,13 @@ export default function Cart() {
 					</Text>
 				</Stack>
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.amount}>
 				<InputNumberProduct data={item} />
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.price}>
 				{item.quantity && <NumberFormatter prefix="$ " value={item.variant.pricePresent * item.quantity} />}
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.status}>
 				{item.variant.available ? (
 					<Badge radius={"md"} color="green" c={"white"}>
 						In Stock
@@ -121,10 +132,8 @@ export default function Cart() {
 					</Badge>
 				)}
 			</TableTd>
-			<TableTd>
-				<ProviderProductCart
-					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
-				>
+			<TableTd w={widths.remove}>
+				<OperatorCart operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}>
 					<ActionIcon
 						size={32}
 						color="red.6"
@@ -133,20 +142,97 @@ export default function Cart() {
 					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
-				</ProviderProductCart>
+				</OperatorCart>
 			</TableTd>
 		</TableTr>
 	));
 
+	const skeletonRows = (
+		<TableTr>
+			<TableTd w={widths.checkBox}>
+				<Stack align="end">
+					<Skeleton height={16} w={16} />
+				</Stack>
+			</TableTd>
+			<TableTd w={widths.image}>
+				<Center>
+					<Skeleton height={56} w={56} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.product}>
+				<Stack align="start" gap={"xs"}>
+					<Skeleton height={16} w={"50%"} />
+					<Skeleton height={16} w={64} />
+				</Stack>
+			</TableTd>
+			<TableTd w={widths.amount}>
+				<Center>
+					<Skeleton height={32} w={"75%"} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.price}>
+				<Center>
+					<Skeleton height={16} w={"50%"} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.status}>
+				<Center>
+					<Skeleton height={16} w={"75%"} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.remove}>
+				<Center>
+					<Skeleton height={32} w={32} />
+				</Center>
+			</TableTd>
+		</TableTr>
+	);
+
 	const mininumDiscountPrice = 300;
 
-	const [value, setValue] = useState(total.getTotal(cart));
+	const [value, setValue] = useState(cart ? total.getTotal(cart) : 0);
 
 	useEffect(() => {
-		setValue(total.getTotal(cart));
+		setValue(cart ? total.getTotal(cart) : 0);
 	}, [cart]);
 
-	return cart.length > 0 ? (
+	return !cart ? (
+		<Table
+			classNames={classes}
+			withColumnBorders={false}
+			captionSide="top"
+			style={{
+				borderRadius: "var(--mantine-radius-md)",
+				borderBottomRightRadius: "var(--mantine-radius-md)",
+				overflow: "hidden",
+			}}
+		>
+			<TableThead>
+				<TableTr>
+					<TableTh style={{ borderTopLeftRadius: "var(--mantine-radius-md)" }} />
+					<TableTh>Image</TableTh>
+					<TableTh ta={"start"}>Product</TableTh>
+					<TableTh>Amount</TableTh>
+					<TableTh>Price</TableTh>
+					<TableTh>Status</TableTh>
+					<TableTh style={{ borderTopRightRadius: "var(--mantine-radius-md)" }} />
+				</TableTr>
+			</TableThead>
+			<TableTbody>
+				{skeletonRows}
+				{skeletonRows}
+				{skeletonRows}
+			</TableTbody>
+
+			<TableCaption>
+				<Stack p={"xs"} ta={"start"} gap={"xl"}>
+					<Skeleton height={16} width={240} />
+
+					<Skeleton height={16} />
+				</Stack>
+			</TableCaption>
+		</Table>
+	) : cart.length > 0 ? (
 		<Table
 			classNames={classes}
 			withColumnBorders={false}
@@ -243,7 +329,7 @@ export default function Cart() {
 						</Button>
 					</Group>
 
-					<ProviderProductCart
+					<OperatorCart
 						operation={{
 							type: "remove",
 							items: selectedRows.map(r => cart.find(p => p.id == r)).filter(p => p != undefined),
@@ -258,7 +344,7 @@ export default function Cart() {
 						>
 							Remove ({selectedRows.length})
 						</Button>
-					</ProviderProductCart>
+					</OperatorCart>
 				</Group>
 			</TableCaption>
 		</Table>

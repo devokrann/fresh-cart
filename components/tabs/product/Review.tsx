@@ -65,34 +65,34 @@ export default function Review({ data }: { data: typeProduct }) {
 		},
 	];
 
-	const rates = [
-		{
-			star: 5,
-			rate: data.rating.stars.five / data.rating.raters,
-		},
-		{
-			star: 4,
-			rate: data.rating.stars.four / data.rating.raters,
-		},
-		{
-			star: 3,
-			rate: data.rating.stars.three / data.rating.raters,
-		},
-		{
-			star: 2,
-			rate: data.rating.stars.two / data.rating.raters,
-		},
-		{
-			star: 1,
-			rate: data.rating.stars.one / data.rating.raters,
-		},
-	];
+	// const rates = [
+	// 	{
+	// 		star: 5,
+	// 		rate: data.rating.stars.five / data.rating.raters,
+	// 	},
+	// 	{
+	// 		star: 4,
+	// 		rate: data.rating.stars.four / data.rating.raters,
+	// 	},
+	// 	{
+	// 		star: 3,
+	// 		rate: data.rating.stars.three / data.rating.raters,
+	// 	},
+	// 	{
+	// 		star: 2,
+	// 		rate: data.rating.stars.two / data.rating.raters,
+	// 	},
+	// 	{
+	// 		star: 1,
+	// 		rate: data.rating.stars.one / data.rating.raters,
+	// 	},
+	// ];
 
 	const additional = [
 		{ label: "Category", item: data.category },
 		{ label: "Brand", item: data.brand },
 		{ label: "Product Number", item: data.code },
-		{ label: "Shipping Days", item: data.shipping.days },
+		{ label: "Shipping Days", item: data.shippingDays },
 		{ label: "Available packaging", item: "LOLDuis aute irure dolor in reprehenderit" },
 		{ label: "Sunt in culpa qui", item: "Lorem ipsum dolor sit amet" },
 		{ label: "Weight", item: "Dolor sit amet" },
@@ -148,21 +148,21 @@ export default function Review({ data }: { data: typeProduct }) {
 								<Stack gap={"xs"}>
 									<Title order={2}>Customer Reviews</Title>
 
-									<Group>
+									{/* <Group>
 										<Rating
 											value={data.rating.rating}
 											fractions={getFraction(data.rating.rating)}
 											readOnly
 										/>
 										<Text inherit>{data.rating.rating} out of 5</Text>
-									</Group>
+									</Group> */}
 
 									<Text inherit>
-										<NumberFormatter value={data.rating.raters} thousandSeparator /> global ratings
+										<NumberFormatter value={data.reviews.length} thousandSeparator /> global ratings
 									</Text>
 								</Stack>
 
-								<Grid>
+								{/* <Grid>
 									<GridCol span={12}>
 										{rates.map(rate => (
 											<Grid key={rate.star} align="center" gutter={0} my={"xs"}>
@@ -187,7 +187,7 @@ export default function Review({ data }: { data: typeProduct }) {
 											</Grid>
 										))}
 									</GridCol>
-								</Grid>
+								</Grid> */}
 
 								<Stack>
 									<Stack gap={0}>

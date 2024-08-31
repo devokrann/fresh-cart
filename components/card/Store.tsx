@@ -44,27 +44,13 @@ export default function Store({ data }: { data: typeStore }) {
 								</Title>
 							</Anchor>
 							<Group gap={4} c={"dimmed"}>
-								{data.goods.map(
-									good =>
-										data.goods.indexOf(good) < 2 && (
-											<>
-												<Text key={good} fz={"sm"}>
-													{good}
-												</Text>
-												{data.goods.indexOf(good) < 1 && (
-													<Group>
-														<IconPointFilled size={12} />
-													</Group>
-												)}
-											</>
-										)
-								)}
+								{data.goods}
 							</Group>
 						</Stack>
 
 						<Stack gap={0} c={"dimmed"} fz={"sm"} fw={500}>
-							<Text inherit c={data.delivery.time ? "pri" : undefined}>
-								Delivery{data.delivery.time && ` by ${data.delivery.time}`}
+							<Text inherit c={data.deliveryTime ? "pri" : undefined}>
+								Delivery{data.deliveryTime && ` by ${data.deliveryTime}`}
 							</Text>
 							<Text inherit>Pickup Available</Text>
 						</Stack>

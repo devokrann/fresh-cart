@@ -6,7 +6,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import ContextProducts from "@/contexts/Products";
 import { typeCart } from "@/types/cart";
 
-import ProviderProductCart from "@/providers/products/Cart";
+import OperatorCart from "@/components/operators/Cart";
 
 export default function Product({ data }: { data: typeCart }) {
 	const handlersRef = useRef<NumberInputHandlers>();
@@ -15,9 +15,7 @@ export default function Product({ data }: { data: typeCart }) {
 
 	return (
 		<Group justify="center" gap={0}>
-			<ProviderProductCart
-				operation={{ type: "decrease", items: [{ product: data.product, variant: data.variant }] }}
-			>
+			<OperatorCart operation={{ type: "decrease", items: [{ product: data.product, variant: data.variant }] }}>
 				<ActionIcon
 					variant="outline"
 					color="var(--mantine-color-default-border)"
@@ -34,7 +32,7 @@ export default function Product({ data }: { data: typeCart }) {
 				>
 					<IconMinus size={12} stroke={2} />
 				</ActionIcon>
-			</ProviderProductCart>
+			</OperatorCart>
 
 			<NumberInput
 				size="xs"
@@ -53,9 +51,7 @@ export default function Product({ data }: { data: typeCart }) {
 				}}
 			/>
 
-			<ProviderProductCart
-				operation={{ type: "increase", items: [{ product: data.product, variant: data.variant }] }}
-			>
+			<OperatorCart operation={{ type: "increase", items: [{ product: data.product, variant: data.variant }] }}>
 				<ActionIcon
 					variant="outline"
 					color="var(--mantine-color-default-border)"
@@ -72,7 +68,7 @@ export default function Product({ data }: { data: typeCart }) {
 				>
 					<IconPlus size={12} stroke={2} />
 				</ActionIcon>
-			</ProviderProductCart>
+			</OperatorCart>
 		</Group>
 	);
 }

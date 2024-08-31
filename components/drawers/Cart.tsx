@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import {
 	ActionIcon,
@@ -18,27 +18,34 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconMoodEmpty, IconShoppingCart } from "@tabler/icons-react";
-import ProviderIndicatorProducts from "@/providers/indicators/Products";
+import IndicatorCart from "../indicators/Cart";
 import CardProductCart from "../card/product/Cart";
 import NotificationEmpty from "../notification/Empty";
 
 import classes from "./Cart.module.scss";
 
-import ContextProducts from "@/contexts/Products";
+import ContextCart from "@/contexts/user/Cart";
 import Link from "next/link";
 import compoundId from "@/handlers/parsers/string/compoundId";
 import total from "@/handlers/total";
 
 export default function Cart() {
-	const productsContext = useContext(ContextProducts);
+	const cartContext = useContext(ContextCart);
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	if (!cartContext) {
+		throw new Error("ChildComponent must be used within a ContextCart.Provider");
 	}
 
-	const { cart, setCart } = productsContext;
+	const { cart, setCart } = cartContext;
 
 	const [opened, { open, close }] = useDisclosure(false);
+
+	const skeletons = [
+		{
+			id: "1",
+			element: <Skeleton height={48} w={"100%"} />,
+		},
+	];
 
 	return (
 		<>
@@ -55,7 +62,9 @@ export default function Cart() {
 				classNames={classes}
 			>
 				<Stack gap={"xl"} justify="space-between" style={{ height: "calc(100vh - 80px)" }}>
-					{cart.length > 0 ? (
+					{!cart ? (
+						skeletons.map(s => s.element)
+					) : cart.length > 0 ? (
 						<Stack
 							gap={0}
 							pt={"md"}
@@ -89,14 +98,18 @@ export default function Cart() {
 					<Stack gap={"xs"} px={"md"}>
 						<Group fz={"xl"} justify="space-between">
 							<Text inherit>Subtotal: </Text>
-							<Text inherit fw={"bold"}>
-								<NumberFormatter
-									prefix="$ "
-									suffix=".00"
-									value={total.getTotal(cart)}
-									thousandSeparator
-								/>
-							</Text>
+							{!cart ? (
+								<Skeleton height={24} width={32} />
+							) : (
+								<Text inherit fw={"bold"}>
+									<NumberFormatter
+										prefix="$ "
+										suffix=".00"
+										value={total.getTotal(cart)}
+										thousandSeparator
+									/>
+								</Text>
+							)}
 						</Group>
 
 						<Group grow>
@@ -119,7 +132,7 @@ export default function Cart() {
 
 			{/* <Skeleton height={mobile ? 16 : tablet ? 20 : 20} circle /> */}
 
-			<ProviderIndicatorProducts variant="cart">
+			<IndicatorCart>
 				<Center>
 					<ActionIcon onClick={open} variant="transparent" color="gray">
 						<Center>
@@ -127,7 +140,7 @@ export default function Cart() {
 						</Center>
 					</ActionIcon>
 				</Center>
-			</ProviderIndicatorProducts>
+			</IndicatorCart>
 		</>
 	);
 }

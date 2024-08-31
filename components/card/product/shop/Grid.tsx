@@ -43,8 +43,8 @@ import { typeProduct, typeVariant } from "@/types/product";
 import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
-import ProviderProductCart from "@/providers/products/Cart";
-import ProviderProductWishlist from "@/providers/products/Wishlist";
+import OperatorCart from "@/components/operators/Cart";
+import OperatorWishlist from "@/components/operators/Wishlist";
 
 export default function Grid({ data }: { data: typeProduct }) {
 	const defaultProductVariant = data.variants[0];
@@ -100,7 +100,7 @@ export default function Grid({ data }: { data: typeProduct }) {
 								</Tooltip>
 							</ModalProduct>
 
-							<ProviderProductWishlist
+							<OperatorWishlist
 								operation={{ type: "add", items: [{ product: data, variant: defaultProductVariant }] }}
 							>
 								<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>
@@ -108,9 +108,9 @@ export default function Grid({ data }: { data: typeProduct }) {
 										<IconHeart size={20} stroke={1.5} />
 									</ActionIcon>
 								</Tooltip>
-							</ProviderProductWishlist>
+							</OperatorWishlist>
 
-							<ProviderProductCart
+							<OperatorCart
 								operation={{ type: "add", items: [{ product: data, variant: defaultProductVariant }] }}
 							>
 								<Tooltip label={"Add to Cart"} withArrow fz={"sm"}>
@@ -118,7 +118,7 @@ export default function Grid({ data }: { data: typeProduct }) {
 										<IconShoppingCart size={20} stroke={1.5} />
 									</ActionIcon>
 								</Tooltip>
-							</ProviderProductCart>
+							</OperatorCart>
 						</Group>
 					</Stack>
 				</CardSection>

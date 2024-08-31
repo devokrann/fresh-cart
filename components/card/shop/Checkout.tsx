@@ -9,6 +9,7 @@ import {
 	Group,
 	NumberFormatter,
 	Paper,
+	Skeleton,
 	Stack,
 	Table,
 	Text,
@@ -16,7 +17,7 @@ import {
 } from "@mantine/core";
 import React, { useContext } from "react";
 
-import ContextProducts from "@/contexts/Products";
+import ContextCart from "@/contexts/user/Cart";
 
 import FormShopRedeem from "@/partials/forms/shop/Redeem";
 
@@ -28,13 +29,15 @@ import classes from "./Checkout.module.scss";
 import contact from "@/data/contact";
 
 export default function Checkout() {
-	const productsContext = useContext(ContextProducts);
+	const cartContext = useContext(ContextCart);
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	if (!cartContext) {
+		throw new Error("ChildComponent must be used within a ContextCart.Provider");
 	}
 
-	const { cart, setCart } = productsContext;
+	const { cart, setCart } = cartContext;
+
+	const skeleton = <Skeleton height={64} />;
 
 	return (
 		<Card className={classes.card} withBorder>
@@ -43,22 +46,30 @@ export default function Checkout() {
 					Order Details
 				</Title>
 
-				<Stack gap={0}>
-					{cart.map(product => (
-						<Box
-							key={product.id}
-							style={
-								cart.indexOf(product) > 0
-									? {
-											borderTop: "1px solid var(--mantine-color-default-border)",
-									  }
-									: undefined
-							}
-						>
-							<CardProductCheckout data={product} />
-						</Box>
-					))}
-				</Stack>
+				{!cart ? (
+					<Stack gap={"xs"}>
+						{skeleton}
+						{skeleton}
+						{skeleton}
+					</Stack>
+				) : (
+					<Stack gap={0}>
+						{cart.map(product => (
+							<Box
+								key={product.id}
+								style={
+									cart.indexOf(product) > 0
+										? {
+												borderTop: "1px solid var(--mantine-color-default-border)",
+										  }
+										: undefined
+								}
+							>
+								<CardProductCheckout data={product} />
+							</Box>
+						))}
+					</Stack>
+				)}
 
 				<TableInvoice />
 

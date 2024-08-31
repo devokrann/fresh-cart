@@ -16,8 +16,8 @@ export default function Shop({ data }: { data: typeReview }) {
 				<GridCol span={1}>
 					<Stack>
 						<Image
-							src={data.reviewer.image}
-							alt={data.reviewer.name}
+							src={data.user.image}
+							alt={data.user.name}
 							w={"100%"}
 							radius={"md"}
 							loading="lazy"
@@ -31,12 +31,12 @@ export default function Shop({ data }: { data: typeReview }) {
 					<Stack gap={"sm"}>
 						<Stack gap={2}>
 							<Title order={3} fz={"md"}>
-								{data.reviewer.name}
+								{data.user.name}
 							</Title>
 
 							<Group fz={"xs"}>
 								<Text inherit c={"dimmed"}>
-									{data.date}
+									{data.date.toDateString()}
 								</Text>
 								{data.purchase.verified ? (
 									<Text inherit c={"green"} fw={"bold"}>

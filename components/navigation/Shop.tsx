@@ -9,11 +9,11 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
 import classes from "./Shop.module.scss";
 
-import { typeCategory } from "@/types/categories";
+import { typeProductCategory } from "@/types/categories";
 import getCategories from "@/handlers/database/getCategories";
 
 export default function Shop({ ...restProps }: {} & React.ComponentProps<typeof Burger>) {
-	const [data, setData] = useState<typeCategory[] | null>(null);
+	const [data, setData] = useState<typeProductCategory[] | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -65,8 +65,8 @@ export default function Shop({ ...restProps }: {} & React.ComponentProps<typeof 
 				link.subCategories &&
 				link.subCategories.map(subLink => (
 					<NavLink
-						key={subLink}
-						label={subLink}
+						key={subLink.id}
+						label={subLink.title}
 						classNames={{
 							root: classes.root,
 							label: classes.label,

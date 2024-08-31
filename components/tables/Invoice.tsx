@@ -1,27 +1,27 @@
 "use client";
 
-import { Anchor, Group, NumberFormatter, Paper, Table, Text } from "@mantine/core";
+import { Anchor, Group, NumberFormatter, Paper, Skeleton, Table, Text } from "@mantine/core";
 import React, { useContext } from "react";
 
-import ContextProducts from "@/contexts/Products";
+import ContextCart from "@/contexts/user/Cart";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 export default function Invoice() {
 	const pathname = usePathname();
 
-	const productsContext = useContext(ContextProducts);
+	const cartContext = useContext(ContextCart);
 
-	if (!productsContext) {
+	if (!cartContext) {
 		throw new Error("ChildComponent must be used within a MyContext.Provider");
 	}
 
-	const { cart, setCart } = productsContext;
+	const { cart, setCart } = cartContext;
 
 	const getTotal = () => {
 		let total = 0;
 
-		cart.map(p => {
+		cart?.map(p => {
 			if (p.quantity) {
 				total += p.variant.pricePresent * p.quantity;
 			}
@@ -32,7 +32,7 @@ export default function Invoice() {
 
 	const itemSubtotal = { label: "Item Subtotal", value: getTotal() };
 	const shipping = { label: "Shipping", value: Math.ceil(getTotal() * 0.1) };
-	const serviceFee = { label: "Service Fee", value: Math.ceil(3 * cart.length) };
+	const serviceFee = { label: "Service Fee", value: Math.ceil(3 * cart?.length!) };
 	const tax = { label: "Tax", value: Math.ceil(getTotal() * 0) };
 	const discount = { label: "Discount", value: Math.ceil(getTotal() * 0.15) };
 	const subTotal = {
@@ -46,8 +46,16 @@ export default function Invoice() {
 		<Table.Tr key={item.label} fw={data.indexOf(item) == data.length - 1 ? "bold" : undefined}>
 			<Table.Td>{item.label}</Table.Td>
 			<Table.Td ta={"end"} c={item.label == "Discount" ? "red.6" : undefined}>
-				{item.label == "Discount" ? "- " : ""}{" "}
-				<NumberFormatter thousandSeparator prefix={"$ "} suffix=".00" value={item.value} />
+				<Group justify="end" gap={4}>
+					{!cart ? (
+						<Skeleton height={16} width={64} />
+					) : (
+						<>
+							{item.label == "Discount" ? "-" : ""}{" "}
+							<NumberFormatter thousandSeparator prefix={"$ "} suffix=".00" value={item.value} />
+						</>
+					)}
+				</Group>
 			</Table.Td>
 		</Table.Tr>
 	));
@@ -66,7 +74,16 @@ export default function Invoice() {
 								Go to Checkout
 							</Text>
 							<Text component="span" inherit>
-								<NumberFormatter thousandSeparator prefix="$ " suffix=".00" value={subTotal.value} />
+								{!cart ? (
+									<Skeleton height={16} width={64} />
+								) : (
+									<NumberFormatter
+										thousandSeparator
+										prefix="$ "
+										suffix=".00"
+										value={subTotal.value}
+									/>
+								)}
 							</Text>
 						</Group>
 					</Paper>

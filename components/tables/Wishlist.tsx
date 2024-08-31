@@ -15,6 +15,7 @@ import {
 	Group,
 	Image,
 	NumberFormatter,
+	Skeleton,
 	Stack,
 	Table,
 	TableCaption,
@@ -27,7 +28,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextProducts from "@/contexts/Products";
+import ContextWishlist from "@/contexts/user/Wishlist";
 import { IconClearAll, IconMoodEmpty, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Wishlist.module.scss";
@@ -35,25 +36,35 @@ import Link from "next/link";
 import NotificationEmpty from "../notification/Empty";
 import link from "@/handlers/parsers/string/link";
 
-import ProviderProductCart from "@/providers/products/Cart";
-import ProviderProductWishlist from "@/providers/products/Wishlist";
+import OperatorCart from "@/components/operators/Cart";
+import OperatorWishlist from "@/components/operators/Wishlist";
 import variant from "@/handlers/variant";
 
 export default function Wishlist() {
-	const productsContext = useContext(ContextProducts);
+	const wishlistContext = useContext(ContextWishlist);
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	if (!wishlistContext) {
+		throw new Error("ChildComponent must be used within a ContextWishlist.Provider");
 	}
 
-	const { cart, wishlist, setWishlist } = productsContext;
+	const { wishlist, setWishlist } = wishlistContext;
 
 	const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
-	const rows = wishlist.map(item => (
+	const widths = {
+		checkBox: "5%",
+		image: "15%",
+		product: "30%",
+		price: "10%",
+		status: "10%",
+		cart: "20%",
+		remove: "10%",
+	};
+
+	const rows = wishlist?.map(item => (
 		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
-			<TableTd>
-				<Center>
+			<TableTd w={widths.checkBox}>
+				<Stack align="end">
 					<Checkbox
 						aria-label="Select row"
 						checked={selectedRows.includes(item.id)}
@@ -65,9 +76,9 @@ export default function Wishlist() {
 							)
 						}
 					/>
-				</Center>
+				</Stack>
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.image}>
 				<Center>
 					<Image
 						src={item.variant.image}
@@ -81,7 +92,7 @@ export default function Wishlist() {
 					/>
 				</Center>
 			</TableTd>
-			<TableTd ta={"start"}>
+			<TableTd w={widths.product} ta={"start"}>
 				<Stack gap={0} align="start">
 					<Anchor
 						underline="never"
@@ -99,25 +110,25 @@ export default function Wishlist() {
 					</Text>
 				</Stack>
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.price}>
 				<NumberFormatter prefix="$ " value={item.variant.pricePresent} />
 			</TableTd>
-			<TableTd>
+			<TableTd w={widths.status}>
 				{item.variant.available ? (
-					<Badge radius={"md"} color="green" c={"white"}>
+					<Badge radius={"md"} color="green" c={"white"} size="sm">
 						In Stock
 					</Badge>
 				) : (
-					<Badge radius={"md"} color="red">
+					<Badge radius={"md"} color="red" size="sm">
 						Out of Stock
 					</Badge>
 				)}
 			</TableTd>
-			<TableTd>
-				<ProviderProductWishlist
+			<TableTd w={widths.cart}>
+				<OperatorWishlist
 					operation={{ type: "transfer", items: [{ product: item.product, variant: item.variant }] }}
 				>
-					<ProviderProductCart
+					<OperatorCart
 						operation={{ type: "add", items: [{ product: item.product, variant: item.variant }] }}
 					>
 						<Button
@@ -128,11 +139,11 @@ export default function Wishlist() {
 						>
 							Add to Cart
 						</Button>
-					</ProviderProductCart>
-				</ProviderProductWishlist>
+					</OperatorCart>
+				</OperatorWishlist>
 			</TableTd>
-			<TableTd>
-				<ProviderProductWishlist
+			<TableTd w={widths.remove}>
+				<OperatorWishlist
 					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
 				>
 					<ActionIcon
@@ -143,12 +154,82 @@ export default function Wishlist() {
 					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
-				</ProviderProductWishlist>
+				</OperatorWishlist>
 			</TableTd>
 		</TableTr>
 	));
 
-	return wishlist.length > 0 ? (
+	const skeletonRow = (
+		<TableTr>
+			<TableTd w={widths.checkBox}>
+				<Stack align="end">
+					<Skeleton height={16} w={16} />
+				</Stack>
+			</TableTd>
+			<TableTd w={widths.image}>
+				<Center>
+					<Skeleton height={56} w={56} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.product}>
+				<Stack align="start" gap={"xs"}>
+					<Skeleton height={16} w={"50%"} />
+					<Skeleton height={16} w={64} />
+				</Stack>
+			</TableTd>
+			<TableTd w={widths.price}>
+				<Center>
+					<Skeleton height={16} w={32} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.status}>
+				<Center>
+					<Skeleton height={16} w={"75%"} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.cart}>
+				<Center>
+					<Skeleton height={32} w={"75%"} />
+				</Center>
+			</TableTd>
+			<TableTd w={widths.remove}>
+				<Center>
+					<Skeleton height={32} w={32} />
+				</Center>
+			</TableTd>
+		</TableTr>
+	);
+
+	return !wishlist ? (
+		<Table
+			classNames={classes}
+			withColumnBorders={false}
+			captionSide="top"
+			style={{
+				borderRadius: "var(--mantine-radius-md)",
+				borderBottomRightRadius: "var(--mantine-radius-md)",
+				overflow: "hidden",
+			}}
+		>
+			<TableThead>
+				<TableTr>
+					<TableTh style={{ borderTopLeftRadius: "var(--mantine-radius-md)" }} />
+					<TableTh>Image</TableTh>
+					<TableTh ta={"start"}>Product</TableTh>
+					<TableTh>Price</TableTh>
+					<TableTh>Status</TableTh>
+					<TableTh />
+					<TableTh style={{ borderTopRightRadius: "var(--mantine-radius-md)" }} />
+				</TableTr>
+			</TableThead>
+
+			<TableTbody>
+				{skeletonRow}
+				{skeletonRow}
+				{skeletonRow}
+			</TableTbody>
+		</Table>
+	) : wishlist.length > 0 ? (
 		<Table
 			classNames={classes}
 			withColumnBorders={false}
@@ -197,7 +278,7 @@ export default function Wishlist() {
 					</Group>
 
 					<Group>
-						<ProviderProductWishlist
+						<OperatorWishlist
 							operation={{
 								type: "remove",
 								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
@@ -212,15 +293,15 @@ export default function Wishlist() {
 							>
 								Remove ({selectedRows.length})
 							</Button>
-						</ProviderProductWishlist>
+						</OperatorWishlist>
 
-						<ProviderProductWishlist
+						<OperatorWishlist
 							operation={{
 								type: "transfer",
 								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
 							}}
 						>
-							<ProviderProductCart
+							<OperatorCart
 								operation={{
 									type: "add",
 									items: selectedRows
@@ -237,8 +318,8 @@ export default function Wishlist() {
 								>
 									Add to cart ({selectedRows.length})
 								</Button>
-							</ProviderProductCart>
-						</ProviderProductWishlist>
+							</OperatorCart>
+						</OperatorWishlist>
 					</Group>
 				</Group>
 			</TableCaption>

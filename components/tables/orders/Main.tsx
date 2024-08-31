@@ -15,6 +15,7 @@ import {
 	Group,
 	Image,
 	NumberFormatter,
+	Skeleton,
 	Stack,
 	Table,
 	TableCaption,
@@ -27,7 +28,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextProducts from "@/contexts/Products";
+import ContextOrders from "@/contexts/user/Orders";
 import { IconClearAll, IconEye, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import BadgeOrder from "@/components/badges/Order";
@@ -37,16 +38,16 @@ import Link from "next/link";
 import NotificationEmpty from "@/components/notification/Empty";
 
 export default function Main() {
-	const productsContext = useContext(ContextProducts);
+	const ordersContext = useContext(ContextOrders);
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	if (!ordersContext) {
+		throw new Error("ChildComponent must be used within a ContextOrders.Provider");
 	}
 
-	const { orders, setOrders } = productsContext;
+	const { orders, setOrders } = ordersContext;
 
-	const rows = orders.map(order => {
-		const getTotal = () => order.subtotal + order.tax + order.serviceFee + order.shipping;
+	const rows = orders?.map(order => {
+		const getTotal = () => order.subtotal + order.taxFee + order.serviceFee + order.shippingFee;
 
 		return (
 			<TableTr key={order.id}>
@@ -57,7 +58,7 @@ export default function Main() {
 				</TableTd>
 				<TableTd>
 					<Text inherit fz={"sm"}>
-						{order.datePlaced}
+						{order.datePlaced.toDateString()}
 					</Text>
 				</TableTd>
 				<TableTd>
@@ -86,7 +87,54 @@ export default function Main() {
 		);
 	});
 
-	return orders.length > 0 ? (
+	const skeletons = (
+		<TableTr>
+			<TableTd>
+				<Skeleton height={16} w={32} />
+			</TableTd>
+			<TableTd>
+				<Skeleton height={16} w={64} />
+			</TableTd>
+			<TableTd>
+				<Skeleton height={16} w={16} />
+			</TableTd>
+			<TableTd>
+				<Skeleton height={16} w={96} />
+			</TableTd>
+			<TableTd>
+				<Skeleton height={16} w={32} />
+			</TableTd>
+			<TableTd>
+				<Skeleton height={32} w={120} />
+			</TableTd>
+		</TableTr>
+	);
+
+	return !orders ? (
+		<Table
+			classNames={classes}
+			withColumnBorders={false}
+			captionSide="top"
+			style={{
+				borderRadius: "var(--mantine-radius-md)",
+				borderBottomRightRadius: "var(--mantine-radius-md)",
+				overflow: "hidden",
+			}}
+		>
+			<TableThead>
+				<TableTr>
+					<TableTh style={{ borderTopLeftRadius: "var(--mantine-radius-md)" }}>Order</TableTh>
+					<TableTh>Date</TableTh>
+					<TableTh>Items</TableTh>
+					<TableTh>Status</TableTh>
+					<TableTh>Amount</TableTh>
+					<TableTh style={{ borderTopRightRadius: "var(--mantine-radius-md)" }} />
+				</TableTr>
+			</TableThead>
+
+			<TableTbody>{skeletons}</TableTbody>
+		</Table>
+	) : orders.length > 0 ? (
 		<Table
 			classNames={classes}
 			withColumnBorders={false}
