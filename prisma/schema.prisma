@@ -21,35 +21,367 @@ enum Role {
   ADMIN
 }
 
+model Address {
+  title   String
+  fname   String
+  lname   String
+  street  String
+  city    String
+  zip     String
+  state   String
+  country String
+  email   String?
+  phone   String?
+  type    String
+  default Boolean @default(false)
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String  @map("user_id")
+  order   Order?  @relation(fields: [orderId], references: [id])
+  orderId String? @map("order_id")
+
+  @@map("addresses")
+}
+
+model Cart {
+  quantity Int
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @map("user_id")
+  variant   Variant @relation(fields: [variantId], references: [id])
+  variantId String  @map("variant_id")
+
+  @@unique([userId, variantId])
+  @@map("cart")
+}
+
+model PostCategory {
+  title String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  posts Post[]
+
+  @@map("post_categories")
+}
+
+model ProductCategory {
+  title String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  productParentCategory   ProductParentCategory @relation(fields: [productParentCategoryId], references: [id])
+  productParentCategoryId String                @map("product_parent_category_id")
+  products                Product[]
+
+  @@map("product_categories")
+}
+
+model ProductParentCategory {
+  title String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  productCategories ProductCategory[]
+
+  @@map("product_parent_categories")
+}
+
+model Device {
+  ip       String?
+  city     String?
+  region   String?
+  country  String?
+  loc      String?
+  org      String?
+  timezone String?
+  os       String?
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  session   Session @relation(fields: [sessionId], references: [sessionToken], onDelete: Cascade)
+  sessionId String  @unique @map("session_id")
+
+  @@map("devices")
+}
+
+model Order {
+  datePlaced    DateTime  @map("date_placed")
+  dateDelivered DateTime? @map("date_delivered")
+  subtotal      Int
+  taxFee        Int       @map("tax_fee")
+  serviceFee    Int       @map("service_fee")
+  shippingFee   Int       @map("shipping_fee")
+  status        String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user            User             @relation(fields: [userId], references: [id])
+  userId          String           @map("user_id")
+  purchase        Purchase?
+  addresses       Address[]
+  orderedProducts OrderedProduct[]
+
+  @@map("orders")
+}
+
+model OrderedProduct {
+  quantity Int
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  variant   Variant @relation(fields: [variantId], references: [id])
+  variantId String  @map("variant_id")
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String  @map("order_id")
+
+  @@unique([variantId, orderId])
+  @@map("ordered_products")
+}
+
+model Otl {
+  email String @unique
+  otl   String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  expiresAt DateTime @updatedAt @map("expires_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  @@map("otls")
+}
+
+model Otp {
+  email String @unique
+  otp   String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  expiresAt DateTime @updatedAt @map("expires_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  @@map("otps")
+}
+
+model PaymentMethod {
+  title   String
+  name    String
+  number  String?
+  cvc     String?
+  email   String?
+  expiry  String?
+  type    String
+  default Boolean
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("payment_methods")
+}
+
+model Post {
+  image       String
+  title       String
+  description String
+  quoteText   String
+  quoter      String
+  date        String
+  readingTime Int
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User         @relation(fields: [userId], references: [id])
+  userId     String       @map("user_id")
+  category   PostCategory @relation(fields: [categoryId], references: [id])
+  categoryId String       @map("category_id")
+
+  @@unique([userId, title])
+  @@map("posts")
+}
+
+model Product {
+  title        String
+  desc         String
+  code         String
+  brand        String
+  available    Boolean
+  shippingDays Int     @map("shipping_days")
+  sale         Boolean
+  hot          Boolean
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
+  productCategoryId String          @map("product_category_id")
+  variants          Variant[]
+  reviews           Review[]
+
+  @@map("products")
+}
+
+model Profile {
+  fname String? @map("first_name")
+  lname String? @map("last_name")
+  bio   String?
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  @@map("profiles")
+}
+
+model Purchase {
+  date DateTime
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @unique @map("order_id")
+
+  @@map("purchases")
+}
+
+model Review {
+  date   DateTime
+  rating Int
+  title  String
+  desc   String
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @map("user_id")
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+model Store {
+  image        String
+  title        String
+  goods        String
+  distance     Int
+  deliverable  Boolean
+  deliveryTime String? @map("devlivery_time")
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("stores")
+}
+
 model User {
-  id             String          @id @default(cuid())
-  name           String?
-  email          String          @unique
-  emailVerified  DateTime?       @map("email_verified")
-  image          String?
+  image         String?
+  name          String?
+  position      String?
+  password      String?
+  email         String    @unique
+  verified      Boolean   @default(false)
+  emailVerified DateTime? @map("email_verified")
+  role          Role      @default(USER)
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  profile        Profile?
   accounts       Account[]
   sessions       Session[]
-  // Optional for WebAuthn support
-  Authenticator  Authenticator[]
-  // end next auth config
-  verified       Boolean         @default(false)
-  password       String?
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
-  role           Role            @default(USER)
+  authenticators Authenticator[] // Optional for WebAuthn support
   otps           Otp[]
   otls           Otl[]
-  profile        Profile?
   reviews        Review[]
   orders         Order[]
   cart           Cart[]
-  addresses      Address[]
   wishlist       Wishlist[]
+  addresses      Address[]
   posts          Post[]
   paymentMethods PaymentMethod[]
 
   @@map("users")
 }
+
+model Variant {
+  image        String
+  available    Boolean
+  priceFormer  Int?    @map("price_former")
+  pricePresent Int     @map("price_present")
+  unitType     String  @map("unit_type")
+  unitValue    String  @map("unit_value")
+
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  product         Product          @relation(fields: [productId], references: [id])
+  productId       String           @map("product_id")
+  cart            Cart[]
+  wishlist        Wishlist[]
+  orderedProducts OrderedProduct[]
+
+  @@map("variants")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @map("user_id")
+  variant   Variant @relation(fields: [variantId], references: [id])
+  variantId String  @map("variant_id")
+
+  @@unique([userId, variantId])
+  @@map("wishlist")
+}
+
+// ===== nextauth models =====
 
 model Account {
   type              String
@@ -85,24 +417,6 @@ model Session {
   @@map("sessions")
 }
 
-model Device {
-  id        String   @id @default(cuid())
-  ip        String?
-  city      String?
-  region    String?
-  country   String?
-  loc       String?
-  org       String?
-  timezone  String?
-  os        String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  session   Session  @relation(fields: [sessionId], references: [sessionToken], onDelete: Cascade)
-  sessionId String   @unique @map("session_id")
-
-  @@map("devices")
-}
-
 model VerificationToken {
   identifier String
   token      String
@@ -112,7 +426,6 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique @map("credential_id")
   providerAccountId    String  @map("provider_account_id")
@@ -126,277 +439,4 @@ model Authenticator {
 
   @@id([userId, credentialID])
   @@map("authenticators")
-}
-
-// non-next-auth models
-
-model Profile {
-  id        String   @id @default(cuid())
-  firstName String?  @map("first_name")
-  lastName  String?  @map("last_name")
-  bio       String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique @map("user_id")
-
-  @@map("profiles")
-}
-
-model Post {
-  id           String       @id @default(cuid())
-  title        String
-  description  String
-  published    Boolean      @default(false)
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
-  user         User         @relation(fields: [userId], references: [id])
-  userId       String       @map("user_id")
-  postCategory PostCategory @relation(fields: [categoryId], references: [id])
-  categoryId   String       @map("category_id")
-
-  @@unique([userId, title])
-  @@map("posts")
-}
-
-model PostCategory {
-  id        String   @id @default(cuid())
-  title     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  posts     Post[]
-
-  @@map("post_categories")
-}
-
-model Otp {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  otp       String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  expiresAt DateTime @updatedAt @map("expires_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique @map("user_id")
-
-  @@map("otps")
-}
-
-model Otl {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  otl       String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  expiresAt DateTime @updatedAt @map("expires_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @unique @map("user_id")
-
-  @@map("otls")
-}
-
-model Product {
-  id                   String             @id @default(cuid())
-  title                String
-  desc                 String
-  code                 String
-  brand                String
-  available            Boolean
-  shippingDays         Int                @map("shipping_days")
-  sale                 Boolean
-  hot                  Boolean
-  createdAt            DateTime           @default(now()) @map("created_at")
-  updatedAt            DateTime           @updatedAt @map("updated_at")
-  variants             Variant[]
-  reviews              Review[]
-  productSubCategory   ProductSubCategory @relation(fields: [productSubCategoryId], references: [id])
-  productSubCategoryId String             @map("sub_category_id")
-
-  @@map("products")
-}
-
-model ProductCategory {
-  id                   String               @id @default(cuid())
-  title                String
-  createdAt            DateTime             @default(now()) @map("created_at")
-  updatedAt            DateTime             @updatedAt @map("updated_at")
-  productSubCategories ProductSubCategory[]
-
-  @@map("product_categories")
-}
-
-model ProductSubCategory {
-  id                String           @id @default(cuid())
-  title             String
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
-  productCategory   ProductCategory? @relation(fields: [productCategoryId], references: [id])
-  productCategoryId String?          @map("category_id")
-  products          Product[]
-
-  @@map("product_sub_categories")
-}
-
-model Variant {
-  id              String           @id @default(cuid())
-  image           String
-  available       Boolean
-  priceFormer     Int?             @map("price_former")
-  pricePresent    Int              @map("price_present")
-  unitType        String           @map("unit_type")
-  unitValue       String           @map("unit_value")
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  product         Product          @relation(fields: [productId], references: [id])
-  productId       String           @map("product_id")
-  cart            Cart[]
-  wishlist        Wishlist[]
-  orderedProducts OrderedProduct[]
-
-  @@map("variants")
-}
-
-model Review {
-  id        String   @id @default(cuid())
-  date      DateTime
-  rating    Int
-  title     String
-  desc      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String   @map("product_id")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-
-  @@unique([userId, productId])
-  @@map("reviews")
-}
-
-model Order {
-  id              String           @id @default(cuid())
-  datePlaced      DateTime         @map("date_placed")
-  dateDelivered   DateTime?        @map("date_delivered")
-  subtotal        Int
-  taxFee          Int              @map("tax_fee")
-  serviceFee      Int              @map("service_fee")
-  shippingFee     Int              @map("shipping_fee")
-  status          String
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
-  user            User             @relation(fields: [userId], references: [id])
-  userId          String           @map("user_id")
-  purchase        Purchase?
-  addresses       Address[]
-  orderedProducts OrderedProduct[]
-
-  @@map("orders")
-}
-
-model OrderedProduct {
-  id        String   @id @default(cuid())
-  quantity  Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  variant   Variant  @relation(fields: [variantId], references: [id])
-  variantId String   @map("variant_id")
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   String   @map("order_id")
-
-  @@unique([variantId, orderId])
-  @@map("ordered_products")
-}
-
-model Address {
-  id        String   @id @default(cuid())
-  title     String
-  fname     String
-  lname     String
-  street    String
-  city      String
-  zip       String
-  state     String
-  country   String
-  email     String?
-  phone     String?
-  type      String
-  default   Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  order     Order?   @relation(fields: [orderId], references: [id])
-  orderId   String?  @map("order_id")
-
-  @@map("addresses")
-}
-
-model Purchase {
-  id        String   @id @default(cuid())
-  date      DateTime
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   String   @unique @map("order_id")
-
-  @@map("purchases")
-}
-
-model Cart {
-  id        String   @id @default(cuid())
-  quantity  Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  variant   Variant  @relation(fields: [variantId], references: [id])
-  variantId String   @map("variant_id")
-
-  @@unique([userId, variantId])
-  @@map("cart")
-}
-
-model Wishlist {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  variant   Variant  @relation(fields: [variantId], references: [id])
-  variantId String   @map("variant_id")
-
-  @@unique([userId, variantId])
-  @@map("wishlist")
-}
-
-model Store {
-  id           String   @id @default(cuid())
-  image        String
-  title        String
-  goods        String
-  distance     Int
-  deliverable  Boolean
-  deliveryTime String?  @map("devlivery_time")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  @@map("stores")
-}
-
-model PaymentMethod {
-  id        String   @id @default(cuid())
-  title     String
-  name      String
-  number    String?
-  cvc       String?
-  email     String?
-  expiry    String?
-  type      String
-  default   Boolean
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-
-  @@map("payment_methods")
 }
