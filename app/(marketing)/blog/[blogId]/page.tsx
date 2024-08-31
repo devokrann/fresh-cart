@@ -26,10 +26,10 @@ export default function Post({ params }: { params: typeParams }) {
 
 			<Stack align="center">
 				<Text inherit c={"sl.4"} fz={36} fw={500} lh={1.2} w={{ md: "80%" }}>
-					&quot;{data?.description.quote.text}&quot;
+					&quot;{data?.quoteText}&quot;
 				</Text>
 				<Text inherit c={"dimmed"}>
-					- {data?.description.quote.person}
+					- {data?.quoter}
 				</Text>
 			</Stack>
 
@@ -63,10 +63,10 @@ export default function Post({ params }: { params: typeParams }) {
 						<Anchor
 							underline="never"
 							component={Link}
-							href={data?.category ? `#/blog/category/${link.linkify(data.category)}` : "#"}
+							href={data?.category ? `#/blog/category/${link.linkify(data.category.id)}` : "#"}
 						>
 							<Text className={classes.category} fw={500}>
-								{data?.category}
+								{data?.category.title}
 							</Text>
 						</Anchor>
 
@@ -99,17 +99,7 @@ export default function Post({ params }: { params: typeParams }) {
 					/>
 
 					<Stack gap={"xs"}>
-						{data?.description.prose.map(item =>
-							data.description.prose.length > 3 ? (
-								data.description.prose.indexOf(item) == 3 ? (
-									elementQuote
-								) : (
-									<Text key={item}>{item}</Text>
-								)
-							) : (
-								<Text key={item}>{item}</Text>
-							)
-						)}
+						<Text>{data?.description}</Text>
 					</Stack>
 
 					<Stack gap={"lg"}>
@@ -118,7 +108,7 @@ export default function Post({ params }: { params: typeParams }) {
 						<Group justify="space-between">
 							<Group gap={"xs"}>
 								<Image
-									src={data?.author.image}
+									src={data?.user.image}
 									alt={data?.title ? data.title : "Blog Author Image"}
 									h={{ base: 44, md: 44 }}
 									radius={99}
@@ -131,10 +121,10 @@ export default function Post({ params }: { params: typeParams }) {
 
 								<Stack gap={0} mt={4}>
 									<Text fz={"lg"} my={0} fw={500} lh={0.8}>
-										{data?.author.name}
+										{data?.user.name}
 									</Text>
 									<Text fz={"xs"} my={0} fw={500} c={"pl.4"}>
-										{data?.author.position}
+										{data?.user.position}
 									</Text>
 								</Stack>
 							</Group>

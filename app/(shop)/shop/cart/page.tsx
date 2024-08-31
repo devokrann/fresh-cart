@@ -34,7 +34,7 @@ import AccordionFaq from "@/components/accordions/Faq";
 import TableCart from "@/components/tables/Cart";
 import CardShopCart from "@/components/card/shop/Cart";
 
-import ProviderProductCart from "@/providers/products/Cart";
+import OperatorCart from "@/components/operators/Cart";
 
 import TemplateEmailContact from "@/templates/email/Contact";
 
@@ -58,7 +58,7 @@ export default async function Cart() {
 							</Stack>
 
 							<Group gap={"xs"}>
-								<ProviderProductCart operation={{ type: "clear", unmount: true }}>
+								<OperatorCart operation={{ type: "clear", unmount: true }}>
 									<Button
 										variant="outline"
 										color="green.6"
@@ -66,7 +66,7 @@ export default async function Cart() {
 									>
 										Clear Cart
 									</Button>
-								</ProviderProductCart>
+								</OperatorCart>
 
 								<Button color="black" leftSection={<IconRefresh size={16} stroke={2} />}>
 									Update Cart
@@ -84,7 +84,7 @@ export default async function Cart() {
 									component={Link}
 									href={"/shop"}
 									variant="outline"
-									c={"pri.6"}
+									color={"pri.6"}
 									leftSection={<IconChevronLeft size={16} stroke={2} />}
 								>
 									Continue Shopping

@@ -7,7 +7,7 @@ import LayoutBody from "@/layouts/Body";
 import contact from "@/data/contact";
 
 export interface typeParams {
-	category: string;
+	id: string;
 }
 
 export const metadata: Metadata = {

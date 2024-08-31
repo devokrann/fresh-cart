@@ -1,4 +1,6 @@
-import React from "react";
+"us eclient";
+
+import React, { useContext, useEffect, useState } from "react";
 
 import {
 	ActionIcon,
@@ -12,6 +14,7 @@ import {
 	Pagination,
 	Rating,
 	Select,
+	Skeleton,
 	Stack,
 	Text,
 	Title,
@@ -28,7 +31,6 @@ import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import CarouselShop from "@/components/carousel/Shop";
 
 import blog from "@/data/blog";
-import products from "@/data/products";
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
 import stores from "@/data/stores";
 import link from "@/handlers/parsers/string/link";
@@ -40,23 +42,30 @@ import getFraction from "@/handlers/fraction";
 import { typeProduct } from "@/types/product";
 
 import TabsReview from "@/components/tabs/product/Review";
+import ContextProducts from "@/contexts/Products";
 
-export default function Shop({ params }: { params: typeParams }) {
-	const data: typeProduct | undefined = products.find(p => link.linkify(p.title) == params.product);
+export default async function Shop({ params }: { params: typeParams }) {
+	const productsContext = useContext(ContextProducts);
 
-	if (!data) {
-		throw Error("Product must be defined");
+	if (!productsContext) {
+		throw new Error("ChildComponent must be used within a ContextProducts.Provider");
 	}
 
-	const variant = data.variants[0];
+	const { products, setProducts } = productsContext;
+
+	const data: typeProduct | undefined = products?.find(p => link.linkify(p.title) == params.product);
+
+	const variant = data?.variants[0];
 
 	const metadata = [
-		{ label: "Product Code", value: data.code },
-		{ label: "Availability", value: data.available ? "In Stock" : "Out of Stock" },
-		{ label: "Type", value: data.category },
+		{ label: "Product Code", value: data?.code },
+		{ label: "Availability", value: data?.available ? "In Stock" : "Out of Stock" },
+		{ label: "Type", value: data?.category },
 		{
 			label: "Shipping",
-			value: `${data.shipping.days} day${data.shipping.days > 1 ? "s" : ""} (free pickup today)`,
+			value: `${data?.shippingDays} day${
+				data?.shippingDays ? (data.shippingDays > 1 ? "s" : "") : ""
+			} (free pickup today)`,
 		},
 	];
 
@@ -72,49 +81,79 @@ export default function Shop({ params }: { params: typeParams }) {
 
 					<GridCol span={{ base: 12, md: 6 }}>
 						<Stack gap={"lg"}>
-							<Text c={"pri"} fw={500}>
-								{data.category}
-							</Text>
+							{!products ? (
+								<Skeleton height={16} w={96} />
+							) : (
+								<Text c={"pri"} fw={500}>
+									{data?.category}
+								</Text>
+							)}
 
 							<Stack justify="space-between">
-								<Title order={2} fw={"bold"} fz={{ lg: 36 }} lh={0.5}>
-									{data.title}
-								</Title>
-								<Group gap={"xs"} c={"pri"} fw={500}>
-									<Rating
-										value={data.rating.rating}
-										fractions={getFraction(data.rating.raters)}
-										readOnly
-									/>
-									<Text inherit lh={0.5}>
-										({data.rating.raters} reviews)
-									</Text>
-								</Group>
-							</Stack>
+								{!products ? (
+									<Skeleton h={32} width={"80%"} />
+								) : (
+									<Title order={2} fw={"bold"} fz={{ lg: 36 }} lh={0.5}>
+										{data?.title}
+									</Title>
+								)}
 
-							<Group gap={4} fz={24}>
-								<Text inherit lh={0.5} fw={500}>
-									${variant.price.present}
-								</Text>
-								{variant.price.former && (
-									<Group>
-										<Text inherit lh={0.5} c={"dimmed"} td={"line-through"} fw={500}>
-											${variant.price.former}
-										</Text>
-
-										<Text inherit lh={0.5} c={"red.9"} fz={"md"}>
-											{100 - Math.floor((variant.price.present / variant.price.former) * 100)}%
-											off
+								{!products ? (
+									<Skeleton h={24} width={120} />
+								) : (
+									<Group gap={"xs"} c={"pri"} fw={500}>
+										<Rating
+											// value={}
+											// fractions={getFraction()}
+											readOnly
+										/>
+										<Text inherit lh={0.5}>
+											({data?.reviews.length} reviews)
 										</Text>
 									</Group>
 								)}
+							</Stack>
+
+							<Group gap={4} fz={24}>
+								{!products ? (
+									<Skeleton height={24} width={64} />
+								) : (
+									<Text inherit lh={0.5} fw={500}>
+										${variant?.pricePresent}
+									</Text>
+								)}
+
+								{!products ? (
+									<Skeleton height={24} width={64} />
+								) : (
+									variant?.priceFormer && (
+										<Group>
+											<Text inherit lh={0.5} c={"dimmed"} td={"line-through"} fw={500}>
+												${variant.priceFormer}
+											</Text>
+
+											<Text inherit lh={0.5} c={"red.9"} fz={"md"}>
+												{100 - Math.floor((variant.pricePresent / variant.priceFormer) * 100)}%
+												off
+											</Text>
+										</Group>
+									)
+								)}
 							</Group>
 
-							<Text>{data.desc}</Text>
+							{!products ? (
+								<Stack gap={"xs"}>
+									<Skeleton height={16} />
+									<Skeleton height={16} />
+									<Skeleton height={16} w={"80%"} />
+								</Stack>
+							) : (
+								<Text>{data?.desc}</Text>
+							)}
 
 							<Divider />
 
-							<SelectorVariant data={data} />
+							{!products ? <Skeleton h={40} /> : data && <SelectorVariant data={data} />}
 
 							<Divider />
 
@@ -136,7 +175,7 @@ export default function Shop({ params }: { params: typeParams }) {
 			</LayoutSection>
 
 			<LayoutSection containerized="responsive" padded>
-				<TabsReview data={data} />
+				{!products ? <Skeleton h={96} /> : data && <TabsReview data={data} />}
 			</LayoutSection>
 
 			<LayoutSection padded>

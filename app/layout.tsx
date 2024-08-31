@@ -29,9 +29,10 @@ import contact from "@/data/contact";
 
 import { SessionProvider } from "next-auth/react";
 
-import { auth } from "@/auth";
+import ProviderContextUserCart from "@/providers/context/user/Cart";
+import ProviderContextUserWishlist from "@/providers/context/user/Wishlist";
 
-import ProviderContextProducts from "@/providers/context/Products";
+import { auth } from "@/auth";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 
@@ -64,7 +65,9 @@ export default async function App({
 				>
 					<ModalsProvider>
 						<SessionProvider session={session}>
-							<ProviderContextProducts>{children}</ProviderContextProducts>
+							<ProviderContextUserWishlist>
+								<ProviderContextUserCart>{children}</ProviderContextUserCart>
+							</ProviderContextUserWishlist>
 						</SessionProvider>
 					</ModalsProvider>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
 	ActionIcon,
@@ -26,39 +26,29 @@ import CardProductShopList from "@/components/card/product/shop/List";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import { IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
 import stores from "@/data/stores";
-import { typeProduct } from "@/types/product";
-import getProducts from "@/handlers/database/getProducts";
+import ContextProducts from "@/contexts/Products";
 
 export default function Shop() {
-	const [data, setData] = useState<typeProduct[] | null>(null);
-	const [loading, setLoading] = useState(true);
+	const productsContext = useContext(ContextProducts);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setData(await getProducts());
-			} catch (error) {
-				console.error("Error fetching products:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
+	if (!productsContext) {
+		throw new Error("ChildComponent must be used within a ContextProducts.Provider");
+	}
 
-		fetchData();
-	}, []);
+	const { products, setProducts } = productsContext;
 
 	const [layout, setLayout] = useState<"grid" | "list">("grid");
 
 	const getLayout = () => {
 		switch (layout) {
 			case "grid":
-				return data?.map(product => (
+				return products?.map(product => (
 					<GridCol key={product.title} span={{ base: 12, md: 4, lg: 3 }}>
 						<CardProductShopGrid data={product} />
 					</GridCol>
 				));
 			case "list":
-				return data?.map(product => (
+				return products?.map(product => (
 					<GridCol key={product.title} span={12}>
 						<CardProductShopList data={product} />
 					</GridCol>
@@ -104,14 +94,14 @@ export default function Shop() {
 								</Text>
 							</Stack>
 
-							{loading ? (
+							{!products ? (
 								<Skeleton w={360} h={32} />
 							) : (
 								<InputAutocompleteStores
 									w={{ md: 320 }}
 									placeholder={`Search ${stores[0].title}`}
 									rightSection={<IconSearch size={16} stroke={2} />}
-									data={data ? data.map(p => p.title) : []}
+									data={products.map(p => p.title)}
 								/>
 							)}
 						</Stack>
@@ -121,12 +111,12 @@ export default function Shop() {
 
 			<LayoutSection>
 				<Group justify="space-between">
-					{loading ? (
+					{!products ? (
 						<Skeleton w={160} h={16} />
 					) : (
 						<Text fz={"sm"}>
 							<Text component="span" inherit fw={"bold"}>
-								<NumberFormatter value={data?.length} thousandSeparator />
+								<NumberFormatter value={products.length} thousandSeparator />
 							</Text>{" "}
 							Products found
 						</Text>
@@ -186,7 +176,7 @@ export default function Shop() {
 
 			<LayoutSection>
 				<Grid>
-					{loading
+					{!products
 						? loadingLayoutArray.map(item => (
 								<GridCol
 									key={item.id}

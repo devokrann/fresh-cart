@@ -30,7 +30,7 @@ export default function LayoutAccount({
 				gap: 48,
 				left: {
 					component: <AsideUser />,
-					width: { md: 30, lg: 22.5 },
+					width: { md: 27.5, lg: 22.5 },
 					withBorder: true,
 				},
 			}}

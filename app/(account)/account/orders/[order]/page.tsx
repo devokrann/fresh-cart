@@ -21,7 +21,6 @@ import { Carousel, CarouselSlide } from "@mantine/carousel";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import CardProductShopGrid from "@/components/card/product/shop/Grid";
 import CardProductShopList from "@/components/card/product/shop/List";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 

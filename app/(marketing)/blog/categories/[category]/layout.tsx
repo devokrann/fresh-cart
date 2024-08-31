@@ -6,12 +6,11 @@ import LayoutBody from "@/layouts/Body";
 
 import link from "@/handlers/parsers/string/link";
 
-import posts from "@/data/blog";
-
 import { typeParams } from "../layout";
+import blogPostCategories from "@/data/categories";
 
 export const generateMetadata = ({ params }: { params: typeParams }): Metadata => {
-	return { title: posts.find(p => p.category.toLowerCase() == params.category)?.category };
+	return { title: blogPostCategories.find(c => link.linkify(c.id) == params.id)?.title };
 };
 
 export default function LayoutPost({
