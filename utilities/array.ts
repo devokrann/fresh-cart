@@ -1,4 +1,5 @@
-import { typeProduct, typeVariant } from "@/types/product";
+import { typeProduct } from "@/types/product";
+import { typeVariant } from "@/types/variant";
 
 const array = {
 	elementIsPresent: (id: string, array: any[]) => (array.find(p => p.id == id) ? true : false),

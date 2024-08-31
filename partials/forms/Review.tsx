@@ -13,7 +13,7 @@ import email from "@/handlers/validators/form/special/email";
 import phone from "@/handlers/validators/form/special/phone";
 import capitalize from "@/handlers/parsers/string/capitalize";
 
-import { typeRating } from "@/types/form";
+import { typeFormRating } from "@/types/form";
 
 export default function Review() {
 	const [submitted, setSubmitted] = useState(false);
@@ -34,7 +34,7 @@ export default function Review() {
 		},
 	});
 
-	const parse = (rawData: typeRating) => {
+	const parse = (rawData: typeFormRating) => {
 		return {
 			fname: capitalize.word(rawData.fname.trim()),
 			lname: capitalize.word(rawData.lname.trim()),
@@ -43,7 +43,7 @@ export default function Review() {
 		};
 	};
 
-	const handleSubmit = async (formValues: typeRating) => {
+	const handleSubmit = async (formValues: typeFormRating) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);

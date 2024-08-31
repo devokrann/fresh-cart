@@ -1,18 +1,9 @@
-import { typeCategory } from "./categories";
+import { typeProductCategory } from "./categories";
+import { typeDatabaseFields } from "./database";
 import { typeReview } from "./review";
+import { typeVariant } from "./variant";
 
-export interface typeVariant {
-	id: string;
-	image: string;
-	available: boolean;
-	priceFormer: number | null;
-	pricePresent: number;
-	unitType: "mass" | "volume" | "size";
-	unitValue: string;
-}
-
-export interface typeProduct {
-	id: string;
+export interface typeProduct extends typeDatabaseFields {
 	title: string;
 	desc: string;
 	code: string;
@@ -21,14 +12,9 @@ export interface typeProduct {
 	shippingDays: number;
 	sale: boolean;
 	hot: boolean;
-	variants: typeVariant[];
 
 	// relationships
-	category: typeCategory;
+	category: typeProductCategory;
+	variants: typeVariant[];
 	reviews: typeReview[];
-}
-
-export interface typeProductVariant {
-	product: typeProduct;
-	variant: typeVariant;
 }

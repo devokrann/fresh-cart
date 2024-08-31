@@ -1,5 +1,6 @@
-export interface typeStore {
-	id: string;
+import { typeDatabaseFields } from "./database";
+
+export interface typeStore extends typeDatabaseFields {
 	image: string;
 	title: string;
 	goods: string;

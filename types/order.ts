@@ -1,9 +1,10 @@
 import { typeAddress } from "./address";
 import { typeCart } from "./cart";
+import { typeDatabaseFields } from "./database";
+import { typePurchase } from "./purchase";
 import { typeUser } from "./user";
 
-export interface typeOrder {
-	id: string;
+export interface typeOrder extends typeDatabaseFields {
 	datePlaced: Date;
 	dateDelivered: Date | null;
 	subtotal: number;
@@ -14,6 +15,7 @@ export interface typeOrder {
 
 	// relationships
 	user: typeUser;
-	products: typeCart[];
+	purchase?: typePurchase;
 	addresses: typeAddress[];
+	orderedProducts: typeCart[];
 }

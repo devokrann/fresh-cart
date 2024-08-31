@@ -2,7 +2,8 @@
 
 import React, { useContext, useEffect, useState } from "react";
 
-import { typeProduct, typeVariant, typeProductVariant } from "@/types/product";
+import { typeProduct } from "@/types/product";
+import { typeVariant } from "@/types/variant";
 import { notifications } from "@mantine/notifications";
 import { IconShoppingCartMinus, IconShoppingCartPlus, IconShoppingCartX } from "@tabler/icons-react";
 import { Box, Text } from "@mantine/core";
@@ -16,7 +17,7 @@ export default function Cart({
 }: {
 	operation: {
 		type: "add" | "remove" | "decrease" | "increase" | "clear";
-		items?: typeProductVariant[];
+		items?: typeVariant[];
 		unmount?: boolean;
 		quantity?: number;
 	};
@@ -32,7 +33,7 @@ export default function Cart({
 
 	const [mounted, setMounted] = useState(true);
 
-	const addToCart = (set: typeProductVariant[]) => {
+	const addToCart = (set: typeVariant[]) => {
 		const itemsToIgnore = cart
 			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), cart))
 			: [];
@@ -86,7 +87,7 @@ export default function Cart({
 		}
 	};
 
-	const removeFromCart = (set: typeProductVariant[]) => {
+	const removeFromCart = (set: typeVariant[]) => {
 		const itemsToRemove = cart
 			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), cart))
 			: [];

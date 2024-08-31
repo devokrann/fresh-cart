@@ -27,7 +27,8 @@ import SelectorVariant from "@/components/selector/Variant";
 
 import getFraction from "@/handlers/fraction";
 
-import { typeProduct, typeVariant } from "@/types/product";
+import { typeProduct } from "@/types/product";
+import { typeVariant } from "@/types/variant";
 import React, { useEffect, useState } from "react";
 
 export default function Product({ data, children }: { data: typeProduct; children: React.ReactNode }) {

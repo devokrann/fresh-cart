@@ -38,7 +38,8 @@ import getFraction from "@/handlers/fraction";
 
 import classes from "./Grid.module.scss";
 
-import { typeProduct, typeVariant } from "@/types/product";
+import { typeProduct } from "@/types/product";
+import { typeVariant } from "@/types/variant";
 
 import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";

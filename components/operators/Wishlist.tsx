@@ -6,7 +6,8 @@ import { notifications } from "@mantine/notifications";
 import { IconHeartMinus, IconHeartPlus, IconShoppingCartPlus } from "@tabler/icons-react";
 import { Box, Text } from "@mantine/core";
 import { typeWishlist } from "@/types/wishlist";
-import { typeProduct, typeVariant, typeProductVariant } from "@/types/product";
+import { typeProduct } from "@/types/product";
+import { typeVariant } from "@/types/variant";
 import array from "@/utilities/array";
 import compoundId from "@/handlers/parsers/string/compoundId";
 import ContextWishlist from "@/contexts/user/Wishlist";
@@ -17,7 +18,7 @@ export default function Wishlist({
 }: {
 	operation: {
 		type: "add" | "remove" | "transfer" | "clear";
-		items?: typeProductVariant[];
+		items?: typeVariant[];
 		unmount?: boolean;
 	};
 	children: React.ReactNode;
@@ -32,7 +33,7 @@ export default function Wishlist({
 
 	const [mounted, setMounted] = useState(true);
 
-	const addToWishlist = (set: typeProductVariant[]) => {
+	const addToWishlist = (set: typeVariant[]) => {
 		const itemsToIgnore = wishlist
 			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), wishlist))
 			: [];
@@ -84,7 +85,7 @@ export default function Wishlist({
 		}
 	};
 
-	const removeFromWishlist = (set: typeProductVariant[]) => {
+	const removeFromWishlist = (set: typeVariant[]) => {
 		const itemsToRemove = wishlist
 			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), wishlist))
 			: [];

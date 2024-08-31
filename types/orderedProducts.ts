@@ -1,11 +1,11 @@
 import { typeDatabaseFields } from "./database";
+import { typeOrder } from "./order";
 import { typeVariant } from "./variant";
-import { typeUser } from "./user";
 
-export interface typeCart extends typeDatabaseFields {
+export interface typeOrderedProduct extends typeDatabaseFields {
 	quantity: number;
 
 	// relationships
-	user: typeUser;
 	variant: typeVariant;
+	order: typeOrder;
 }

@@ -37,7 +37,7 @@ import password from "@/handlers/validators/form/special/password";
 import compare from "@/handlers/validators/form/special/compare";
 import converter from "@/utilities/converter";
 
-import { typeSignUp } from "@/types/form";
+import { typeFormSignUp } from "@/types/form";
 
 import { signIn as authSignIn } from "next-auth/react";
 
@@ -92,7 +92,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 		},
 	});
 
-	const parse = (rawData: typeSignUp) => {
+	const parse = (rawData: typeFormSignUp) => {
 		return {
 			email: rawData.email.trim().toLowerCase(),
 			password: rawData.password.trim(),
@@ -100,7 +100,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 		};
 	};
 
-	const handleSignUp = async (formValues: typeSignUp) => {
+	const handleSignUp = async (formValues: typeFormSignUp) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);

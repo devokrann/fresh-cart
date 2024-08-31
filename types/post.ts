@@ -1,17 +1,17 @@
-import { typeBlogPostCategory } from "./categories";
+import { typePostCategory } from "./categories";
+import { typeDatabaseFields } from "./database";
 import { typeUser } from "./user";
 
-export interface typePost {
-	id: string;
+export interface typePost extends typeDatabaseFields {
 	image: string;
 	title: string;
 	description: string;
 	quoteText: string;
 	quoter: string;
 	date: string;
-	length: number;
-	category: typeBlogPostCategory;
+	readingTime: number;
 
 	// relationships
 	user: typeUser;
+	category: typePostCategory;
 }

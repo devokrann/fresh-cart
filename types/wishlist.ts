@@ -1,9 +1,9 @@
-import { typeProduct, typeVariant } from "./product";
+import { typeDatabaseFields } from "./database";
+import { typeUser } from "./user";
+import { typeVariant } from "./variant";
 
-export interface typeWishlist {
-	id: string;
-
+export interface typeWishlist extends typeDatabaseFields {
 	// relationships
-	product: typeProduct;
+	user: typeUser;
 	variant: typeVariant;
 }

@@ -1,4 +1,4 @@
-import { typeVariant } from "@/types/product";
+import { typeVariant } from "@/types/variant";
 
 const variant = {
 	getUnit(variant: typeVariant) {

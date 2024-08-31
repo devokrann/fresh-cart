@@ -31,7 +31,7 @@ import email from "@/handlers/validators/form/special/email";
 
 import { signIn as authSignIn } from "next-auth/react";
 
-import { typeSignIn } from "@/types/form";
+import { typeFormSignIn } from "@/types/form";
 
 export default function SignIn() {
 	const [submitted, setSubmitted] = useState(false);
@@ -50,7 +50,7 @@ export default function SignIn() {
 		},
 	});
 
-	const parse = (rawData: typeSignIn) => {
+	const parse = (rawData: typeFormSignIn) => {
 		return {
 			email: rawData.email.trim().toLowerCase(),
 			password: rawData.password.trim(),
@@ -58,7 +58,7 @@ export default function SignIn() {
 		};
 	};
 
-	const handleSubmit = async (formValues: typeSignIn) => {
+	const handleSubmit = async (formValues: typeFormSignIn) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);

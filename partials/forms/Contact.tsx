@@ -13,7 +13,7 @@ import email from "@/handlers/validators/form/special/email";
 import phone from "@/handlers/validators/form/special/phone";
 import capitalize from "@/handlers/parsers/string/capitalize";
 
-import { typeContact } from "@/types/form";
+import { typeFormContact } from "@/types/form";
 
 export default function Contact() {
 	const [submitted, setSubmitted] = useState(false);
@@ -38,7 +38,7 @@ export default function Contact() {
 		},
 	});
 
-	const parse = (rawData: typeContact) => {
+	const parse = (rawData: typeFormContact) => {
 		return {
 			fname: capitalize.word(rawData.fname.trim()),
 			lname: capitalize.word(rawData.lname.trim()),
@@ -49,7 +49,7 @@ export default function Contact() {
 		};
 	};
 
-	const handleSubmit = async (formValues: typeContact) => {
+	const handleSubmit = async (formValues: typeFormContact) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);

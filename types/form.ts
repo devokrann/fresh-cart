@@ -1,6 +1,6 @@
 import { typeAddress } from "./address";
 
-export interface typeContact {
+export interface typeFormContact {
 	fname: string;
 	lname: string;
 	email: string;
@@ -15,19 +15,19 @@ export interface typeFormAddress {
 	shipping: typeAddress;
 }
 
-export interface typeRating {
+export interface typeFormRating {
 	fname: string;
 	lname: string;
 	rating: string;
 	review: string;
 }
 
-export interface typeSignUp {
+export interface typeFormSignUp {
 	email: string;
 	password: string;
 }
 
-export interface typeSignIn {
+export interface typeFormSignIn {
 	email: string;
 	password: string;
 	save: boolean;

@@ -1,24 +1,26 @@
+import { typeDatabaseFields } from "./database";
 import { typePost } from "./post";
 import { typeProduct } from "./product";
 
-export interface typeProductSubCategory {
-	id: string;
+export interface typePostCategory extends typeDatabaseFields {
 	title: string;
+
+	// relationships
+	posts: typePost[];
 }
 
-export interface typeProductCategory {
-	id: string;
+export interface typeProductCategory extends typeDatabaseFields {
 	title: string;
 
-	// rels
-	subCategories: typeProductSubCategory[];
+	// relationships
+	productParentCategory: typeProductParentCategory;
 	products: typeProduct[];
 }
 
-export interface typeBlogPostCategory {
-	id: string;
+export interface typeProductParentCategory extends typeDatabaseFields {
 	title: string;
 
-	// rels
-	posts: typePost[];
+	// relationships
+	subCategories: typeProductCategory[];
+	productCategories: typeProductCategory[];
 }
