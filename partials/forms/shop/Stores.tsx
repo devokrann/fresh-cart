@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import InputCheckboxStores from "@/components/inputs/checkbox/Stores";
 import { typeStore } from "@/types/store";
-import getStores from "@/handlers/database/getStores";
+import getStores from "@/handlers/database/create/stores";
 
 export default function Stores() {
 	const [data, setData] = useState<typeStore[] | null>(null);
