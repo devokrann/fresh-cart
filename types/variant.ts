@@ -13,7 +13,7 @@ export interface typeVariant extends typeDatabaseFields {
 	unitValue: string;
 
 	// relationships
-	product: typeProduct[];
+	product: typeProduct;
 	cart: typeCart[];
 	wishlist: typeWishlist[];
 	orderedProducts: typeOrderedProduct[];
