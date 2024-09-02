@@ -4,7 +4,7 @@ export async function POST(req: Request) {
 	try {
 		const { productId } = await req.json();
 
-		const variants = await prisma.variants.findMany({ where: { productId } });
+		const variants = await prisma.variant.findMany({ where: { productId } });
 
 		return Response.json(variants);
 	} catch (error) {
