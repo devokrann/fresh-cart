@@ -7,7 +7,6 @@ import { typeUser } from "./user";
 export interface typeOrder extends typeDatabaseFields {
 	datePlaced: Date;
 	dateDelivered: Date | null;
-	subtotal: number;
 	taxFee: number;
 	serviceFee: number;
 	shippingFee: number;

@@ -18,5 +18,5 @@ export interface typeAddress extends typeDatabaseFields {
 
 	// relationships
 	user: typeUser;
-	order: typeOrder | null;
+	order?: typeOrder | null;
 }

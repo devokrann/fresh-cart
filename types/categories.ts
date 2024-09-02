@@ -13,7 +13,7 @@ export interface typeProductCategory extends typeDatabaseFields {
 	title: string;
 
 	// relationships
-	productParentCategory: typeProductParentCategory;
+	productParentCategory?: typeProductParentCategory;
 	products: typeProduct[];
 }
 

@@ -5,9 +5,9 @@ import { typeUser } from "./user";
 export interface typePost extends typeDatabaseFields {
 	image: string;
 	title: string;
-	description: string;
 	quoteText: string;
 	quoter: string;
+	description: string;
 	date: string;
 	readingTime: number;
 
