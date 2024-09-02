@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import ContextUserWishlist from "@/contexts/user/Wishlist";
+import ContextUserWishlist from "@/contexts/Wishlist";
 
 import { typeWishlist } from "@/types/wishlist";
 import getWishlist from "@/handlers/database/getWishlist";

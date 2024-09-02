@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import ContextUserCart from "@/contexts/user/Cart";
+import ContextUserCart from "@/contexts/Cart";
 
 import { typeCart } from "@/types/cart";
 import getCart from "@/handlers/database/getCart";
