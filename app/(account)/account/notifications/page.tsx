@@ -9,10 +9,16 @@ import { Center, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/cor
 import FurmUserNotifications from "@/partials/forms/user/Notifications";
 import FormUserAccountPassword from "@/partials/forms/user/settings/Password";
 import ModalDeleteAccount from "@/components/modal/delete/Account";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Notifications" };
 
 export default async function Notifications() {
+	const session = await auth();
+
+	!session && redirect("/");
+
 	return (
 		<LayoutPage stacked>
 			<LayoutSection>

@@ -5,7 +5,6 @@ import NavbarMain from "@/partials/navbars/Main";
 import FooterMain from "@/partials/footers/Main";
 import HeaderMain from "@/partials/headers/Main";
 import SectionShop from "@/partials/sections/Shop";
-import ProviderContextProducts from "@/providers/context/Products";
 
 import AffixTop from "@/components/affixi/Top";
 import { Metadata } from "next";
@@ -29,9 +28,7 @@ export default function Shop({
 				</>
 			}
 		>
-			<main>
-				<ProviderContextProducts>{children}</ProviderContextProducts>
-			</main>
+			<main>{children}</main>
 
 			<AffixTop />
 		</LayoutBody>

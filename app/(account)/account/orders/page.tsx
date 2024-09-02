@@ -28,10 +28,16 @@ import TableOrders from "@/components/tables/orders/Main";
 import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Orders" };
 
 export default async function Orders() {
+	const session = await auth();
+
+	!session && redirect("/");
+
 	return (
 		<LayoutPage>
 			<LayoutSection>

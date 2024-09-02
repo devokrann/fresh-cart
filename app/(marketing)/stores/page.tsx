@@ -11,11 +11,13 @@ import CardStore from "@/components/card/Store";
 
 import classes from "./Stores.module.scss";
 import images from "@/assets/images";
-import stores from "@/data/stores";
+import getStores from "@/handlers/database/getStores";
 
 export const metadata: Metadata = { title: "Stores" };
 
 export default async function Stores() {
+	const stores = await getStores();
+
 	return (
 		<LayoutPage>
 			<LayoutSection containerized={"responsive"} margined={48}>

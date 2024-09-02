@@ -6,10 +6,11 @@ import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
 import CardBlog from "@/components/card/Blog";
+import getPosts from "@/handlers/database/getPosts";
 
-import blog from "@/data/posts";
+export default async function Blog() {
+	const posts = await getPosts();
 
-export default function Blog() {
 	return (
 		<LayoutPage>
 			<LayoutSection margined containerized={"responsive"}>
@@ -20,12 +21,12 @@ export default function Blog() {
 
 					<Grid gutter={"xl"}>
 						<GridCol span={12}>
-							<CardBlog data={blog[blog.length - 1]} orientation="horizontal" />
+							<CardBlog data={posts[posts.length - 1]} orientation="horizontal" />
 						</GridCol>
 
-						{blog.map(
+						{posts.map(
 							post =>
-								blog.filter(p => p != blog[blog.length - 1]) && (
+								posts.filter(p => p != posts[posts.length - 1]) && (
 									<GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
 										<CardBlog data={post} />
 									</GridCol>

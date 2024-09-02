@@ -10,10 +10,16 @@ import LayoutSection from "@/layouts/Section";
 import ProviderAuthSignIn from "@/providers/auth/signIn";
 
 import { IconArrowRight } from "@tabler/icons-react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Authentication Error" };
 
 export default async function SignOut() {
+	const session = await auth();
+
+	session && redirect("/");
+
 	return (
 		<LayoutPage>
 			<LayoutSection containerized="xs" padded>

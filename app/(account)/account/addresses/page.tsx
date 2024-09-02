@@ -6,11 +6,19 @@ import { Metadata } from "next";
 import { Divider, Grid, GridCol, Group, Stack, Text, Title } from "@mantine/core";
 import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardAddressMain from "@/components/card/address/Main";
-import addresses from "@/data/addresses";
+import getAddresses from "@/handlers/database/getAddresses";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Addresses" };
 
 export default async function Addresses() {
+	const session = await auth();
+
+	!session && redirect("/");
+
+	const addresses = session?.user.id ? await getAddresses(session.user.id) : null;
+
 	return (
 		<LayoutPage>
 			<LayoutSection>
@@ -28,7 +36,7 @@ export default async function Addresses() {
 
 					<GridCol span={12}>
 						<Grid>
-							{addresses.map(address => (
+							{addresses?.map(address => (
 								<GridCol key={address.lname} span={{ base: 12, md: 6, lg: 4 }}>
 									<CardAddressMain data={address} />
 								</GridCol>
