@@ -1,12 +1,12 @@
-import images from "@/assets/images";
-import { typePaymentMethods } from "@/types/payment";
+import { typePaymentMethod } from "@/types/payment";
 import users from "./users";
 
-const paymentMethods: typePaymentMethods[] = [
+const paymentMethods: typePaymentMethod[] = [
 	{
 		title: "My Visa",
 		name: users[0].name,
 		number: "4242 7856 4242 7856",
+		cvc: "424",
 		expiry: new Date().toDateString(),
 		type: "visa",
 		default: true,
@@ -15,6 +15,7 @@ const paymentMethods: typePaymentMethods[] = [
 		title: "Joe's Master Card",
 		name: users[1].name,
 		number: "4242 7856 4242 7856",
+		cvc: "424",
 		expiry: new Date().toDateString(),
 		type: "mastercard",
 		default: false,
@@ -23,6 +24,7 @@ const paymentMethods: typePaymentMethods[] = [
 		title: "Brother's Card",
 		name: users[2].name,
 		number: "4242 7856 4242 7856",
+		cvc: "424",
 		expiry: new Date().toDateString(),
 		type: "discover",
 		default: false,
@@ -31,6 +33,7 @@ const paymentMethods: typePaymentMethods[] = [
 		title: "Platinum Card",
 		name: users[2].name,
 		number: "4242 7856 4242 7856",
+		cvc: "424",
 		expiry: new Date().toDateString(),
 		type: "american express",
 		default: false,

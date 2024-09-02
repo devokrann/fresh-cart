@@ -3,29 +3,34 @@ import { typeUser } from "@/types/user";
 
 const users: typeUser[] = [
 	{
-		image: images.avatars.avatar10,
-		name: "Shankar Subbaraman",
-		email: "shankar.subbaraman@example.com",
+		image: images.avatars.avatar12,
+		name: "Enola Holmes",
+		email: "enola@baker.street",
+		verified: true,
 	},
 	{
-		image: images.avatars.avatar12,
-		name: "Robert Thomas",
-		email: "robert.thomas@example.com",
+		image: images.avatars.avatar10,
+		name: "Sherlock Holmes",
+		email: "sherlock@baker.street",
+		verified: true,
 	},
 	{
 		image: images.avatars.avatar9,
-		name: "Barbara Tay",
-		email: "barbara.tay@example.com",
+		name: "Eudoria Holmes",
+		email: "eudoria@baker.street",
+		verified: true,
 	},
 	{
 		image: images.avatars.avatar8,
-		name: "Sandra Langevin",
-		email: "sandra.langevin@example.com",
+		name: "Mira Troy",
+		email: "mira@marchmont.square",
+		verified: true,
 	},
 	{
 		image: images.avatars.avatar4,
-		name: "Dustin Warren",
-		email: "dustin.warren@example.com",
+		name: "Sarah Chapman",
+		email: "sarah@bell.place",
+		verified: true,
 		position: "Marketing Manager",
 	},
 ];

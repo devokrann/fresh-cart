@@ -1,22 +1,35 @@
-import { typeBlogPostCategory } from "@/types/categories";
-import blog from "./blog";
+import { typePostCategory, typeProductCategory } from "@/types/categories";
 
-const blogPostCategories: typeBlogPostCategory[] = [
+const postCategories: typePostCategory[] = [
 	{
-		id: "1",
 		title: "Recipes",
-		posts: blog,
 	},
 	{
-		id: "2",
 		title: "Retailer",
-		posts: blog,
 	},
 	{
-		id: "3",
 		title: "Company",
-		posts: blog,
 	},
 ];
 
-export default blogPostCategories;
+const productCategories: typeProductCategory[] = [
+	{
+		title: "Bakery & Biscuits",
+	},
+	{
+		title: "Snack & Munchies",
+	},
+	{
+		title: "Instant Food",
+	},
+	{
+		title: "Dairy, Bread & Eggs",
+	},
+];
+
+const categories = {
+	blog: postCategories,
+	product: productCategories,
+};
+
+export default categories;
