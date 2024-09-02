@@ -1,6 +1,6 @@
-import { typeCategory } from "@/types/categories";
+import { typeProductCategory } from "@/types/categories";
 
-const getCategories = async (): Promise<typeCategory[]> => {
+const getProductCategories = async (): Promise<typeProductCategory[]> => {
 	try {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/products`, {
 			method: "GET",
@@ -14,10 +14,10 @@ const getCategories = async (): Promise<typeCategory[]> => {
 
 		return result;
 	} catch (error) {
-		console.error("X-> Error fetching categories", error);
+		console.error("X-> Error fetching product categories", error);
 
 		return [];
 	}
 };
 
-export default getCategories;
+export default getProductCategories;
