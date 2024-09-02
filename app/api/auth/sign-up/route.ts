@@ -35,11 +35,13 @@ export async function POST(req: Request) {
 				// create otp record
 				otpHash && (await createOtp({ email, otp: otpHash }));
 
+				console.log(otpValue);
+
 				return Response.json({
 					user: { exists: false },
 					otp: { value: otpValue },
-					// send otp email and output result in response body
-					resend: await verify(otpValue, email),
+					// // send otp email and output result in response body
+					// resend: await verify(otpValue, email),
 				});
 			}
 		} else {

@@ -15,7 +15,7 @@ import { IconBrandFacebook, IconBrandLinkedin, IconBrandTwitter } from "@tabler/
 
 import { typeParams } from "../layout";
 
-import blog from "@/data/blog";
+import blog from "@/data/posts";
 
 export default function Post({ params }: { params: typeParams }) {
 	const data = blog.find(p => link.linkify(p.title) == params.blogId);

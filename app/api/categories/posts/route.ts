@@ -1,16 +1,16 @@
 import categories from "@/data/categories";
-import addProductCategories from "@/handlers/database/create/productCategories";
+import addPostCategories from "@/handlers/database/create/postCategories";
 import prisma from "@/services/prisma";
 
 export async function GET(req: Request) {
 	try {
 		// const data = await req.json();
 
-		const productCategories = await prisma.productCategory.findMany();
+		const postCategories = await prisma.postCategory.findMany();
 
-		return Response.json(productCategories);
+		return Response.json(postCategories);
 	} catch (error) {
-		console.error("x-> Error getting product categories:", error);
+		console.error("x-> Error getting post categories:", error);
 		return Response.error();
 	}
 }
@@ -19,11 +19,11 @@ export async function POST(req: Request) {
 	try {
 		// const data = await req.json();
 
-		const response = await addProductCategories(categories.product);
+		const response = await addPostCategories(categories.blog);
 
 		return Response.json(response);
 	} catch (error) {
-		console.error("x-> Error adding product categories:", error);
+		console.error("x-> Error adding post categories:", error);
 		return Response.error();
 	}
 }

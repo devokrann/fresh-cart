@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 		} else {
 			if (!userRecord.verified) {
 				// query database for otp
-				const otpRecord = await prisma.otps.findUnique({ where: { email } });
+				const otpRecord = await prisma.otp.findUnique({ where: { email } });
 
 				if (!otpRecord) {
 					return Response.json({
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 							await prisma.user.update({ where: { email }, data: { verified: true } });
 
 							// delete used otp record
-							await prisma.otps.delete({ where: { email } });
+							await prisma.otp.delete({ where: { email } });
 
 							return Response.json({
 								user: { exists: true, verified: false },
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
 							});
 						} else {
 							// delete expired otp record
-							await prisma.otps.delete({ where: { email } });
+							await prisma.otp.delete({ where: { email } });
 
 							return Response.json({
 								user: { exists: true, verified: false },

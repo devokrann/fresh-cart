@@ -6,7 +6,7 @@ import LayoutBody from "@/layouts/Body";
 
 import link from "@/handlers/parsers/string/link";
 
-import posts from "@/data/blog";
+import posts from "@/data/posts";
 
 import { typeParams } from "../layout";
 

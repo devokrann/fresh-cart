@@ -30,7 +30,7 @@ import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 
 import CarouselShop from "@/components/carousel/Shop";
 
-import blog from "@/data/blog";
+import blog from "@/data/posts";
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
 import stores from "@/data/stores";
 import link from "@/handlers/parsers/string/link";

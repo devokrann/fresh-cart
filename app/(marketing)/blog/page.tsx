@@ -7,7 +7,7 @@ import LayoutSection from "@/layouts/Section";
 
 import CardBlog from "@/components/card/Blog";
 
-import blog from "@/data/blog";
+import blog from "@/data/posts";
 
 export default function Blog() {
 	return (

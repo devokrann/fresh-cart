@@ -7,7 +7,7 @@ import LayoutSection from "@/layouts/Section";
 
 import CardBlog from "@/components/card/Blog";
 
-import blog from "@/data/blog";
+import blog from "@/data/posts";
 import { typeParams } from "../layout";
 import capitalize from "@/handlers/parsers/string/capitalize";
 import blogPostCategories from "@/data/categories";
