@@ -20,7 +20,13 @@ export default async function Stores() {
 		<LayoutPage>
 			<LayoutSection containerized={"responsive"} margined={48}>
 				<Group justify="space-between" className={classes.card}>
-					<Title order={2} fz={{ base: "xl", lg: 36 }} fw={"bold"} ml={{ md: "md", lg: "xl" }}>
+					<Title
+						order={2}
+						fz={{ base: "xl", lg: 36 }}
+						fw={"bold"}
+						ml={{ md: "md", lg: "xl" }}
+						className={classes.title}
+					>
 						Stores
 					</Title>
 					<Stack>

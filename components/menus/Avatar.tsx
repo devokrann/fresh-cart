@@ -27,6 +27,10 @@ import {
 	IconMapPin,
 	IconBellRinging,
 	IconDashboard,
+	IconHeart,
+	IconStar,
+	IconHelpCircle,
+	IconInfoCircle,
 } from "@tabler/icons-react";
 
 import classes from "./Avatar.module.scss";
@@ -42,46 +46,56 @@ export default function Avatar() {
 
 	const sizeAvatar = mobile ? 28 : 36;
 
-	const user = session.data?.user;
-
 	const menuItems = {
-		app: [
+		activity: [
 			{
-				icon: IconDashboard,
-				link: `/dashboard`,
-				label: "Overview",
+				icon: IconHeart,
+				link: `/account/wishlist`,
+				label: "My Wishlist",
 			},
 			{
 				icon: IconPackage,
-				link: `/dashboard/orders`,
+				link: `/account/orders`,
 				label: "My Orders",
+			},
+			{
+				icon: IconStar,
+				link: `/account/reviews`,
+				label: "My Reviews",
 			},
 		],
 		user: [
 			{
 				icon: IconUser,
-				link: `/account/settings/profile`,
+				link: `/account/profile`,
 				label: "Profile Settings",
 			},
 			{
 				icon: IconCoins,
-				link: `/account/settings/payment`,
+				link: `/account/payment`,
 				label: "Payment Details",
 			},
 			{
 				icon: IconMapPin,
-				link: `/account/settings/addresses`,
-				label: "Shipping Addresses",
-			},
-			{
-				icon: IconSettings,
-				link: `/account/settings`,
-				label: "Account Settings",
+				link: `/account/addresses`,
+				label: "Addresses",
 			},
 			{
 				icon: IconBellRinging,
-				link: `/account/settings/notifications`,
+				link: `/account/notifications`,
 				label: "Notifications",
+			},
+		],
+		help: [
+			{
+				icon: IconHelpCircle,
+				link: `/help`,
+				label: "Help Center",
+			},
+			{
+				icon: IconInfoCircle,
+				link: `/legal/terms-and-conditions`,
+				label: "Terms and Conditions",
 			},
 		],
 		danger: [
@@ -95,28 +109,31 @@ export default function Avatar() {
 	};
 
 	return (
-		<Menu position={"bottom-end"} withArrow classNames={{ dropdown: classes.dropdown }} width={mobile ? 200 : 240}>
+		<Menu
+			position={"bottom"}
+			withArrow
+			classNames={{ dropdown: classes.dropdown, item: classes.item, divider: classes.divider }}
+			width={mobile ? 200 : 240}
+		>
 			<MenuTarget>
-				{user ? (
-					!user?.image ? (
-						<MantineAvatar
-							size={sizeAvatar}
-							title={user.name ? user.name : "User"}
-							className={classes.avatar}
-						>
-							{user.name ? initialize(user?.name) : user.email?.charAt(0).toUpperCase()}
-						</MantineAvatar>
-					) : (
-						<MantineAvatar
-							src={user.image}
-							alt={user.name ? user.name : "User"}
-							size={sizeAvatar}
-							title={user.name ? user.name : "User"}
-							className={classes.avatar}
-						/>
-					)
+				{!session.data?.user.image ? (
+					<MantineAvatar
+						size={sizeAvatar}
+						title={session.data?.user.name ? session.data?.user.name : "User"}
+						className={classes.avatar}
+					>
+						{session.data?.user.name
+							? initialize(session.data?.user.name)
+							: session.data?.user.email?.charAt(0).toUpperCase()}
+					</MantineAvatar>
 				) : (
-					<span></span>
+					<MantineAvatar
+						src={session.data?.user.image}
+						alt={session.data?.user.name ? session.data?.user.name : "User"}
+						size={sizeAvatar}
+						title={session.data?.user.name ? session.data?.user.name : "User"}
+						className={classes.avatar}
+					/>
 				)}
 			</MenuTarget>
 
@@ -126,16 +143,15 @@ export default function Avatar() {
 						<Skeleton height={8} radius="xl" />
 					) : (
 						<Stack gap={"xs"}>
-							{user?.name && (
+							{session.data?.user.name && (
 								<Text fz={"sm"} lh={1} ta={"center"}>
-									{user?.name}
+									{session.data?.user.name}
 								</Text>
 							)}
 							<Text fz={"xs"} lh={1} ta={"center"}>
-								({user?.email})
+								({session.data?.user.email})
 							</Text>
 
-							{/* test expiry session */}
 							{/* <Text fz={"xs"} lh={1} ta={"center"}>
 								({session.data?.expires})
 							</Text> */}
@@ -145,8 +161,8 @@ export default function Avatar() {
 
 				<MenuDivider />
 
-				<MenuLabel>Dashboard</MenuLabel>
-				{menuItems.app.map(item => (
+				<MenuLabel>Activity</MenuLabel>
+				{menuItems.activity.map(item => (
 					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
 						{item.label}
 					</MenuItem>
@@ -160,6 +176,15 @@ export default function Avatar() {
 						{item.label}
 					</MenuItem>
 				))}
+
+				{/* <MenuDivider />
+
+				<MenuLabel>Customer Care</MenuLabel>
+				{menuItems.help.map(item => (
+					<MenuItem key={item.label} leftSection={<item.icon size={16} />} component={Link} href={item.link}>
+						{item.label}
+					</MenuItem>
+				))} */}
 
 				<MenuDivider />
 

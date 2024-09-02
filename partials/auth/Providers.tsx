@@ -9,14 +9,16 @@ import { IconBrandAppleFilled, IconBrandFacebookFilled, IconBrandGoogleFilled } 
 import { signIn } from "next-auth/react";
 
 export default function Providers() {
+	const handleGoogleSignIn = async () => {
+		await signIn("google", {
+			redirect: false,
+			callbackUrl: "/",
+		});
+	};
+
 	return (
 		<Group justify="center">
-			<ActionIcon
-				size={40}
-				radius={"xl"}
-				variant="light"
-				onClick={async () => await signIn("google", { redirect: false, callbackUrl: "/" })}
-			>
+			<ActionIcon size={40} radius={"xl"} variant="light" onClick={handleGoogleSignIn}>
 				<IconBrandGoogleFilled size={20} />
 			</ActionIcon>
 			<ActionIcon size={40} radius={"xl"} variant="light">

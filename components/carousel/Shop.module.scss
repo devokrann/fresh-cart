@@ -1,0 +1,12 @@
+.indicator {
+	background-color: transparent;
+	border: 1px solid light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+
+	@include hover {
+		background-color: light-dark(var(--mantine-color-pri-light), var(--mantine-color-pri-light));
+	}
+
+	&[data-active] {
+		background-color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+}

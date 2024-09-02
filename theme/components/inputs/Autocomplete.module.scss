@@ -1,0 +1,43 @@
+.input {
+	&[data-variant="default"] {
+		background-color: var(--mantine-color-body);
+		border-color: var(--mantine-color-default-border);
+
+		&:focus {
+			border-color: var(--mantine-color-pri-6);
+		}
+	}
+}
+
+.label {
+	margin-left: var(--mantine-spacing-lg);
+}
+
+.description {
+	margin-left: var(--mantine-spacing-lg);
+}
+
+.error {
+	margin-left: var(--mantine-spacing-lg);
+}
+
+.dropdown {
+	background-color: var(--mantine-color-body);
+	border-color: var(--mantine-color-default-border);
+
+	&:focus {
+		border-color: var(--mantine-color-pri-6);
+	}
+}
+
+.option {
+	&:hover {
+		background-color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+		color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
+	}
+
+	&[data-active] {
+		background-color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+		color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
+	}
+}

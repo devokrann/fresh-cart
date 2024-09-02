@@ -10,9 +10,11 @@ import {
 	Box,
 	Button,
 	Center,
+	Checkbox,
 	Divider,
 	Grid,
 	GridCol,
+	Group,
 	PasswordInput,
 	Stack,
 	Text,
@@ -29,7 +31,7 @@ import email from "@/handlers/validators/form/special/email";
 
 import { signIn as authSignIn } from "next-auth/react";
 
-import { typeSignIn } from "@/types/form";
+import { typeFormSignIn } from "@/types/form";
 
 export default function SignIn() {
 	const [submitted, setSubmitted] = useState(false);
@@ -39,6 +41,7 @@ export default function SignIn() {
 		initialValues: {
 			email: "",
 			password: "",
+			save: false,
 		},
 
 		validate: {
@@ -47,14 +50,15 @@ export default function SignIn() {
 		},
 	});
 
-	const parse = (rawData: typeSignIn) => {
+	const parse = (rawData: typeFormSignIn) => {
 		return {
 			email: rawData.email.trim().toLowerCase(),
 			password: rawData.password.trim(),
+			save: rawData.save,
 		};
 	};
 
-	const handleSubmit = async (formValues: typeSignIn) => {
+	const handleSubmit = async (formValues: typeFormSignIn) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
@@ -62,39 +66,39 @@ export default function SignIn() {
 				// // test request body
 				// console.log(parse(formValues));
 
-				const res = await authSignIn("credentials", {
+				const response = await authSignIn("credentials", {
 					...parse(formValues),
 					redirect: false,
 					callbackUrl: "/",
 				});
 
-				if (!res) {
+				if (!response?.ok) {
 					notifications.show({
-						id: "otp-verify-failed-no-response",
+						id: "sign-in-failed-bad-response",
 						icon: <IconX size={16} stroke={1.5} />,
-						title: "Server Unreachable",
-						message: `Check your network connection.`,
+						title: "Bad Response",
+						message: "There was a problem with the request",
 						variant: "failed",
 					});
 				} else {
-					if (!res.url) {
+					if (!response.error) {
+						// apply callbackurl
+						response.url && router.replace(response.url);
+					} else {
 						notifications.show({
-							id: "otp-verify-failed-no-response",
+							id: `sign-in-failed-${response.error}`,
 							icon: <IconX size={16} stroke={1.5} />,
-							title: "Unauthorized",
-							message: `Incorrect username/password`,
+							title: "Authentication Error",
+							message: "Incorrect username/password",
 							variant: "failed",
 						});
-					} else {
-						// apply callbackurl
-						router.replace(res.url);
 					}
 				}
 			} catch (error) {
 				notifications.show({
-					id: "sign-in-failed-unauthorized",
+					id: "sign-in-failed-unexpected",
 					icon: <IconX size={16} stroke={1.5} />,
-					title: "Unauthorized",
+					title: "Unexpected Error",
 					message: (error as Error).message,
 					variant: "failed",
 				});
@@ -113,7 +117,7 @@ export default function SignIn() {
 						<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 					</GridCol>
 					<GridCol span={{ base: 12, xs: 12 }}>
-						<Stack gap={4} align="end">
+						<Stack gap={"xs"}>
 							<PasswordInput
 								required
 								label={"Password"}
@@ -121,17 +125,26 @@ export default function SignIn() {
 								{...form.getInputProps("password")}
 								w={"100%"}
 							/>
-							<Anchor
-								underline="hover"
-								inherit
-								fz={"xs"}
-								ta={"end"}
-								w={"fit-content"}
-								component={Link}
-								href={"/auth/password/forgot"}
-							>
-								Forgot password
-							</Anchor>
+
+							<Group justify="space-between">
+								<Checkbox
+									label="Remember me"
+									key={form.key("save")}
+									{...form.getInputProps("save", { type: "checkbox" })}
+								/>
+
+								<Anchor
+									underline="hover"
+									inherit
+									fz={"xs"}
+									ta={"end"}
+									w={"fit-content"}
+									component={Link}
+									href={"/auth/password/forgot"}
+								>
+									Forgot password
+								</Anchor>
+							</Group>
 						</Stack>
 					</GridCol>
 					<GridCol span={12} mt={"md"}>

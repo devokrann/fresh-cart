@@ -1,9 +1,6 @@
-import { auth } from "@/auth";
 import prisma from "@/services/prisma";
 
 export async function POST(req: Request, { params }: { params: { userId: string } }) {
-	const session = await auth();
-
 	try {
 		const userId = params.userId;
 		const { name, email } = await req.json();

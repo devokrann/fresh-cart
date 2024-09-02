@@ -1,9 +1,10 @@
-import { StaticImageData } from "next/image";
+import { typeDatabaseFields } from "./database";
 
-export interface typeStore {
-	image: StaticImageData;
+export interface typeStore extends typeDatabaseFields {
+	image: string;
 	title: string;
-	goods: string[];
-	delivery: { available: boolean; time?: string };
+	goods: string;
 	distance: number;
+	deliverable: boolean;
+	deliveryTime?: string;
 }

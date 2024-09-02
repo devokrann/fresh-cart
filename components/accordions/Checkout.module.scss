@@ -1,0 +1,37 @@
+.item {
+	overflow: hidden;
+	border: 1px solid transparent;
+	border: 1px solid light-dark(var(--mantine-color-default-border), var(--mantine-color-default-border));
+	border-radius: var(--mantine-radius-md);
+}
+
+.control {
+	transition: 0.25s all ease;
+	border-bottom: 1px solid light-dark(var(--mantine-color-default-border), var(--mantine-color-default-border));
+
+	@include hover {
+		background-color: transparent;
+
+		.label {
+			color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+		}
+	}
+}
+
+.content {
+	padding: var(--mantine-spacing-md);
+}
+
+.panel {
+}
+
+.label {
+	transition: 0.25s all ease;
+
+	font-weight: 500;
+	color: var(--mantine-color-text);
+	padding: var(--mantine-spacing-md) 0;
+}
+
+.chevron {
+}

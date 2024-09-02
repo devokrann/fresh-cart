@@ -1,8 +1,13 @@
 .header {
 	border-bottom: 1px solid var(--mantine-color-default-border);
 	box-shadow: var(--mantine-shadow-xs);
+	background-color: var(--mantine-color-body);
 }
 
 .body {
-	padding-top: var(--mantine-spacing-md);
+	padding: 0;
+}
+
+.content {
+	background-color: var(--mantine-color-body);
 }

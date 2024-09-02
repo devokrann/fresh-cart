@@ -39,7 +39,7 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 
 const handleDelete = async (id: string) => {
 	// delete user-related records
-	await prisma.account.deleteMany({ where: { userId: id } });
+	await prisma.accounts.deleteMany({ where: { userId: id } });
 	// await prisma.comment.deleteMany({ where: { userId:id } });
 	// await prisma.message.deleteMany({ where: { userId:id } });
 	// await prisma.otl.deleteMany({ where: { userId:id } });

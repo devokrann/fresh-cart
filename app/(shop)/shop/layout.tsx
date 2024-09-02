@@ -1,26 +1,39 @@
 import React from "react";
 
-import { Metadata } from "next";
-
 import LayoutBody from "@/layouts/Body";
+import NavbarMain from "@/partials/navbars/Main";
+import FooterMain from "@/partials/footers/Main";
+import HeaderMain from "@/partials/headers/Main";
+import SectionShop from "@/partials/sections/Shop";
+import ProviderContextProducts from "@/providers/context/Products";
 
-import link from "@/handlers/parsers/string/link";
-import AsideShop from "@/partials/asides/Shop";
+import AffixTop from "@/components/affixi/Top";
+import { Metadata } from "next";
+import contact from "@/data/contact";
 
-import posts from "@/data/blog";
+export const metadata: Metadata = { title: { default: "Shop", template: `%s - Shop - ${contact.name.app}` } };
 
-export interface typeParams {
-	productId: string;
-}
-
-export const generateMetadata = ({ params }: { params: typeParams }): Metadata => {
-	return { title: posts.find(p => link.linkify(p.title) == params.productId)?.title };
-};
-
-export default function LayoutShop({
+export default function Shop({
 	children, // will be a page or nested layout
 }: {
 	children: React.ReactNode;
 }) {
-	return <LayoutBody aside={{ left: { component: <AsideShop /> }, gap: 64 }}>{children}</LayoutBody>;
+	return (
+		<LayoutBody
+			header={<HeaderMain />}
+			nav={<NavbarMain />}
+			footer={
+				<>
+					<SectionShop />
+					<FooterMain />
+				</>
+			}
+		>
+			<main>
+				<ProviderContextProducts>{children}</ProviderContextProducts>
+			</main>
+
+			<AffixTop />
+		</LayoutBody>
+	);
 }

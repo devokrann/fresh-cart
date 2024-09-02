@@ -1,22 +1,27 @@
 import React from "react";
 
-import { Accordion, AccordionControl, AccordionItem, AccordionPanel } from "@mantine/core";
-
-import faqs from "@/data/faq";
+import { Accordion, AccordionControl, AccordionItem, AccordionPanel, Stack } from "@mantine/core";
 
 import classes from "./Faq.module.scss";
 
-export default function Faq() {
-	const items = faqs.map(item => (
-		<AccordionItem key={item.q} value={item.q} mt={faqs.indexOf(item) == 0 ? undefined : "md"}>
-			<AccordionControl>{item.q}</AccordionControl>
-			<AccordionPanel>{item.a}</AccordionPanel>
+export default function Faq({
+	data,
+}: {
+	data: {
+		label: string;
+		item: string;
+	}[];
+}) {
+	const items = data.map(item => (
+		<AccordionItem key={item.label} value={item.label}>
+			<AccordionControl>{item.label}</AccordionControl>
+			<AccordionPanel>{item.item}</AccordionPanel>
 		</AccordionItem>
 	));
 
 	return (
 		<Accordion
-			defaultValue={faqs[0].q}
+			defaultValue={data[0].label}
 			classNames={{
 				item: classes.item,
 				label: classes.label,
@@ -24,7 +29,7 @@ export default function Faq() {
 				control: classes.control,
 			}}
 		>
-			{items}
+			<Stack gap={4}>{items}</Stack>
 		</Accordion>
 	);
 }

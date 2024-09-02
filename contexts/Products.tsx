@@ -1,13 +1,6 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
 
-import { typeProduct } from "@/types/product";
-
-interface typeContextProducts {
-	wishlist: typeProduct[];
-	setWishlist: Dispatch<SetStateAction<typeProduct[]>>;
-	cart: typeProduct[];
-	setCart: Dispatch<SetStateAction<typeProduct[]>>;
-}
+import { typeContextProducts } from "@/types/context";
 
 const Products = createContext<typeContextProducts | null>(null);
 

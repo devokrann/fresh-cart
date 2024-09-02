@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 import { Switch, useMantineColorScheme, useComputedColorScheme } from "@mantine/core";
@@ -10,10 +12,11 @@ export default function Theme() {
 
 	return (
 		<Switch
-			radius={"sm"}
+			size="xs"
+			radius={"md"}
 			defaultChecked={colorScheme == "dark" ? true : false}
-			offLabel={<IconMoonStars size={16} stroke={2.5} />}
-			onLabel={<IconSun size={16} stroke={2.5} />}
+			offLabel={<IconMoonStars size={12} stroke={2} />}
+			onLabel={<IconSun size={12} stroke={2} />}
 			onChange={() => setColorScheme(computedColorScheme == "dark" ? "light" : "dark")}
 		/>
 	);

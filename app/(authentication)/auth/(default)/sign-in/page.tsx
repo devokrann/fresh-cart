@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { Anchor, Center, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Box, Center, Flex, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
@@ -23,21 +23,42 @@ export const metadata: Metadata = { title: "Sign In" };
 export default async function SignIn() {
 	const session = await auth();
 
-	session?.user && redirect("/");
+	session && redirect("/");
 
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"xs"}>
-				<Stack gap={40} px={{ md: 40 }}>
-					<AuthHeader
-						data={{
-							title: "Welcome Back!",
-							desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
-						}}
-					/>
+			<LayoutSection padded containerized={"responsive"}>
+				<Grid align="center">
+					<GridCol span={{ base: 12, md: 6 }}>
+						<LayoutSection containerized="xs">
+							<Stack>
+								<Image
+									src={images.auth.signin}
+									alt={"Sign In"}
+									radius={"md"}
+									component={NextImage}
+									width={1920}
+									height={1080}
+									priority
+								/>
+							</Stack>
+						</LayoutSection>
+					</GridCol>
+					<GridCol span={{ base: 12, md: 6 }}>
+						<LayoutSection containerized="xs">
+							<Stack gap={"xl"}>
+								<AuthHeader
+									data={{
+										title: "Welcome Back!",
+										desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vulputate ut laoreet velit ma.",
+									}}
+								/>
 
-					<FormAuthSignIn />
-				</Stack>
+								<FormAuthSignIn />
+							</Stack>
+						</LayoutSection>
+					</GridCol>
+				</Grid>
 			</LayoutSection>
 		</LayoutPage>
 	);

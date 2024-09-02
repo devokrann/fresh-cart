@@ -6,7 +6,8 @@
 }
 
 .dropdownGrid {
-	background-color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
+	background-color: var(--mantine-color-body);
+	border: 1px solid var(--mantine-color-default-border);
 	padding: var(--mantine-spacing-sm);
 	border-radius: var(--mantine-radius-md);
 	box-shadow: var(--mantine-shadow-sm);

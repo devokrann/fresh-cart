@@ -23,17 +23,16 @@ import { ModalsProvider } from "@mantine/modals";
 
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import projectName from "@/theme";
+import projectName, { resolver } from "@/theme";
 
 import contact from "@/data/contact";
 
 import { SessionProvider } from "next-auth/react";
 
+import ProviderContextUserCart from "@/providers/context/user/Cart";
+import ProviderContextUserWishlist from "@/providers/context/user/Wishlist";
+
 import { auth } from "@/auth";
-
-import AffixTheme from "@/components/affixi/Theme";
-
-import ProviderContextProducts from "@/providers/context/Products";
 
 const noto = Noto_Sans_Display({ subsets: ["latin"] });
 
@@ -58,6 +57,7 @@ export default async function App({
 			<body className={noto.className}>
 				<MantineProvider
 					theme={projectName}
+					cssVariablesResolver={resolver}
 					defaultColorScheme="light"
 					classNamesPrefix="next-template"
 					withStaticClasses={false}
@@ -65,12 +65,13 @@ export default async function App({
 				>
 					<ModalsProvider>
 						<SessionProvider session={session}>
-							<ProviderContextProducts>{children}</ProviderContextProducts>
+							<ProviderContextUserWishlist>
+								<ProviderContextUserCart>{children}</ProviderContextUserCart>
+							</ProviderContextUserWishlist>
 						</SessionProvider>
 					</ModalsProvider>
 
-					<Notifications limit={3} />
-					<AffixTheme />
+					<Notifications limit={3} position="top-center" />
 				</MantineProvider>
 
 				<SpeedInsights />

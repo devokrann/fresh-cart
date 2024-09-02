@@ -1,0 +1,28 @@
+.th {
+	text-align: center;
+	padding: var(--mantine-spacing-sm) 0;
+}
+
+.td {
+	text-align: center;
+	padding: var(--mantine-spacing-sm) 0;
+}
+
+.thead {
+	background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+}
+
+.caption {
+	background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
+	padding: var(--mantine-spacing-xs);
+	border-radius: var(--mantine-radius-md);
+}
+
+.link {
+	transition: 0.25s all ease;
+	color: var(--mantine-color-text);
+
+	@include hover {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+}

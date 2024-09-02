@@ -1,18 +1,18 @@
 import React from "react";
 
-import { Box, Divider, Grid, GridCol, Stack, Text, Title } from "@mantine/core";
+import { Box, Divider, Grid, GridCol, Group, Pagination, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
 import CardBlog from "@/components/card/Blog";
 
-import blog from "@/data/blog";
+import blog from "@/data/posts";
 
 export default function Blog() {
 	return (
 		<LayoutPage>
-			<LayoutSection padded containerized={"responsive"}>
+			<LayoutSection margined containerized={"responsive"}>
 				<Stack>
 					<Title order={2} fz={36} fw={900}>
 						FreshCart Blog
@@ -33,6 +33,12 @@ export default function Blog() {
 						)}
 					</Grid>
 				</Stack>
+			</LayoutSection>
+
+			<LayoutSection margined>
+				<Group justify="center">
+					<Pagination total={10} />
+				</Group>
 			</LayoutSection>
 		</LayoutPage>
 	);

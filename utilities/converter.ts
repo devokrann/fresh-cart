@@ -5,8 +5,8 @@ const converter = {
 			var seconds = ((milliseconds % 60000) / 1000).toFixed(0).toString();
 
 			return { minutes, seconds };
-		} catch (error: any) {
-			console.error("x-> Time convertion failure:", error.message);
+		} catch (error) {
+			console.error("x-> Time convertion failure:", error);
 		}
 	},
 };

@@ -13,8 +13,6 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import password from "@/handlers/validators/form/special/password";
 import compare from "@/handlers/validators/form/special/compare";
 
-import request from "@/hooks/request";
-
 import { signOut as authSignOut, signIn as authSignIn, useSession } from "next-auth/react";
 
 import { typeParams } from "@/app/(authentication)/auth/(default)/layout";
@@ -51,7 +49,7 @@ export default function Reset({ data }: { data: typeParams }) {
 				// // test request body
 				// console.log({ id: data.userId, token: data.token, ...parse(formValues) });
 
-				const res = await request.post(
+				const response = await fetch(
 					process.env.NEXT_PUBLIC_API_URL + `/api/auth/password/reset/${data.userId}/${data.token}`,
 					{
 						method: "POST",
@@ -63,7 +61,9 @@ export default function Reset({ data }: { data: typeParams }) {
 					}
 				);
 
-				if (!res) {
+				const result = await response.json();
+
+				if (!result) {
 					notifications.show({
 						id: "password-reset-failed-no-response",
 						icon: <IconX size={16} stroke={1.5} />,
@@ -72,7 +72,7 @@ export default function Reset({ data }: { data: typeParams }) {
 						variant: "failed",
 					});
 				} else {
-					if (!res.user.exists) {
+					if (!result.user.exists) {
 						notifications.show({
 							id: "password-reset-failed-not-found",
 							icon: <IconX size={16} stroke={1.5} />,
@@ -86,7 +86,7 @@ export default function Reset({ data }: { data: typeParams }) {
 						// redirect to sign up page
 						router.replace("/auth/sign-up");
 					} else {
-						if (!res.token.valid) {
+						if (!result.token.valid) {
 							notifications.show({
 								id: "password-reset-failed-invalid",
 								icon: <IconX size={16} stroke={1.5} />,
@@ -100,7 +100,7 @@ export default function Reset({ data }: { data: typeParams }) {
 							// redirect to forgot password page
 							router.replace("/auth/password/forgot");
 						} else {
-							if (!res.user.password.matches) {
+							if (!result.user.password.matches) {
 								notifications.show({
 									id: "password-reset-success",
 									withCloseButton: false,

@@ -89,6 +89,7 @@ export default function Categories() {
 										fz={{ sm: "xl", md: "md", lg: "xl" }}
 										lh={1}
 										w={{ sm: "66%", md: "75%", lg: "66%" }}
+										c={"dark.6"}
 									>
 										Don&apos;t miss this offer today.
 									</Text>

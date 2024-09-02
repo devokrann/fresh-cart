@@ -4,3 +4,7 @@
 	padding: var(--mantine-spacing-lg);
 	box-shadow: var(--mantine-shadow-xs);
 }
+
+.title {
+	color: light-dark(var(--mantine-color-text), var(--mantine-color-white));
+}

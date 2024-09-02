@@ -1,0 +1,8 @@
+.header {
+	padding: var(--mantine-spacing-xs) 0;
+	box-shadow: var(--mantine-shadow-xs);
+
+	@include larger-than($mantine-breakpoint-xs) {
+		border-bottom: 0 solid var(--mantine-color-default-border);
+	}
+}

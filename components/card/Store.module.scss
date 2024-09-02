@@ -1,6 +1,6 @@
 .card {
 	background-color: transparent;
-	border: 1px solid var(--mantine-color-gray-3);
+	border: 1px solid var(--mantine-color-default-border);
 	padding: var(--mantine-spacing-xl);
 	height: 100%;
 	transition: 0.25s all ease;
@@ -21,7 +21,7 @@
 
 .link {
 	transition: 0.25s all ease;
-	color: light-dark(var(--mantine-color-dark-6), var(--mantine-color-dark-6));
+	color: var(--mantine-color-text);
 
 	@include hover {
 		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));

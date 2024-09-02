@@ -1,6 +1,18 @@
 import React from "react";
 
-import { ActionIcon, Avatar, Box, Center, Grid, GridCol, Group, Indicator, Skeleton, Text } from "@mantine/core";
+import {
+	ActionIcon,
+	Avatar,
+	Box,
+	Center,
+	Divider,
+	Grid,
+	GridCol,
+	Group,
+	Indicator,
+	Skeleton,
+	Text,
+} from "@mantine/core";
 
 import LayoutSection from "@/layouts/Section";
 import DrawerCart from "@/components/drawers/Cart";
@@ -10,17 +22,19 @@ import BrandLandscape from "../brand/Landscape";
 
 import links from "@/data/links";
 
+import SwitchTheme from "@/components/switches/Theme";
+
 import classes from "./Main.module.scss";
 import { auth } from "@/auth";
 import ProviderAuthSignIn from "@/providers/auth/signIn";
 import MenuAvatar from "@/components/menus/Avatar";
 import { IconHeart, IconUser } from "@tabler/icons-react";
-import ProviderIndicatorProducts from "@/providers/indicators/Products";
+import IndicatorWishlist from "@/components/indicators/Wishlist";
+
+import Link from "next/link";
 
 export default async function Main() {
 	const session = await auth();
-
-	// if (!session?.user) return null;
 
 	return (
 		<LayoutSection containerized="responsive" padded="xs" className={classes.header}>
@@ -40,29 +54,40 @@ export default async function Main() {
 				<GridCol span={{ base: 9, sm: 3 }}>
 					<Group justify="end">
 						<Group gap={"xs"}>
-							<ProviderIndicatorProducts variant="wishlist">
-								<Center>
-									<ActionIcon variant="transparent">
-										<Center>
-											<IconHeart size={24} stroke={2} />
-										</Center>
-									</ActionIcon>
-								</Center>
-							</ProviderIndicatorProducts>
+							<SwitchTheme />
 
-							<DrawerCart />
+							<Divider orientation="vertical" />
 
-							{!session?.user ? (
-								<ProviderAuthSignIn>
-									<ActionIcon variant="transparent">
-										<Center>
-											<IconUser size={24} stroke={2} />
-										</Center>
-									</ActionIcon>
-								</ProviderAuthSignIn>
-							) : (
-								<MenuAvatar />
-							)}
+							<Group gap={"xs"}>
+								<IndicatorWishlist>
+									<Center>
+										<ActionIcon
+											variant="transparent"
+											component={Link}
+											href={"/account/wishlist"}
+											color="gray"
+										>
+											<Center>
+												<IconHeart size={24} stroke={1} />
+											</Center>
+										</ActionIcon>
+									</Center>
+								</IndicatorWishlist>
+
+								<DrawerCart />
+
+								{!session?.user ? (
+									<ProviderAuthSignIn>
+										<ActionIcon variant="transparent" color="gray">
+											<Center>
+												<IconUser size={24} stroke={1} />
+											</Center>
+										</ActionIcon>
+									</ProviderAuthSignIn>
+								) : (
+									<MenuAvatar />
+								)}
+							</Group>
 						</Group>
 					</Group>
 				</GridCol>

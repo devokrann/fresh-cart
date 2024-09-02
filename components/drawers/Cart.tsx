@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 import {
 	ActionIcon,
@@ -11,29 +11,41 @@ import {
 	Drawer,
 	Group,
 	Indicator,
+	NumberFormatter,
 	Skeleton,
 	Stack,
 	Text,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
-import { IconShoppingCart } from "@tabler/icons-react";
-import ProviderIndicatorProducts from "@/providers/indicators/Products";
-import CardPriductCart from "../card/product/Cart";
+import { IconMoodEmpty, IconShoppingCart } from "@tabler/icons-react";
+import IndicatorCart from "../indicators/Cart";
+import CardProductCart from "../card/product/Cart";
+import NotificationEmpty from "../notification/Empty";
 
 import classes from "./Cart.module.scss";
 
-import ContextProducts from "@/contexts/Products";
+import ContextCart from "@/contexts/user/Cart";
+import Link from "next/link";
+import compoundId from "@/handlers/parsers/string/compoundId";
+import total from "@/handlers/total";
 
 export default function Cart() {
-	const productsContext = useContext(ContextProducts);
+	const cartContext = useContext(ContextCart);
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a MyContext.Provider");
+	if (!cartContext) {
+		throw new Error("ChildComponent must be used within a ContextCart.Provider");
 	}
 
-	const { cart, setCart } = productsContext;
+	const { cart, setCart } = cartContext;
 
 	const [opened, { open, close }] = useDisclosure(false);
+
+	const skeletons = [
+		{
+			id: "1",
+			element: <Skeleton height={48} w={"100%"} />,
+		},
+	];
 
 	return (
 		<>
@@ -47,63 +59,88 @@ export default function Cart() {
 					</Text>
 				}
 				position="right"
-				classNames={{
-					body: classes.body,
-					header: classes.header,
-					inner: classes.inner,
-					overlay: classes.overlay,
-					root: classes.root,
-					title: classes.title,
-				}}
+				classNames={classes}
 			>
-				{cart.length > 0 ? (
-					<Stack gap={"xl"}>
-						<Stack gap={0}>
-							{cart.map(product => (
+				<Stack gap={"xl"} justify="space-between" style={{ height: "calc(100vh - 80px)" }}>
+					{!cart ? (
+						skeletons.map(s => s.element)
+					) : cart.length > 0 ? (
+						<Stack
+							gap={0}
+							pt={"md"}
+							px={"xs"}
+							style={{
+								height: "calc(100vh - 144px)",
+								overflowY: "scroll",
+							}}
+						>
+							{cart.map(item => (
 								<Box
-									key={product.title}
+									key={compoundId.getCompoundId(item)}
 									style={{
 										borderTop:
-											cart.indexOf(product) > 0
+											cart.indexOf(item) > 0
 												? "1px solid var(--mantine-color-default-border)"
 												: "",
-										paddingTop: cart.indexOf(product) > 0 ? "var(--mantine-spacing-xs)" : "",
+										paddingTop: cart.indexOf(item) > 0 ? "var(--mantine-spacing-xs)" : "",
 										paddingBottom:
-											cart.indexOf(product) < cart.length - 1 ? "var(--mantine-spacing-xs)" : "",
+											cart.indexOf(item) < cart.length - 1 ? "var(--mantine-spacing-xs)" : "",
 									}}
 								>
-									<CardPriductCart data={product} />
+									<CardProductCart data={item} />
 								</Box>
 							))}
 						</Stack>
+					) : (
+						<NotificationEmpty label="cart" />
+					)}
+
+					<Stack gap={"xs"} px={"md"}>
+						<Group fz={"xl"} justify="space-between">
+							<Text inherit>Subtotal: </Text>
+							{!cart ? (
+								<Skeleton height={24} width={32} />
+							) : (
+								<Text inherit fw={"bold"}>
+									<NumberFormatter
+										prefix="$ "
+										suffix=".00"
+										value={total.getTotal(cart)}
+										thousandSeparator
+									/>
+								</Text>
+							)}
+						</Group>
 
 						<Group grow>
-							<Button variant="outline" onClick={() => setCart([])}>
-								Clear Cart
+							<Button
+								variant="outline"
+								onClick={close}
+								component={Link}
+								href={"/shop/cart"}
+								color="pri.6"
+							>
+								View Cart
 							</Button>
-							<Button>Checkout</Button>
+							<Button component={Link} href={"/shop/checkout"}>
+								Checkout
+							</Button>
 						</Group>
 					</Stack>
-				) : (
-					<Stack align="center">
-						<Text ta={"center"} mt={"xl"} className="textResponsive">
-							Your cart is empty.
-						</Text>
-					</Stack>
-				)}
+				</Stack>
 			</Drawer>
 
 			{/* <Skeleton height={mobile ? 16 : tablet ? 20 : 20} circle /> */}
 
-			<ProviderIndicatorProducts variant="cart">
+			<IndicatorCart>
 				<Center>
-					<ActionIcon onClick={open} variant="transparent">
+					<ActionIcon onClick={open} variant="transparent" color="gray">
 						<Center>
-							<IconShoppingCart size={24} />
+							<IconShoppingCart size={24} stroke={1} />
 						</Center>
 					</ActionIcon>
 				</Center>
-			</ProviderIndicatorProducts>
+			</IndicatorCart>
 		</>
 	);
 }

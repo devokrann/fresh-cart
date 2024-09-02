@@ -10,8 +10,6 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconSearch, IconX } from "@tabler/icons-react";
 
-import request from "@/hooks/request";
-
 import classes from "./Main.module.scss";
 
 export default function Main() {

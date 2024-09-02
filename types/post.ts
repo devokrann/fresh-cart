@@ -1,15 +1,17 @@
-import { StaticImageData } from "next/image";
+import { typePostCategory } from "./categories";
+import { typeDatabaseFields } from "./database";
+import { typeUser } from "./user";
 
-export interface typeBlog {
+export interface typePost extends typeDatabaseFields {
 	image: string;
 	title: string;
-	description: { preview: string; quote: { text: string; person: string } };
+	quoteText: string;
+	quoter: string;
+	description: string;
 	date: string;
-	length: number;
-	category: string;
-	author: {
-		image: string;
-		name: string;
-		position: string;
-	};
+	readingTime: number;
+
+	// relationships
+	user: typeUser;
+	category: typePostCategory;
 }

@@ -12,6 +12,10 @@ const links = {
 			link: "/contact",
 			label: "Contact",
 		},
+		{
+			link: "/help",
+			label: "Help",
+		},
 	],
 	menuMega: [
 		{

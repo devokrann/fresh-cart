@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { Box, Button, Center, Grid, GridCol, TextInput, Textarea } from "@mantine/core";
+import { Box, Button, Center, Grid, GridCol, Select, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
@@ -13,9 +13,7 @@ import email from "@/handlers/validators/form/special/email";
 import phone from "@/handlers/validators/form/special/phone";
 import capitalize from "@/handlers/parsers/string/capitalize";
 
-import request from "@/hooks/request";
-
-import { typeContact } from "@/types/form";
+import { typeFormContact } from "@/types/form";
 
 export default function Contact() {
 	const [submitted, setSubmitted] = useState(false);
@@ -40,7 +38,7 @@ export default function Contact() {
 		},
 	});
 
-	const parse = (rawData: typeContact) => {
+	const parse = (rawData: typeFormContact) => {
 		return {
 			fname: capitalize.word(rawData.fname.trim()),
 			lname: capitalize.word(rawData.lname.trim()),
@@ -51,41 +49,41 @@ export default function Contact() {
 		};
 	};
 
-	const handleSubmit = async (formValues: typeContact) => {
+	const handleSubmit = async (formValues: typeFormContact) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				await request
-					.post(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
-						method: "POST",
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					})
-					.then(res => {
-						if (!res) {
-							notifications.show({
-								id: "form-contact-failed-no-response",
-								icon: <IconX size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Server Unavailable",
-								message: `There was no response from the server.`,
-								variant: "failed",
-							});
-						} else {
-							notifications.show({
-								id: "form-contact-success",
-								icon: <IconCheck size={16} stroke={1.5} />,
-								autoClose: 5000,
-								title: "Form Submitted",
-								message: "Someone will get back to you within 24 hours",
-								variant: "success",
-							});
-						}
+				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
+					method: "POST",
+					body: JSON.stringify(parse(formValues)),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
+
+				const result = await response.json();
+
+				if (!result) {
+					notifications.show({
+						id: "form-contact-failed-no-response",
+						icon: <IconX size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: "Server Unavailable",
+						message: `There was no response from the server.`,
+						variant: "failed",
 					});
+				} else {
+					notifications.show({
+						id: "form-contact-success",
+						icon: <IconCheck size={16} stroke={1.5} />,
+						autoClose: 5000,
+						title: "Form Submitted",
+						message: "Someone will get back to you within 24 hours",
+						variant: "success",
+					});
+				}
 			} catch (error) {
 				notifications.show({
 					id: "form-contact-failed",
@@ -105,7 +103,7 @@ export default function Contact() {
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
 			<Grid pb={"md"}>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput
 						required
 						label={"Frist Name"}
@@ -113,7 +111,7 @@ export default function Contact() {
 						{...form.getInputProps("fname")}
 					/>
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput
 						required
 						label={"Last Name"}
@@ -121,10 +119,10 @@ export default function Contact() {
 						{...form.getInputProps("lname")}
 					/>
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput required label={"Email"} placeholder="Your Email" {...form.getInputProps("email")} />
 				</GridCol>
-				<GridCol span={{ base: 12, xs: 6, sm: 12, md: 6 }}>
+				<GridCol span={{ base: 12, xs: 6, sm: 6 }}>
 					<TextInput label={"Phone"} placeholder="Your Phone" {...form.getInputProps("phone")} />
 				</GridCol>
 				<GridCol span={12}>
@@ -141,34 +139,16 @@ export default function Contact() {
 						label={"Message"}
 						placeholder="Write your message here..."
 						autosize
+						resize="vertical"
 						minRows={3}
 						maxRows={10}
 						{...form.getInputProps("message")}
 					/>
 				</GridCol>
 				<GridCol span={12}>
-					<Grid mt={"md"}>
-						<GridCol span={{ base: 6 }}>
-							{/* <Center>
-								<Button
-									variant="light"
-									fullWidth
-									type="reset"
-									onClick={() => form.reset()}
-									disabled={submitted}
-								>
-									Clear
-								</Button>
-							</Center> */}
-						</GridCol>
-						<GridCol span={{ base: 6 }}>
-							<Center>
-								<Button fullWidth type="submit" loading={submitted}>
-									{submitted ? "Sending" : "Send"}
-								</Button>
-							</Center>
-						</GridCol>
-					</Grid>
+					<Button type="submit" loading={submitted} mt={"md"}>
+						{submitted ? "Sending" : "Send"}
+					</Button>
 				</GridCol>
 			</Grid>
 		</Box>

@@ -1,5 +1,7 @@
 .root {
 	box-shadow: var(--mantine-shadow-xs);
+	background-color: var(--mantine-color-body);
+	border: 1px solid var(--mantine-color-default-border);
 
 	&[data-variant="success"] {
 		.icon {
@@ -10,6 +12,12 @@
 	&[data-variant="failed"] {
 		.icon {
 			background-color: var(--mantine-color-red-6);
+		}
+	}
+
+	&[data-variant="info"] {
+		.icon {
+			background-color: var(--mantine-color-blue-6);
 		}
 	}
 }

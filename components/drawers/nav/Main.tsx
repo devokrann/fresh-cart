@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { Burger, Button, Drawer, Group, Image, NavLink, Stack } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 
-import brand from "@/assets/images/brand";
+import images from "@/assets/images";
 
 import classes from "./Main.module.scss";
 

@@ -2,10 +2,10 @@ import resend from "@/services/resend";
 
 import TemplateEmailContact from "@/templates/email/Contact";
 
-import { typeContact } from "@/types/form";
+import { typeFormContact } from "@/types/form";
 
 const inquiry = {
-	async general(formData: typeContact) {
+	async general(formData: typeFormContact) {
 		// switch to 'resend.general' when your domain is configured
 		const { data, error } = await resend.onboarding.emails.send({
 			/**

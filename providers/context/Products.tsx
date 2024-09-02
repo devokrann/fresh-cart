@@ -1,47 +1,25 @@
 "use client";
 
-import React, { SetStateAction, useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import ContextProducts from "@/contexts/Products";
 
 import { typeProduct } from "@/types/product";
+import getProducts from "@/handlers/database/getProducts";
 
 export default function Products({ children }: { children: React.ReactNode }) {
-	const [wishlist, setWishlist] = useState<typeProduct[]>(() => {
-		try {
-			const storedWishlist = typeof window !== "undefined" ? window.localStorage.getItem("wishlist") : null;
-			return storedWishlist ? JSON.parse(storedWishlist) : [];
-		} catch (error) {
-			console.error("x-> Failed to parse wishlist from localStorage:", (error as Error).message);
-			return [];
-		}
-	});
-	const [cart, setCart] = useState<typeProduct[]>(() => {
-		try {
-			const storedCart = typeof window !== "undefined" ? window.localStorage.getItem("cart") : null;
-			return storedCart ? JSON.parse(storedCart) : [];
-		} catch (error) {
-			console.error("x-> Failed to parse cart from localStorage:", (error as Error).message);
-			return [];
-		}
-	});
+	const [products, setProducts] = useState<typeProduct[] | null>(null);
+	const [productsLoading, setProductsLoading] = useState(true);
 
 	useEffect(() => {
-		if (typeof window !== "undefined") {
-			window.localStorage.setItem("wishlist", JSON.stringify(wishlist));
+		const setInitialProducts = async () => {
+			// fetch wishlist data asynchronously then set wishlist
+			setProducts(await getProducts());
+			setProductsLoading(false);
+		};
 
-			// window.localStorage.clear();
-		}
-	}, [wishlist]);
-	useEffect(() => {
-		if (typeof window !== "undefined") {
-			window.localStorage.setItem("cart", JSON.stringify(cart));
+		setInitialProducts();
+	}, []);
 
-			// window.localStorage.clear();
-		}
-	}, [cart]);
-
-	return (
-		<ContextProducts.Provider value={{ wishlist, setWishlist, cart, setCart }}>{children}</ContextProducts.Provider>
-	);
+	return <ContextProducts.Provider value={{ products, setProducts }}>{children}</ContextProducts.Provider>;
 }

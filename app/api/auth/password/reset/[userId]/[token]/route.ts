@@ -31,7 +31,7 @@ export async function POST(req: Request, { params }: { params: typePasswordReset
 						await prisma.user.update({ where: { id: params.userId }, data: { password: passwordHash } });
 
 						// delete used otl record
-						await prisma.otl.delete({ where: { email: userRecord.email } });
+						await prisma.otls.delete({ where: { email: userRecord.email } });
 
 						return Response.json({
 							user: { exists: true, password: { matches: false } },

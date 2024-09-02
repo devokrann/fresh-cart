@@ -1,0 +1,16 @@
+.tab {
+	transition: 0.25s all ease;
+	padding: var(--mantine-spacing-md) 0;
+
+	&[data-active] {
+		color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
+	}
+
+	@include hover {
+		// background-color: transparent;
+	}
+}
+
+.panel{
+	font-size: var(--mantine-font-size-sm);
+}

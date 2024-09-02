@@ -1,6 +1,5 @@
 .card {
-	background-color: light-dark(var(--mantine-color-pri-6), var(--mantine-color-pri-6));
-	color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
+	background-color: light-dark(var(--mantine-color-gray-light), var(--mantine-color-gray-light));
 	padding: var(--mantine-spacing-xl);
 	height: 100%;
 }
@@ -8,7 +7,4 @@
 .title {
 	font-weight: bolder;
 	font-size: calc(var(--mantine-font-size-xl) * 1.2);
-}
-
-.description {
 }

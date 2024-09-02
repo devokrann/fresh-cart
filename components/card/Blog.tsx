@@ -19,7 +19,7 @@ import {
 
 import classes from "./Blog.module.scss";
 
-import { typeBlog } from "@/types/post";
+import { typePost } from "@/types/post";
 import link from "@/handlers/parsers/string/link";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ export default function Blog({
 	data,
 	orientation = "vertical",
 }: {
-	data: typeBlog;
+	data: typePost;
 	orientation?: "vertical" | "horizontal";
 }) {
 	return (
@@ -42,7 +42,7 @@ export default function Blog({
 						<Image
 							src={data.image}
 							alt={data.title}
-							h={orientation == "vertical" ? { base: 240, md: 200, lg: 240 } : { base: 240, md: 360 }}
+							h={orientation == "vertical" ? { base: 240, md: 200 } : { base: 240, md: 400 }}
 							component={NextImage}
 							width={1920}
 							height={1080}
@@ -60,9 +60,9 @@ export default function Blog({
 					h={"100%"}
 					px={orientation == "vertical" ? undefined : { base: 0, md: "lg" }}
 				>
-					<Anchor underline="never" component={Link} href={`#/blog/category/${link.linkify(data.category)}`}>
+					<Anchor underline="never" component={Link} href={`/blog/categories/${link.linkify(data.category.id)}`}>
 						<Text className={classes.category} fw={500}>
-							{data.category}
+							{data.category.title}
 						</Text>
 					</Anchor>
 
@@ -79,7 +79,7 @@ export default function Blog({
 								</Title>
 							</Anchor>
 							<Text lineClamp={orientation == "vertical" ? 2 : undefined}>
-								{data.description.preview}
+								{data.description}
 							</Text>
 						</Stack>
 

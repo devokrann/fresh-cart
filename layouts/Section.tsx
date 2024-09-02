@@ -13,6 +13,7 @@ export default function Section({
 	className,
 	bordered,
 	shadowed,
+	bg,
 	children,
 	...restProps
 }: typeSection & React.ComponentProps<typeof Box & typeof Container>) {
@@ -21,6 +22,7 @@ export default function Section({
 			component={"section"}
 			py={padded ? (typeof padded == "boolean" ? 64 : padded) : ""}
 			my={margined ? (typeof margined == "boolean" ? 64 : margined) : ""}
+			bg={bg}
 			className={
 				(className ? `${className}` : "") +
 				(bordered ? ` ${classes.border}` : "") +
