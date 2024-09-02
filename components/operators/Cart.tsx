@@ -9,7 +9,7 @@ import { IconShoppingCartMinus, IconShoppingCartPlus, IconShoppingCartX } from "
 import { Box, Text } from "@mantine/core";
 import array from "@/utilities/array";
 import compoundId from "@/handlers/parsers/string/compoundId";
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 
 export default function Cart({
 	operation,
@@ -35,22 +35,22 @@ export default function Cart({
 
 	const addToCart = (set: typeVariant[]) => {
 		const itemsToIgnore = cart
-			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), cart))
+			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item.id, item.product.id), cart))
 			: [];
 
 		if (itemsToIgnore.length != set.length) {
 			// Filter out all items already included
-			const compoundIdsToIgnore = itemsToIgnore.map(item => compoundId.getCompoundId(item));
+			const compoundIdsToIgnore = itemsToIgnore.map(item => compoundId.getCompoundId(item.id, item.product.id));
 			cart &&
 				setCart(
 					cart.concat(
 						set
 							.map(s =>
-								!compoundIdsToIgnore?.includes(compoundId.getCompoundId(s))
+								!compoundIdsToIgnore?.includes(compoundId.getCompoundId(s.id, s.product.id))
 									? {
-											...s,
-											id: compoundId.getCompoundId(s),
+											compoundId: compoundId.getCompoundId(s.id, s.product.id),
 											quantity: set.length > 1 ? 1 : operation.quantity ? operation.quantity : 1,
+											...s,
 									  }
 									: undefined
 							)
@@ -59,7 +59,7 @@ export default function Cart({
 				);
 
 			notifications.show({
-				id: `cart-add-${set.map(item => compoundId.getCompoundId(item)).join("-")}`,
+				id: `cart-add-${set.map(item => compoundId.getCompoundId(item.id, item.product.id)).join("-")}`,
 				icon: <IconShoppingCartPlus size={16} stroke={1.5} />,
 				title: `Added to Cart`,
 				message: (
@@ -89,16 +89,18 @@ export default function Cart({
 
 	const removeFromCart = (set: typeVariant[]) => {
 		const itemsToRemove = cart
-			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item), cart))
+			? set.filter(item => array.elementIsPresent(compoundId.getCompoundId(item.id, item.product.id), cart))
 			: [];
 
 		if (itemsToRemove.length > 0) {
 			// Update the cart by filtering out all items in one go
-			const compoundIdsToRemove = itemsToRemove.map(item => compoundId.getCompoundId(item));
+			const compoundIdsToRemove = itemsToRemove.map(item => compoundId.getCompoundId(item.id, item.product.id));
 			cart && setCart(cart.filter(p => !compoundIdsToRemove.includes(p.id)));
 
 			notifications.show({
-				id: `cart-remove-${itemsToRemove.map(item => compoundId.getCompoundId(item)).join("-")}`,
+				id: `cart-remove-${itemsToRemove
+					.map(item => compoundId.getCompoundId(item.id, item.product.id))
+					.join("-")}`,
 				icon: <IconShoppingCartMinus size={16} stroke={1.5} />,
 				title: `Removed From Cart`,
 				message: (
@@ -148,8 +150,10 @@ export default function Cart({
 		} else {
 			operation.type == "add" && addToCart(operation.items);
 			operation.type == "remove" && removeFromCart(operation.items);
-			operation.type == "decrease" && updateQuantity.decrease(compoundId.getCompoundId(operation.items[0]));
-			operation.type == "increase" && updateQuantity.increase(compoundId.getCompoundId(operation.items[0]));
+			operation.type == "decrease" &&
+				updateQuantity.decrease(compoundId.getCompoundId(operation.items[0].id, operation.items[0].product.id));
+			operation.type == "increase" &&
+				updateQuantity.increase(compoundId.getCompoundId(operation.items[0].id, operation.items[0].product.id));
 		}
 
 		operation.unmount && setMounted(false);

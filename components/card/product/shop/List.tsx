@@ -46,7 +46,6 @@ import OperatorWishlist from "@/components/operators/Wishlist";
 import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";
 
-import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
 export default function List({ data }: { data: typeProduct }) {
@@ -156,7 +155,7 @@ export default function List({ data }: { data: typeProduct }) {
 								<OperatorWishlist
 									operation={{
 										type: "add",
-										items: [{ product: data, variant: defaultProductVariant }],
+										items: [defaultProductVariant],
 									}}
 								>
 									<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>
@@ -169,7 +168,7 @@ export default function List({ data }: { data: typeProduct }) {
 								<OperatorCart
 									operation={{
 										type: "add",
-										items: [{ product: data, variant: defaultProductVariant }],
+										items: [defaultProductVariant],
 									}}
 								>
 									<Tooltip label={"Add to Cart"} withArrow fz={"sm"}>

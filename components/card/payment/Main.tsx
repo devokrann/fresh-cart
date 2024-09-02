@@ -6,13 +6,12 @@ import { Badge, Button, Image, Card, CardSection, Group, Stack, Text, Title, Pap
 
 import classes from "./Main.module.scss";
 
-import { typePaymentMethods, typePaymentType } from "@/types/payment";
+import { typePaymentMethod, typePaymentType } from "@/types/payment";
 import capitalize from "@/handlers/parsers/string/capitalize";
-import paymentMethods from "@/data/payment";
 import images from "@/assets/images";
 import image from "@/handlers/getters/image";
 
-export default function Main({ data }: { data: typePaymentMethods }) {
+export default function Main({ data }: { data: typePaymentMethod }) {
 	return (
 		<Card className={classes.card} withBorder>
 			<Stack justify="space-between" h={"100%"}>

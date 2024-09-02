@@ -88,7 +88,7 @@ export default function Blog({
 							<Text inherit>
 								Read time:{" "}
 								<Text component="span" inherit fw={"bold"}>
-									{data.length} min
+									{data.readingTime} min
 								</Text>
 							</Text>
 						</Group>

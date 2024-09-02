@@ -28,7 +28,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextWishlist from "@/contexts/user/Wishlist";
+import ContextWishlist from "@/contexts/Wishlist";
 import { IconClearAll, IconMoodEmpty, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Wishlist.module.scss";
@@ -82,7 +82,7 @@ export default function Wishlist() {
 				<Center>
 					<Image
 						src={item.variant.image}
-						alt={item.product.title}
+						alt={item.variant.product.title}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -97,11 +97,11 @@ export default function Wishlist() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.product.title)}`}
+						href={`/shop/products/${link.linkify(item.variant.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
-							{item.product.title}
+							{item.variant.product.title}
 						</Title>
 					</Anchor>
 
@@ -125,12 +125,8 @@ export default function Wishlist() {
 				)}
 			</TableTd>
 			<TableTd w={widths.cart}>
-				<OperatorWishlist
-					operation={{ type: "transfer", items: [{ product: item.product, variant: item.variant }] }}
-				>
-					<OperatorCart
-						operation={{ type: "add", items: [{ product: item.product, variant: item.variant }] }}
-					>
+				<OperatorWishlist operation={{ type: "transfer", items: [item.variant] }}>
+					<OperatorCart operation={{ type: "add", items: [item.variant] }}>
 						<Button
 							variant="outline"
 							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
@@ -143,9 +139,7 @@ export default function Wishlist() {
 				</OperatorWishlist>
 			</TableTd>
 			<TableTd w={widths.remove}>
-				<OperatorWishlist
-					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
-				>
+				<OperatorWishlist operation={{ type: "remove", items: [item.variant] }}>
 					<ActionIcon
 						size={32}
 						color="red.6"
@@ -281,7 +275,9 @@ export default function Wishlist() {
 						<OperatorWishlist
 							operation={{
 								type: "remove",
-								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
+								items: selectedRows
+									.map(r => wishlist.find(p => p.id == r)?.variant)
+									.filter(p => p != undefined),
 							}}
 						>
 							<Button
@@ -298,14 +294,16 @@ export default function Wishlist() {
 						<OperatorWishlist
 							operation={{
 								type: "transfer",
-								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
+								items: selectedRows
+									.map(r => wishlist.find(p => p.id == r)?.variant)
+									.filter(p => p != undefined),
 							}}
 						>
 							<OperatorCart
 								operation={{
 									type: "add",
 									items: selectedRows
-										.map(r => wishlist.find(p => p.id == r))
+										.map(r => wishlist.find(p => p.id == r)?.variant)
 										.filter(p => p != undefined),
 								}}
 							>

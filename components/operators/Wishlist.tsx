@@ -10,7 +10,7 @@ import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";
 import array from "@/utilities/array";
 import compoundId from "@/handlers/parsers/string/compoundId";
-import ContextWishlist from "@/contexts/user/Wishlist";
+import ContextWishlist from "@/contexts/Wishlist";
 
 export default function Wishlist({
 	operation,

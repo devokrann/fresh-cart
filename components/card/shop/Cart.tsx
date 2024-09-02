@@ -3,8 +3,6 @@
 import { Anchor, Button, Card, Divider, Group, NumberFormatter, Paper, Stack, Table, Text, Title } from "@mantine/core";
 import React, { useContext } from "react";
 
-import ContextProducts from "@/contexts/Products";
-
 import FormShopRedeem from "@/partials/forms/shop/Redeem";
 
 import classes from "./Cart.module.scss";

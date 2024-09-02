@@ -41,7 +41,6 @@ import classes from "./Grid.module.scss";
 import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";
 
-import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
 import OperatorCart from "@/components/operators/Cart";
@@ -102,7 +101,7 @@ export default function Grid({ data }: { data: typeProduct }) {
 							</ModalProduct>
 
 							<OperatorWishlist
-								operation={{ type: "add", items: [{ product: data, variant: defaultProductVariant }] }}
+								operation={{ type: "add", items: [defaultProductVariant] }}
 							>
 								<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>
 									<ActionIcon size={32}>
@@ -112,7 +111,7 @@ export default function Grid({ data }: { data: typeProduct }) {
 							</OperatorWishlist>
 
 							<OperatorCart
-								operation={{ type: "add", items: [{ product: data, variant: defaultProductVariant }] }}
+								operation={{ type: "add", items: [defaultProductVariant] }}
 							>
 								<Tooltip label={"Add to Cart"} withArrow fz={"sm"}>
 									<ActionIcon size={32}>

@@ -5,9 +5,9 @@ import { useDisclosure } from "@mantine/hooks";
 
 import FormUserPayment from "@/partials/forms/user/Payment";
 import React from "react";
-import { typePaymentMethods } from "@/types/payment";
+import { typePaymentMethod } from "@/types/payment";
 
-export default function Payment({ data, children }: { data?: typePaymentMethods; children: React.ReactNode }) {
+export default function Payment({ data, children }: { data?: typePaymentMethod; children: React.ReactNode }) {
 	const [opened, { open, close }] = useDisclosure(false);
 
 	return (

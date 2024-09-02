@@ -24,7 +24,7 @@ import NotificationEmpty from "../notification/Empty";
 
 import classes from "./Cart.module.scss";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 import Link from "next/link";
 import compoundId from "@/handlers/parsers/string/compoundId";
 import total from "@/handlers/total";

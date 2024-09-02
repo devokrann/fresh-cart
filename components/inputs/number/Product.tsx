@@ -3,7 +3,6 @@
 import { ActionIcon, Group, NumberInput, NumberInputHandlers } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import ContextProducts from "@/contexts/Products";
 import { typeCart } from "@/types/cart";
 
 import OperatorCart from "@/components/operators/Cart";
@@ -15,7 +14,7 @@ export default function Product({ data }: { data: typeCart }) {
 
 	return (
 		<Group justify="center" gap={0}>
-			<OperatorCart operation={{ type: "decrease", items: [{ product: data.product, variant: data.variant }] }}>
+			<OperatorCart operation={{ type: "decrease", items: [data.variant] }}>
 				<ActionIcon
 					variant="outline"
 					color="var(--mantine-color-default-border)"
@@ -51,7 +50,7 @@ export default function Product({ data }: { data: typeCart }) {
 				}}
 			/>
 
-			<OperatorCart operation={{ type: "increase", items: [{ product: data.product, variant: data.variant }] }}>
+			<OperatorCart operation={{ type: "increase", items: [data.variant] }}>
 				<ActionIcon
 					variant="outline"
 					color="var(--mantine-color-default-border)"

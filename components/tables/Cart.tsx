@@ -29,7 +29,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 import InputNumberProduct from "../inputs/number/Product";
 import NotificationEmpty from "../notification/Empty";
 
@@ -87,7 +87,7 @@ export default function Cart() {
 				<Center>
 					<Image
 						src={item.variant.image}
-						alt={item.product.title}
+						alt={item.variant.product.title}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -102,11 +102,11 @@ export default function Cart() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.product.title)}`}
+						href={`/shop/products/${link.linkify(item.variant.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
-							{item.product.title}
+							{item.variant.product.title}
 						</Title>
 					</Anchor>
 
@@ -133,7 +133,7 @@ export default function Cart() {
 				)}
 			</TableTd>
 			<TableTd w={widths.remove}>
-				<OperatorCart operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}>
+				<OperatorCart operation={{ type: "remove", items: [item.variant] }}>
 					<ActionIcon
 						size={32}
 						color="red.6"
@@ -332,7 +332,9 @@ export default function Cart() {
 					<OperatorCart
 						operation={{
 							type: "remove",
-							items: selectedRows.map(r => cart.find(p => p.id == r)).filter(p => p != undefined),
+							items: selectedRows
+								.map(r => cart.find(p => p.id == r)?.variant)
+								.filter(p => p != undefined),
 						}}
 					>
 						<Button

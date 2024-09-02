@@ -1,6 +1,5 @@
 "use client";
 
-import stores from "@/data/stores";
 import { Checkbox } from "@mantine/core";
 import React, { useState } from "react";
 

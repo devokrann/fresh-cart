@@ -45,8 +45,6 @@ import getFraction from "@/handlers/fraction";
 
 import classes from "./Cart.module.scss";
 
-import ContextProducts from "@/contexts/Products";
-
 import InputNumberProduct from "@/components/inputs/number/Product";
 import OperatorCart from "@/components/operators/Cart";
 
@@ -63,7 +61,7 @@ export default function Cart({ data }: { data: typeCart }) {
 					<Stack>
 						<Image
 							src={data.variant.image}
-							alt={data.product.title}
+							alt={data.variant.title}
 							w={"100%"}
 							radius={"md"}
 							component={NextImage}

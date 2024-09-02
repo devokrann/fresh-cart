@@ -31,21 +31,22 @@ import {
 
 import { MonthPickerInput } from "@mantine/dates";
 
-import ContextProducts from "@/contexts/Products";
 import CardPaymentMain from "../card/payment/Main";
 
 import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
-import addresses from "@/data/addresses";
-import users from "@/data/users";
-
 import ModalPayment from "../modal/Payment";
 import ModalAddress from "../modal/Address";
-import paymentMethods from "@/data/payment";
 import image from "@/handlers/getters/image";
+import { typeAddress } from "@/types/address";
+import { typePaymentMethod } from "@/types/payment";
 
-export default function Checkout() {
+export default function Checkout({
+	data,
+}: {
+	data: { addresses: typeAddress[]; paymentMethods: typePaymentMethod[] };
+}) {
 	const [checked, setChecked] = useState(false);
 
 	const paymentOptions = [
@@ -90,7 +91,7 @@ export default function Checkout() {
 
 					<RadioGroup>
 						<Grid>
-							{addresses
+							{data.addresses
 								.filter(a => a.type == "billing")
 								.map(address => (
 									<GridCol key={address.title} span={{ base: 12, md: 6, lg: 4 }}>
@@ -152,7 +153,7 @@ export default function Checkout() {
 					<RadioGroup>
 						<Grid>
 							{!checked &&
-								addresses
+								data.addresses
 									.filter(a => a.type == "shipping")
 									.map(address => (
 										<GridCol key={address.title} span={{ base: 12, md: 6, lg: 4 }}>
@@ -222,7 +223,7 @@ export default function Checkout() {
 
 					<RadioGroup>
 						<Grid>
-							{paymentMethods.map(method => (
+							{data.paymentMethods.map(method => (
 								<GridCol key={method.title} span={{ base: 12, md: 6, lg: 4 }}>
 									<Radio.Card value={method.title} key={method.title} p={"md"} h={"100%"}>
 										<Group wrap="nowrap" align="flex-start" h={"100%"}>

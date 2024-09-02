@@ -3,7 +3,7 @@
 import { Anchor, Group, NumberFormatter, Paper, Skeleton, Table, Text } from "@mantine/core";
 import React, { useContext } from "react";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
