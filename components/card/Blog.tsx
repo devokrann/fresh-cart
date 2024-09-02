@@ -60,7 +60,11 @@ export default function Blog({
 					h={"100%"}
 					px={orientation == "vertical" ? undefined : { base: 0, md: "lg" }}
 				>
-					<Anchor underline="never" component={Link} href={`/blog/categories/${link.linkify(data.category.id)}`}>
+					<Anchor
+						underline="never"
+						component={Link}
+						href={`/blog/categories/${link.linkify(data.category.id)}`}
+					>
 						<Text className={classes.category} fw={500}>
 							{data.category.title}
 						</Text>
@@ -78,9 +82,7 @@ export default function Blog({
 									{data.title}
 								</Title>
 							</Anchor>
-							<Text lineClamp={orientation == "vertical" ? 2 : undefined}>
-								{data.description}
-							</Text>
+							<Text lineClamp={orientation == "vertical" ? 2 : 6}>{data.description}</Text>
 						</Stack>
 
 						<Group justify="space-between" fz={"xs"} c={"dimmed"}>

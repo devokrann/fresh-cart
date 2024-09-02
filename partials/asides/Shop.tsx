@@ -9,9 +9,13 @@ import InputCheckboxStores from "@/components/inputs/checkbox/Stores";
 import CardShopOffer from "@/components/card/shop/Offer";
 import FormShopStores from "../forms/shop/Stores";
 
-import stores from "@/data/stores";
+import getProducts from "@/handlers/database/getProducts";
+import getProductParentCategories from "@/handlers/database/getProductParentCategories";
 
-export default function Shop() {
+export default async function Shop() {
+	const products = await getProducts();
+	const productParentCategories = await getProductParentCategories();
+
 	return (
 		<LayoutSection padded>
 			<Stack gap={"xl"}>
@@ -22,7 +26,7 @@ export default function Shop() {
 						</Title>
 
 						<Stack gap={0}>
-							<NavShop />
+							<NavShop data={productParentCategories} />
 						</Stack>
 					</Stack>
 				</LayoutSection>
@@ -43,7 +47,7 @@ export default function Shop() {
 							Price
 						</Title>
 
-						<SliderPrice />
+						<SliderPrice data={products} />
 					</Stack>
 				</LayoutSection>
 

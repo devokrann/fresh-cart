@@ -30,9 +30,9 @@ export default async function Shop() {
 	const products = await getProducts();
 	const stores = await getStores();
 
-	const [layout, setLayout] = useState<"grid" | "list">("grid");
+	// const [layout, setLayout] = useState<"grid" | "list">("grid");
 
-	const getLayout = () => {
+	const getLayout = (layout: "list" | "grid") => {
 		switch (layout) {
 			case "grid":
 				return products?.map(product => (
@@ -89,20 +89,10 @@ export default async function Shop() {
 					</Text>
 
 					<Group>
-						<ActionIcon
-							size={32}
-							variant="subtle"
-							color={layout == "list" ? "pri.6" : "gray"}
-							onClick={() => setLayout("list")}
-						>
+						<ActionIcon size={32} variant="subtle" color={"gray"}>
 							<IconList size={24} stroke={2} />
 						</ActionIcon>
-						<ActionIcon
-							size={32}
-							variant="subtle"
-							color={layout == "grid" ? "pri.6" : "gray"}
-							onClick={() => setLayout("grid")}
-						>
+						<ActionIcon size={32} variant="subtle" color={"pri.6"}>
 							<IconLayoutGrid size={24} stroke={2} />
 						</ActionIcon>
 						{/* <ActionIcon size={32} variant="subtle" c={"pri"}>
@@ -141,7 +131,7 @@ export default async function Shop() {
 			</LayoutSection>
 
 			<LayoutSection>
-				<Grid>getLayout()</Grid>
+				<Grid>{getLayout("grid")}</Grid>
 			</LayoutSection>
 
 			<LayoutSection>
