@@ -49,7 +49,7 @@ export default async function Stores() {
 			<LayoutSection containerized={"responsive"} margined>
 				<Grid>
 					{stores.map(store => (
-						<GridCol key={store.title} span={{ base: 12, sm: 6, md: 4 }}>
+						<GridCol key={store.id} span={{ base: 12, sm: 6, md: 4 }}>
 							<CardStore data={store} />
 						</GridCol>
 					))}

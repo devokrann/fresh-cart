@@ -1,4 +1,3 @@
-import orders from "@/data/orders";
 import addOrders from "@/handlers/database/create/orders";
 import prisma from "@/services/prisma";
 
@@ -19,9 +18,9 @@ export async function POST(req: Request) {
 	try {
 		// const data = await req.json();
 
-		const response = await addOrders(orders);
+		// const response = await addOrders(orders);
 
-		return Response.json(response);
+		return Response.json('');
 	} catch (error) {
 		console.error("x-> Error adding orders:", error);
 		return Response.error();

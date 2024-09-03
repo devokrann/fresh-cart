@@ -39,7 +39,7 @@ export default async function Payment() {
 					<GridCol span={12}>
 						<Grid>
 							{paymentMethods?.map(method => (
-								<GridCol key={method.name} span={{ base: 12, md: 6, lg: 4 }}>
+								<GridCol key={method.id} span={{ base: 12, md: 6, lg: 4 }}>
 									<CardPaymentMain data={method} />
 								</GridCol>
 							))}

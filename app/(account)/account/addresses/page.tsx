@@ -37,7 +37,7 @@ export default async function Addresses() {
 					<GridCol span={12}>
 						<Grid>
 							{addresses?.map(address => (
-								<GridCol key={address.lname} span={{ base: 12, md: 6, lg: 4 }}>
+								<GridCol key={address.id} span={{ base: 12, md: 6, lg: 4 }}>
 									<CardAddressMain data={address} />
 								</GridCol>
 							))}

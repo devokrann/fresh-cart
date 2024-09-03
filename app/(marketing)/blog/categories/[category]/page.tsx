@@ -31,7 +31,7 @@ export default async function Categories({ params }: { params: typeParams }) {
 						{posts
 							.filter(p => p.category.id == category?.id)
 							.map(post => (
-								<GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
+								<GridCol key={post.id} span={{ base: 12, sm: 6, md: 4 }}>
 									<CardBlog data={post} />
 								</GridCol>
 							))}

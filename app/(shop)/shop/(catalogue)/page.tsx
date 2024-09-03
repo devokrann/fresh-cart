@@ -36,13 +36,13 @@ export default async function Shop() {
 		switch (layout) {
 			case "grid":
 				return products?.map(product => (
-					<GridCol key={product.title} span={{ base: 12, md: 4, lg: 3 }}>
+					<GridCol key={product.id} span={{ base: 12, md: 4, lg: 3 }}>
 						<CardProductShopGrid data={product} />
 					</GridCol>
 				));
 			case "list":
 				return products?.map(product => (
-					<GridCol key={product.title} span={12}>
+					<GridCol key={product.id} span={12}>
 						<CardProductShopList data={product} />
 					</GridCol>
 				));

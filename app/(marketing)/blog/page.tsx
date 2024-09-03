@@ -27,7 +27,7 @@ export default async function Blog() {
 						{posts.map(
 							post =>
 								posts.filter(p => p != posts[posts.length - 1]) && (
-									<GridCol key={post.title} span={{ base: 12, sm: 6, md: 4 }}>
+									<GridCol key={post.id} span={{ base: 12, sm: 6, md: 4 }}>
 										<CardBlog data={post} />
 									</GridCol>
 								)

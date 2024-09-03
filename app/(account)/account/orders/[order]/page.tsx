@@ -100,7 +100,7 @@ export default async function Order({ params }: { params: typeParams }) {
 							<GridCol span={{ base: 12, md: 7 }}>
 								<Grid>
 									{addresses?.map(address => (
-										<GridCol key={address.title} span={{ base: 12, md: 6 }}>
+										<GridCol key={address.id} span={{ base: 12, md: 6 }}>
 											<CardAddressOrder data={address} />
 										</GridCol>
 									))}

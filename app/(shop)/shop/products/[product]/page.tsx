@@ -50,7 +50,7 @@ export default async function Shop({ params }: { params: typeParams }) {
 	const metadata = [
 		{ label: "Product Code", value: data?.code },
 		{ label: "Availability", value: data?.available ? "In Stock" : "Out of Stock" },
-		{ label: "Type", value: data?.category },
+		{ label: "Type", value: data?.category.title },
 		{
 			label: "Shipping",
 			value: `${data?.shippingDays} day${
@@ -72,7 +72,7 @@ export default async function Shop({ params }: { params: typeParams }) {
 					<GridCol span={{ base: 12, md: 6 }}>
 						<Stack gap={"lg"}>
 							<Text c={"pri"} fw={500}>
-								{data?.category}
+								{data?.category.title}
 							</Text>
 
 							<Stack justify="space-between">
@@ -114,7 +114,7 @@ export default async function Shop({ params }: { params: typeParams }) {
 
 							<Divider />
 
-							<SelectorVariant data={data} />
+							<SelectorVariant data={data!} />
 
 							<Divider />
 
@@ -136,7 +136,7 @@ export default async function Shop({ params }: { params: typeParams }) {
 			</LayoutSection>
 
 			<LayoutSection containerized="responsive" padded>
-				<TabsReview data={data} />
+				<TabsReview data={data!} />
 			</LayoutSection>
 
 			<LayoutSection padded>
