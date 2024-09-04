@@ -1,9 +1,11 @@
+import { auth } from "@/auth";
 import prisma from "@/services/prisma";
 
-export async function POST(req: Request, { params }: { params: { userId: string } }) {
+export async function POST(req: Request) {
+	const session = await auth();
+
 	try {
-		const userId = params.userId;
-		const { name, email } = await req.json();
+		const { userId, name, email, phone } = await req.json();
 
 		const userRecord = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -15,16 +17,17 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 				data: { name },
 			});
 
-			// // update session on server
-			// if (session?.user) {
-			// 	session.user.name = name;
-			// 	session.user.email = email;
-			// }
+			// update session on server
+			if (session?.user) {
+				session.user.name = name;
+			}
+
+			console.log(session?.user.name);
 
 			return Response.json({ user: { exists: true } });
 		}
 	} catch (error) {
-		console.error("x-> Error changing account details:", (error as Error).message);
+		console.error("x-> Error updating profile details:", (error as Error).message);
 		return Response.error();
 	}
 }

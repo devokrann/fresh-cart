@@ -1,10 +1,9 @@
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 
-export async function POST(req: Request, { params }: { params: { userId: string } }) {
+export async function POST(req: Request) {
 	try {
-		const userId = params.userId;
-		const { passwordCurrent, passwordNew } = await req.json();
+		const { userId, passwordCurrent, passwordNew } = await req.json();
 
 		const userRecord = await prisma.user.findUnique({ where: { id: userId } });
 
