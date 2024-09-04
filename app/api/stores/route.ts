@@ -1,4 +1,3 @@
-import addStores from "@/handlers/database/create/stores";
 import prisma from "@/services/prisma";
 
 export async function GET(req: Request) {
@@ -20,7 +19,7 @@ export async function POST(req: Request) {
 
 		// const response = await addStores(stores);
 
-		return Response.json('');
+		return Response.json("");
 	} catch (error) {
 		console.error("x-> Error adding stores:", error);
 		return Response.error();

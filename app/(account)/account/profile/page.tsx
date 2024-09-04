@@ -18,7 +18,7 @@ export const metadata: Metadata = { title: "Profile" };
 export default async function Profile() {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	return (
 		<LayoutPage stacked>

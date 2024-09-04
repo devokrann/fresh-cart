@@ -50,7 +50,7 @@ import getAddresses from "@/handlers/database/getAddresses";
 export default async function Order({ params }: { params: typeParams }) {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	const orders = session?.user.id ? await getOrders(session.user.id) : null;
 	const addresses = session?.user.id ? await getAddresses(session.user.id) : null;

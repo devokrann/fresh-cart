@@ -36,7 +36,7 @@ export const metadata: Metadata = { title: "Orders" };
 export default async function Orders() {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	return (
 		<LayoutPage>

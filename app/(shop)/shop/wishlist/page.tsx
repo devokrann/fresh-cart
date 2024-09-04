@@ -17,12 +17,22 @@ import {
 	Title,
 } from "@mantine/core";
 
-import { IconMail, IconPhone, IconTrash } from "@tabler/icons-react";
+import {
+	IconArrowRight,
+	IconChevronLeft,
+	IconChevronRight,
+	IconMail,
+	IconPhone,
+	IconRefresh,
+	IconTrash,
+} from "@tabler/icons-react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import FormContact from "@/partials/forms/Contact";
 import AccordionFaq from "@/components/accordions/Faq";
+import TableCart from "@/components/tables/Cart";
+import CardShopCart from "@/components/card/shop/Cart";
 import TableWishlist from "@/components/tables/Wishlist";
 
 import OperatorWishlist from "@/components/operators/Wishlist";
@@ -30,19 +40,14 @@ import OperatorWishlist from "@/components/operators/Wishlist";
 import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export const metadata: Metadata = { title: "Wishlist" };
 
 export default async function Wishlist() {
-	const session = await auth();
-
-	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
-
 	return (
 		<LayoutPage>
-			<LayoutSection>
+			<LayoutSection padded containerized={"responsive"}>
 				<Grid gutter={{ md: 48 }}>
 					<GridCol span={12}>
 						<Group align="start" justify="space-between">
@@ -53,9 +58,21 @@ export default async function Wishlist() {
 								<Text inherit>There are {"5"} products in your wishlist.</Text>
 							</Stack>
 
-							<OperatorWishlist operation={{ type: "clear", unmount: true }}>
-								<Button leftSection={<IconTrash size={16} stroke={2} />}>Clear Whishlist</Button>
-							</OperatorWishlist>
+							<Group gap={"xs"}>
+								<Button
+									component={Link}
+									href={"/shop"}
+									variant="outline"
+									color={"pri.6"}
+									leftSection={<IconChevronLeft size={16} stroke={2} />}
+								>
+									Continue Shopping
+								</Button>
+
+								<OperatorWishlist operation={{ type: "clear", unmount: true }}>
+									<Button leftSection={<IconTrash size={16} stroke={2} />}>Clear Whishlist</Button>
+								</OperatorWishlist>
+							</Group>
 						</Group>
 					</GridCol>
 

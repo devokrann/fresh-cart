@@ -17,7 +17,7 @@ export const metadata: Metadata = { title: "Payment" };
 export default async function Payment() {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	const paymentMethods = session?.user.id ? await getPaymentMethods(session.user.id) : null;
 

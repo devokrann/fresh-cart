@@ -53,7 +53,7 @@ export const metadata: Metadata = { title: "Checkout" };
 export default async function Checkout() {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	const addresses = await getAddresses(session?.user.id!);
 	const paymentMethods = await getPaymentMethods(session?.user.id!);

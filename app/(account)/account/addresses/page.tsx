@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Addresses" };
 export default async function Addresses() {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	const addresses = session?.user.id ? await getAddresses(session.user.id) : null;
 

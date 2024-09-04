@@ -17,7 +17,7 @@ export const metadata: Metadata = { title: "Notifications" };
 export default async function Notifications() {
 	const session = await auth();
 
-	!session && redirect("/");
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	return (
 		<LayoutPage stacked>
