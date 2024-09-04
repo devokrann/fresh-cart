@@ -10,6 +10,7 @@ declare module "next-auth" {
 	 */
 	interface Session {
 		token: string;
+		rememberMe: boolean;
 
 		user: {
 			//  * By default, TypeScript merges new interface properties and overwrites existing ones.
@@ -27,6 +28,7 @@ declare module "next-auth" {
 	interface User {
 		// User signin error
 		error?: string;
+		rememberMe?: string;
 	}
 
 	/**
@@ -53,6 +55,7 @@ export default {
 			credentials: {
 				email: {},
 				password: {},
+				rememberMe: {},
 			},
 			authorize: async credentials => {
 				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-in", {
@@ -75,7 +78,7 @@ export default {
 						if (!result.user.password.matches) {
 							return { error: "Incorrect password" };
 						} else {
-							return { ...result.user.data };
+							return { ...result.user.data, rememberMe: credentials.rememberMe };
 						}
 					}
 				}
@@ -125,6 +128,20 @@ export default {
 				token.user = session.user;
 			}
 
+			if (trigger === "signIn") {
+				token.rememberMe = user.rememberMe == "true" ? true : false;
+				console.log("remember", token.rememberMe);
+			}
+
+			if (token.rememberMe == true) {
+				token.exp = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // 7 days
+			} else {
+				token.exp = Math.floor(Date.now() / 1000) + 24 * 60 * 60; // 1 day
+			}
+
+			// // remaining time in days
+			// console.log(Math.floor(token.exp - Date.now() / 1000) / 60 / 60 / 24);
+
 			return token;
 		},
 
@@ -134,6 +151,11 @@ export default {
 			// Send properties to the client, like a user id from a provider.
 			session.token = token.accessToken as string;
 			session.user.id = token.id as string;
+
+			session.rememberMe = token.rememberMe as boolean;
+
+			// Set session expiration dynamically based on token expiration
+			session.expires = new Date(token.exp! * 1000).toISOString() as Date & string;
 
 			return session;
 		},

@@ -153,9 +153,9 @@ export default function Avatar() {
 									({session.data?.user.email})
 								</Text>
 
-								{/* <Text fz={"xs"} lh={1} ta={"center"}>
-								({session.data?.expires})
-							</Text> */}
+								<Text fz={"xs"} lh={1} ta={"center"}>
+									({session.data?.expires})
+								</Text>
 							</Stack>
 						)
 					)}
