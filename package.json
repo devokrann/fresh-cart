@@ -24,7 +24,7 @@
     "@mantine/spotlight": "^7.10.1",
     "@mantine/tiptap": "^7.10.1",
     "@next/env": "^14.2.4",
-    "@prisma/client": "^5.16.2",
+    "@prisma/client": "^5.19.1",
     "@react-email/components": "^0.0.19",
     "@tabler/icons-react": "^3.5.0",
     "@tiptap/extension-link": "^2.4.0",
@@ -59,7 +59,7 @@
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1",
-    "prisma": "^5.16.2",
+    "prisma": "^5.19.1",
     "sass": "^1.77.5",
     "ts-node": "^10.9.2",
     "typescript": "^5"
