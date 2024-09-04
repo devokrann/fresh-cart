@@ -1,13 +1,17 @@
+import { auth } from "@/auth";
 import prisma from "@/services/prisma";
 import { typeWishlist } from "@/types/wishlist";
 
 export async function GET(req: Request) {
 	try {
-		// const data = await req.json();
+		const session = await auth();
 
-		const stores = await prisma.store.findMany();
+		const databaseWishlist = await prisma.user.findUnique({
+			where: { id: session?.user.id },
+			include: { wishlist: { include: { variant: true, product: true } } },
+		});
 
-		return Response.json(stores);
+		return Response.json(databaseWishlist?.wishlist);
 	} catch (error) {
 		console.error("x-> Error getting wishlist:", error);
 		return Response.error();
@@ -36,7 +40,7 @@ export async function POST(req: Request) {
 				itemsToRemove.map(
 					async i =>
 						await prisma.wishlist.delete({
-							where: { compoundId: i.compoundId },
+							where: { userId_compoundId: { compoundId: i.compoundId, userId } },
 							include: { product: true, variant: true },
 						})
 				)

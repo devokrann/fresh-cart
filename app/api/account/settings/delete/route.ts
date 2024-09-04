@@ -1,34 +1,33 @@
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 
-export async function POST(req: Request, { params }: { params: { userId: string } }) {
+export async function POST(req: Request) {
 	try {
-		const userId = params.userId;
-		const { password } = await req.json();
+		const { userId, password } = await req.json();
 
 		const userRecord = await prisma.user.findUnique({ where: { id: userId } });
 
 		if (!userRecord) {
 			return Response.json({ user: { exists: false } });
 		} else {
-			const passwordMatch = await hasher.compare(password, userRecord.password);
+			if (!userRecord.password) {
+				if (!password) {
+					await handleDelete(userId);
 
-			if (!passwordMatch) {
-				if (!userRecord.password) {
-					if (!password) {
-						await handleDelete(userId);
-
-						return Response.json({ user: { exists: true, password: { match: true } } });
-					} else {
-						return Response.json({ user: { exists: true, password: { match: false } } });
-					}
+					return Response.json({ user: { exists: true, password: { match: true } } });
 				} else {
 					return Response.json({ user: { exists: true, password: { match: false } } });
 				}
 			} else {
-				await handleDelete(userId);
+				const passwordMatch = await hasher.compare(password, userRecord.password);
 
-				return Response.json({ user: { match: true } });
+				if (!passwordMatch) {
+					return Response.json({ user: { exists: true, password: { match: false } } });
+				} else {
+					await handleDelete(userId);
+
+					return Response.json({ user: { exists: true, password: { match: true } } });
+				}
 			}
 		}
 	} catch (error) {
@@ -38,18 +37,23 @@ export async function POST(req: Request, { params }: { params: { userId: string 
 }
 
 const handleDelete = async (id: string) => {
-	// delete user-related records
-	await prisma.account.deleteMany({ where: { userId: id } });
-	// await prisma.comment.deleteMany({ where: { userId:id } });
-	// await prisma.message.deleteMany({ where: { userId:id } });
-	// await prisma.otl.deleteMany({ where: { userId:id } });
-	// await prisma.otp.deleteMany({ where: { userId:id } });
-	// await prisma.post.deleteMany({ where: { userId:id } });
-	await prisma.profile.deleteMany({ where: { userId: id } });
-	// await prisma.reply.deleteMany({ where: { userId:id } });
-	// await prisma.session.deleteMany({ where: { userId:id } });
-	// await prisma.verificationToken.deleteMany({ where: { userId:id } });
-
-	// delete user
-	await prisma.user.delete({ where: { id } });
+	// delete user and user-related records
+	await prisma.user.delete({
+		where: { id },
+		include: {
+			profile: true,
+			accounts: true,
+			sessions: true,
+			authenticators: true,
+			otps: true,
+			otls: true,
+			reviews: true,
+			orders: true,
+			cart: true,
+			wishlist: true,
+			addresses: true,
+			posts: true,
+			paymentMethods: true,
+		},
+	});
 };

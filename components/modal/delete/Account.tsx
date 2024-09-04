@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, Button, Stack, Text } from "@mantine/core";
+import { Modal, Button, Stack, Text, Divider } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 import FormUserAccountDelete from "@/partials/forms/user/settings/Delete";
@@ -10,14 +10,18 @@ export default function Account() {
 
 	return (
 		<>
-			<Modal opened={opened} onClose={close} centered title="Account Erasure">
+			<Modal opened={opened} onClose={close} centered title="Account Erasure" size={"lg"}>
 				<Stack>
 					<Text>
-						Deleting your account will permanently remove all data associated with it.{" "}
+						Deleting your account will permanently remove all data associated with it.
+						<br />
 						<Text component="span" inherit c="red.6">
 							Proceed with caution. This action is irreversible.
 						</Text>
 					</Text>
+
+					<Divider />
+
 					<FormUserAccountDelete />
 				</Stack>
 			</Modal>

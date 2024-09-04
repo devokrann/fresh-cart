@@ -101,7 +101,7 @@ export default function Avatar() {
 		danger: [
 			{
 				icon: IconLogout,
-				link: `/api/auth/signout`,
+				link: process.env.NEXT_PUBLIC_SIGN_OUT_URL!,
 				label: "Sign Out",
 				color: "red",
 			},

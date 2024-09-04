@@ -1,7 +1,8 @@
-import { DefaultSession } from "next-auth";
+import { DefaultSession, User } from "next-auth";
 import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
+import { AdapterUser } from "next-auth/adapters";
 
 declare module "next-auth" {
 	/**
@@ -33,11 +34,6 @@ declare module "next-auth" {
 	 * Usually contains information about the provider being used, like OAuth tokens (`access_token`, etc).
 	 */
 	interface Account {}
-
-	/**
-	 * Returned by `useSession`, `auth`, contains information about the active session.
-	 */
-	interface Session {}
 }
 
 export default {
@@ -120,10 +116,21 @@ export default {
 				token.id = user.id;
 			}
 
+			// Ensure token.user is always set if user is available
+			if (user) {
+				token.user = user;
+			}
+
+			if (trigger === "update" && session) {
+				token.user = session.user;
+			}
+
 			return token;
 		},
 
 		async session({ session, token, user, newSession, trigger }) {
+			session.user = token.user as AdapterUser & User;
+
 			// Send properties to the client, like a user id from a provider.
 			session.token = token.accessToken as string;
 			session.user.id = token.id as string;

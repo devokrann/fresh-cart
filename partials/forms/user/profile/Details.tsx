@@ -21,14 +21,14 @@ interface typeProfileDetails {
 }
 
 export default function Details() {
-	const session = useSession();
+	const { data: session, update } = useSession();
 
 	const [submitted, setSubmitted] = useState(false);
 
 	const form = useForm({
 		initialValues: {
-			name: session.data?.user.name ? session.data?.user.name : "",
-			email: session.data?.user.email,
+			name: session?.user?.name ? session?.user?.name : "",
+			email: session?.user?.email,
 			phone: "",
 		},
 
@@ -62,9 +62,9 @@ export default function Details() {
 				} else {
 					setSubmitted(true);
 
-					const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
+					const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/account/profile", {
 						method: "POST",
-						body: JSON.stringify(parse(formValues)),
+						body: JSON.stringify({ ...parse(formValues), userId: session?.user?.id }),
 						headers: {
 							"Content-Type": "application/json",
 							Accept: "application/json",
@@ -73,17 +73,61 @@ export default function Details() {
 
 					const result = await response.json();
 
-					console.log(result);
+					if (!result) {
+						notifications.show({
+							id: "profile-update-failed-no-response",
+							icon: <IconX size={16} stroke={1.5} />,
+							autoClose: 5000,
+							title: "Server Unavailable",
+							message: `There was no response from the server.`,
+							variant: "failed",
+						});
+
+						form.reset();
+					} else {
+						if (!result.user.exists) {
+							notifications.show({
+								id: "profile-update-failed-no-user",
+								icon: <IconX size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Unauthorized",
+								message: `You're not allowed to perform this action.`,
+								variant: "failed",
+							});
+
+							form.reset();
+						} else {
+							// Update the session data on the client-side
+							await update({
+								...session,
+								user: {
+									...session?.user,
+									name: parse(formValues).name,
+								},
+							});
+
+							notifications.show({
+								id: "profile-update-success",
+								icon: <IconCheck size={16} stroke={1.5} />,
+								autoClose: 5000,
+								title: "Profile Updated",
+								message: "Your profile details are up to date.",
+								variant: "success",
+							});
+						}
+					}
 				}
 			} catch (error) {
 				notifications.show({
-					id: "form-contact-failed",
+					id: "profile-update-failed",
 					icon: <IconX size={16} stroke={1.5} />,
 					autoClose: 5000,
 					title: "Submisstion Failed",
 					message: (error as Error).message,
 					variant: "failed",
 				});
+
+				form.reset();
 			} finally {
 				setSubmitted(false);
 			}

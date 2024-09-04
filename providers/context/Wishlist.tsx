@@ -17,7 +17,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 export default function Wishlist({ children }: { children: React.ReactNode }) {
 	// window.localStorage.clear();
 
-	const session = useSession();
+	const { data: session } = useSession();
 
 	const inClient = typeof window !== "undefined";
 
@@ -25,14 +25,15 @@ export default function Wishlist({ children }: { children: React.ReactNode }) {
 	const [wishlistLoading, setWishlistLoading] = useState(true);
 
 	const updateDatabaseWishlist = useDebouncedCallback(
-		async () => await postWishlist(session.data?.user.id!, wishlist!),
+		async () => await postWishlist(session?.user.id!, wishlist!),
 		5000
 	);
 
 	useEffect(() => {
 		const setInitialWishlist = async () => {
 			// fetch wishlist data asynchronously then set wishlist
-			inClient && setWishlist(await getLocalWishlist());
+			inClient && setWishlist(await handleSetlWishlist(session?.user.id));
+
 			setWishlistLoading(false);
 		};
 
@@ -45,14 +46,14 @@ export default function Wishlist({ children }: { children: React.ReactNode }) {
 			window.localStorage.setItem(ProductArrays.WISHLIST, JSON.stringify(wishlist));
 
 			// Sync local storage wishlist with database (throttled)
-			session.data && updateDatabaseWishlist();
+			session && updateDatabaseWishlist();
 		}
 	}, [wishlist]);
 
 	return <ContextUserWishlist.Provider value={{ wishlist, setWishlist }}>{children}</ContextUserWishlist.Provider>;
 }
 
-const getLocalWishlist = async (): Promise<typeWishlist[]> => {
+const handleSetlWishlist = async (id?: string): Promise<typeWishlist[]> => {
 	try {
 		// Initialize from local storage
 		const savedWishlist = window.localStorage.getItem(ProductArrays.WISHLIST);
@@ -61,15 +62,20 @@ const getLocalWishlist = async (): Promise<typeWishlist[]> => {
 			return [];
 		} else {
 			// parse local wishlist
-			const parsedSavedWishlist = await JSON.parse(savedWishlist);
+			const parsedSavedWishlist: typeWishlist[] = await JSON.parse(savedWishlist);
 
-			// // get database wishlist
-			// const databaseWishlist = await getWishlist();
+			if (parsedSavedWishlist.length > 0) {
+				return parsedSavedWishlist;
+			}
 
-			// // compare local wishlist with database
-			// if (!array.areEqual(databaseWishlist, parsedSavedWishlist)) {
-			// 	window.localStorage.setItem(ProductArrays.WISHLIST, JSON.stringify(databaseWishlist));
-			// }
+			// check if user is signed in
+			if (id) {
+				// get database wishlist
+				const databaseWishlist = await getWishlist();
+
+				return databaseWishlist;
+			}
+
 			return parsedSavedWishlist;
 		}
 	} catch (error) {
