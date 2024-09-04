@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import {
 	Anchor,
@@ -35,7 +34,6 @@ import { typeFormSignIn } from "@/types/form";
 
 export default function SignIn() {
 	const [submitted, setSubmitted] = useState(false);
-	const router = useRouter();
 
 	const form = useForm({
 		initialValues: {
@@ -69,7 +67,7 @@ export default function SignIn() {
 				const response = await authSignIn("credentials", {
 					...parse(formValues),
 					redirect: false,
-					callbackUrl: "/",
+					callbackUrl: getCallbackUrlFromQuery(),
 				});
 
 				if (!response?.ok) {
@@ -83,7 +81,7 @@ export default function SignIn() {
 				} else {
 					if (!response.error) {
 						// apply callbackurl
-						response.url && router.replace(response.url);
+						response.url && window.location.replace(response.url);
 					} else {
 						notifications.show({
 							id: `sign-in-failed-${response.error}`,
@@ -169,4 +167,15 @@ export default function SignIn() {
 			</Stack>
 		</Box>
 	);
+}
+
+function getCallbackUrlFromQuery() {
+	const inClient = typeof window !== "undefined";
+
+	if (inClient) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get("callbackUrl") || "/";
+	}
+
+	return "/";
 }

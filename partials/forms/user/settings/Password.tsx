@@ -14,11 +14,10 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import password from "@/handlers/validators/form/special/password";
 import compare from "@/handlers/validators/form/special/compare";
 
-import { Session, User } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Password() {
-	const session = useSession();
+	const { data: session } = useSession();
 
 	const [sending, setSending] = useState(false);
 	const router = useRouter();
@@ -54,20 +53,18 @@ export default function Password() {
 			if (form.isValid()) {
 				setSending(true);
 
-				const response = await fetch(
-					process.env.NEXT_PUBLIC_API_URL + `/api/${session.data?.userId}/settings/account/password`,
-					{
-						method: "POST",
-						body: JSON.stringify({
-							passwordCurrent: parse(formValues).passwordCurrent,
-							passwordNew: parse(formValues).passwordNew,
-						}),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
-					}
-				);
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/account/settings/password`, {
+					method: "POST",
+					body: JSON.stringify({
+						userId: session?.user.id,
+						passwordCurrent: parse(formValues).passwordCurrent,
+						passwordNew: parse(formValues).passwordNew,
+					}),
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+				});
 
 				const result = await response.json();
 
