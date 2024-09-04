@@ -64,7 +64,7 @@ export default async function Main() {
 										<ActionIcon
 											variant="transparent"
 											component={Link}
-											href={"/account/wishlist"}
+											href={!session ? "/shop/wishlist" : "/account/wishlist"}
 											color="gray"
 										>
 											<Center>
