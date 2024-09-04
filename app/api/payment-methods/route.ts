@@ -1,13 +1,16 @@
-import addPaymentMethods from "@/handlers/database/create/paymentMethods";
+import { auth } from "@/auth";
 import prisma from "@/services/prisma";
 
 export async function GET(req: Request) {
 	try {
-		// const data = await req.json();
+		const session = await auth();
 
-		const posts = await prisma.paymentMethod.findMany();
+		// const user = await prisma.user.findUnique({
+		// 	where: { id: session?.user.id! },
+		// 	include: { paymentMethods: true },
+		// });
 
-		return Response.json(posts);
+		return Response.json(session);
 	} catch (error) {
 		console.error("x-> Error getting payment methods:", error);
 		return Response.error();
