@@ -39,7 +39,7 @@ export default function SignIn() {
 		initialValues: {
 			email: "",
 			password: "",
-			save: false,
+			remember: false,
 		},
 
 		validate: {
@@ -52,7 +52,7 @@ export default function SignIn() {
 		return {
 			email: rawData.email.trim().toLowerCase(),
 			password: rawData.password.trim(),
-			save: rawData.save,
+			rememberMe: rawData.remember,
 		};
 	};
 
@@ -127,8 +127,8 @@ export default function SignIn() {
 							<Group justify="space-between">
 								<Checkbox
 									label="Remember me"
-									key={form.key("save")}
-									{...form.getInputProps("save", { type: "checkbox" })}
+									key={form.key("remember")}
+									{...form.getInputProps("remember", { type: "checkbox" })}
 								/>
 
 								<Anchor

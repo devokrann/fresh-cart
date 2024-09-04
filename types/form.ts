@@ -30,5 +30,5 @@ export interface typeFormSignUp {
 export interface typeFormSignIn {
 	email: string;
 	password: string;
-	save: boolean;
+	remember: boolean;
 }
