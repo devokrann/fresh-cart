@@ -2,7 +2,7 @@ import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";
 
 const array = {
-	elementIsPresent: (id: string, array: any[]) => (array.find(p => p.id == id) ? true : false),
+	elementIsPresent: (id: string, array: any[]) => (array.find(p => p.compoundId == id) ? true : false),
 
 	areEqual: (array1: any[], array2: any[]): boolean => {
 		// If the lengths of the arrays are different, they are not equal

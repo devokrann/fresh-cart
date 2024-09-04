@@ -5,7 +5,7 @@ import React, { useContext } from "react";
 import { ActionIcon, Box, Center, Indicator, Skeleton, Text } from "@mantine/core";
 import { IconHeart } from "@tabler/icons-react";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 
 export default function Cart({ children }: { children: React.ReactNode }) {
 	const cartContext = useContext(ContextCart);

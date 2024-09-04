@@ -1,4 +1,3 @@
-import paymentMethods from "@/data/payment";
 import addPaymentMethods from "@/handlers/database/create/paymentMethods";
 import prisma from "@/services/prisma";
 
@@ -19,9 +18,9 @@ export async function POST(req: Request) {
 	try {
 		// const data = await req.json();
 
-		const response = await addPaymentMethods(paymentMethods);
+		// const response = await addPaymentMethods(paymentMethods);
 
-		return Response.json(response);
+		return Response.json("");
 	} catch (error) {
 		console.error("x-> Error adding payment methods:", error);
 		return Response.error();

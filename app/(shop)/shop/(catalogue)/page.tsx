@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useContext, useEffect, useState } from "react";
 
 import {
@@ -25,55 +23,31 @@ import CardProductShopGrid from "@/components/card/product/shop/Grid";
 import CardProductShopList from "@/components/card/product/shop/List";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import { IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
-import stores from "@/data/stores";
-import ContextProducts from "@/contexts/Products";
+import getProducts from "@/handlers/database/getProducts";
+import getStores from "@/handlers/database/getStores";
 
-export default function Shop() {
-	const productsContext = useContext(ContextProducts);
+export default async function Shop() {
+	const products = await getProducts();
+	const stores = await getStores();
 
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a ContextProducts.Provider");
-	}
+	// const [layout, setLayout] = useState<"grid" | "list">("grid");
 
-	const { products, setProducts } = productsContext;
-
-	const [layout, setLayout] = useState<"grid" | "list">("grid");
-
-	const getLayout = () => {
+	const getLayout = (layout: "list" | "grid") => {
 		switch (layout) {
 			case "grid":
 				return products?.map(product => (
-					<GridCol key={product.title} span={{ base: 12, md: 4, lg: 3 }}>
+					<GridCol key={product.id} span={{ base: 12, md: 4, lg: 3 }}>
 						<CardProductShopGrid data={product} />
 					</GridCol>
 				));
 			case "list":
 				return products?.map(product => (
-					<GridCol key={product.title} span={12}>
+					<GridCol key={product.id} span={12}>
 						<CardProductShopList data={product} />
 					</GridCol>
 				));
 		}
 	};
-
-	const loadingLayoutArray = [
-		{
-			id: "1",
-			element: <Skeleton h={320} w={"100%"} />,
-		},
-		{
-			id: "2",
-			element: <Skeleton h={320} w={"100%"} />,
-		},
-		{
-			id: "3",
-			element: <Skeleton h={320} w={"100%"} />,
-		},
-		{
-			id: "4",
-			element: <Skeleton h={320} w={"100%"} />,
-		},
-	];
 
 	return (
 		<LayoutPage padded stacked="lg">
@@ -94,16 +68,12 @@ export default function Shop() {
 								</Text>
 							</Stack>
 
-							{!products ? (
-								<Skeleton w={360} h={32} />
-							) : (
-								<InputAutocompleteStores
-									w={{ md: 320 }}
-									placeholder={`Search ${stores[0].title}`}
-									rightSection={<IconSearch size={16} stroke={2} />}
-									data={products.map(p => p.title)}
-								/>
-							)}
+							<InputAutocompleteStores
+								w={{ md: 320 }}
+								placeholder={`Search ${stores[0].title}`}
+								rightSection={<IconSearch size={16} stroke={2} />}
+								data={products.map(p => p.title)}
+							/>
 						</Stack>
 					</Stack>
 				</Card>
@@ -111,32 +81,18 @@ export default function Shop() {
 
 			<LayoutSection>
 				<Group justify="space-between">
-					{!products ? (
-						<Skeleton w={160} h={16} />
-					) : (
-						<Text fz={"sm"}>
-							<Text component="span" inherit fw={"bold"}>
-								<NumberFormatter value={products.length} thousandSeparator />
-							</Text>{" "}
-							Products found
-						</Text>
-					)}
+					<Text fz={"sm"}>
+						<Text component="span" inherit fw={"bold"}>
+							<NumberFormatter value={products.length} thousandSeparator />
+						</Text>{" "}
+						Products found
+					</Text>
 
 					<Group>
-						<ActionIcon
-							size={32}
-							variant="subtle"
-							color={layout == "list" ? "pri.6" : "gray"}
-							onClick={() => setLayout("list")}
-						>
+						<ActionIcon size={32} variant="subtle" color={"gray"}>
 							<IconList size={24} stroke={2} />
 						</ActionIcon>
-						<ActionIcon
-							size={32}
-							variant="subtle"
-							color={layout == "grid" ? "pri.6" : "gray"}
-							onClick={() => setLayout("grid")}
-						>
+						<ActionIcon size={32} variant="subtle" color={"pri.6"}>
 							<IconLayoutGrid size={24} stroke={2} />
 						</ActionIcon>
 						{/* <ActionIcon size={32} variant="subtle" c={"pri"}>
@@ -175,23 +131,7 @@ export default function Shop() {
 			</LayoutSection>
 
 			<LayoutSection>
-				<Grid>
-					{!products
-						? loadingLayoutArray.map(item => (
-								<GridCol
-									key={item.id}
-									span={{ base: 12, md: 4, lg: 3 }}
-									visibleFrom={
-										loadingLayoutArray.indexOf(item) == loadingLayoutArray.length - 1
-											? "lg"
-											: undefined
-									}
-								>
-									{item.element}
-								</GridCol>
-						  ))
-						: getLayout()}
-				</Grid>
+				<Grid>{getLayout("grid")}</Grid>
 			</LayoutSection>
 
 			<LayoutSection>

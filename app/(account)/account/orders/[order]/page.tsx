@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import {
 	ActionIcon,
@@ -26,9 +26,7 @@ import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 
 import CarouselShop from "@/components/carousel/Shop";
 
-import blog from "@/data/posts";
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
-import stores from "@/data/stores";
 import link from "@/handlers/parsers/string/link";
 import TabsProduct from "@/components/tabs/product/Images";
 
@@ -40,18 +38,24 @@ import getFraction from "@/handlers/fraction";
 import TableOrdersProducts from "@/components/tables/orders/Products";
 
 import TabsReview from "@/components/tabs/product/Review";
-import orders from "@/data/orders";
 import { typeOrder } from "@/types/order";
-import addresses from "@/data/addresses";
 
 import BadgeOrder from "@/components/badges/Order";
 
-export default function Order({ params }: { params: typeParams }) {
-	const data: typeOrder | undefined = orders.find(order => order.id == params.order);
+import getOrders from "@/handlers/database/getOrders";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+import getAddresses from "@/handlers/database/getAddresses";
 
-	if (!data) {
-		throw Error("Order must be defined");
-	}
+export default async function Order({ params }: { params: typeParams }) {
+	const session = await auth();
+
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
+	const orders = session?.user.id ? await getOrders(session.user.id) : null;
+	const addresses = session?.user.id ? await getAddresses(session.user.id) : null;
+
+	const data: typeOrder | undefined = orders?.find(order => order.id == params.order);
 
 	return (
 		<LayoutPage>
@@ -62,14 +66,14 @@ export default function Order({ params }: { params: typeParams }) {
 							<Stack gap={0}>
 								<Group>
 									<Title order={2} fw={"bold"}>
-										Order (#{data.id})
+										Order (#{data?.id})
 									</Title>
 
-									<BadgeOrder status={data.status} />
+									<BadgeOrder status={data?.status!} />
 								</Group>
 								<Text inherit>
-									Order <u>{data.id}</u> was placed on <u>{data.datePlaced.toDateString()}</u> and is
-									currently being prepared.
+									Order <u>{data?.id}</u> was placed on <u>{data?.datePlaced.toDateString()}</u> and
+									is currently being prepared.
 								</Text>
 								<Text inherit>
 									If you have any questions, please feel free to contact us, our customer service
@@ -80,7 +84,7 @@ export default function Order({ params }: { params: typeParams }) {
 					</GridCol>
 
 					<GridCol span={12}>
-						<TableOrdersProducts data={data.products} />
+						<TableOrdersProducts data={data?.orderedProducts!} />
 					</GridCol>
 
 					<GridCol span={12}>
@@ -95,8 +99,8 @@ export default function Order({ params }: { params: typeParams }) {
 
 							<GridCol span={{ base: 12, md: 7 }}>
 								<Grid>
-									{addresses.map(address => (
-										<GridCol key={address.title} span={{ base: 12, md: 6 }}>
+									{addresses?.map(address => (
+										<GridCol key={address.id} span={{ base: 12, md: 6 }}>
 											<CardAddressOrder data={address} />
 										</GridCol>
 									))}

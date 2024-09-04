@@ -1,10 +1,11 @@
-import addresses from "@/data/addresses";
 import addAddresses from "@/handlers/database/create/addresses";
 import prisma from "@/services/prisma";
 
 export async function GET(req: Request) {
 	try {
-		// const data = await req.json();
+		const data = await req.json();
+
+		console.log(data);
 
 		const addresses = await prisma.address.findMany();
 
@@ -17,11 +18,12 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
 	try {
-		// const data = await req.json();
+		const { userId } = await req.json();
 
-		const response = await addAddresses(addresses);
+		// const response = await addAddresses(addresses);
+		const addresses = await prisma.address.findMany({ where: { userId } });
 
-		return Response.json(response);
+		return Response.json(addresses);
 	} catch (error) {
 		console.error("x-> Error adding addresses:", error);
 		return Response.error();

@@ -6,11 +6,13 @@ import LayoutBody from "@/layouts/Body";
 
 import link from "@/handlers/parsers/string/link";
 
-import posts from "@/data/posts";
-
 import { typeParams } from "../layout";
 
-export const generateMetadata = ({ params }: { params: typeParams }): Metadata => {
+import getPosts from "@/handlers/database/getPosts";
+
+export const generateMetadata = async ({ params }: { params: typeParams }): Promise<Metadata> => {
+	const posts = await getPosts();
+
 	return { title: posts.find(p => link.linkify(p.id) == params.blogId)?.title };
 };
 

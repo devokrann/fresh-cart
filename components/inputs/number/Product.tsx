@@ -3,7 +3,6 @@
 import { ActionIcon, Group, NumberInput, NumberInputHandlers } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import ContextProducts from "@/contexts/Products";
 import { typeCart } from "@/types/cart";
 
 import OperatorCart from "@/components/operators/Cart";

@@ -6,13 +6,21 @@ import { Metadata } from "next";
 import { Divider, Grid, GridCol, Group, Stack, Text, Title } from "@mantine/core";
 import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardPaymentMain from "@/components/card/payment/Main";
-import { typePaymentMethods, typePaymentType } from "@/types/payment";
-import paymentMethods from "@/data/payment";
+import { typePaymentMethod, typePaymentType } from "@/types/payment";
 import FormUserPayment from "@/partials/forms/user/Payment";
+import getPaymentMethods from "@/handlers/database/getPaymentMethods";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Payment" };
 
 export default async function Payment() {
+	const session = await auth();
+
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
+	const paymentMethods = session?.user.id ? await getPaymentMethods(session.user.id) : null;
+
 	return (
 		<LayoutPage>
 			<LayoutSection>
@@ -30,8 +38,8 @@ export default async function Payment() {
 
 					<GridCol span={12}>
 						<Grid>
-							{paymentMethods.map(method => (
-								<GridCol key={method.name} span={{ base: 12, md: 6, lg: 4 }}>
+							{paymentMethods?.map(method => (
+								<GridCol key={method.id} span={{ base: 12, md: 6, lg: 4 }}>
 									<CardPaymentMain data={method} />
 								</GridCol>
 							))}

@@ -24,7 +24,7 @@ import NotificationEmpty from "../notification/Empty";
 
 import classes from "./Cart.module.scss";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 import Link from "next/link";
 import compoundId from "@/handlers/parsers/string/compoundId";
 import total from "@/handlers/total";
@@ -76,7 +76,7 @@ export default function Cart() {
 						>
 							{cart.map(item => (
 								<Box
-									key={compoundId.getCompoundId(item)}
+									key={item.compoundId}
 									style={{
 										borderTop:
 											cart.indexOf(item) > 0
@@ -122,7 +122,7 @@ export default function Cart() {
 							>
 								View Cart
 							</Button>
-							<Button component={Link} href={"/shop/checkout"}>
+							<Button onClick={close} component={Link} href={"/shop/checkout"}>
 								Checkout
 							</Button>
 						</Group>

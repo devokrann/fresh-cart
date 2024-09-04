@@ -1,8 +1,5 @@
-import { typeProduct } from "@/types/product";
-import { typeVariant } from "@/types/variant";
-
 const compoundId = {
-	getCompoundId: (combo: { product: typeProduct; variant: typeVariant }) => `${combo.product.id}-${combo.variant.id}`,
+	getCompoundId: (productId: string, variantId: string) => `${productId}-${variantId}`,
 };
 
 export default compoundId;

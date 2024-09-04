@@ -2,21 +2,32 @@
 
 import React, { useEffect, useState } from "react";
 
-import ContextUserWishlist from "@/contexts/user/Wishlist";
+import ContextUserWishlist from "@/contexts/Wishlist";
 
 import { typeWishlist } from "@/types/wishlist";
 import getWishlist from "@/handlers/database/getWishlist";
 import array from "@/utilities/array";
 
 import { ProductArrays } from "@/types/enums";
+import { useSession } from "next-auth/react";
+
+import postWishlist from "@/handlers/database/postWishlist";
+import { useDebouncedCallback } from "@mantine/hooks";
 
 export default function Wishlist({ children }: { children: React.ReactNode }) {
 	// window.localStorage.clear();
+
+	const session = useSession();
 
 	const inClient = typeof window !== "undefined";
 
 	const [wishlist, setWishlist] = useState<typeWishlist[] | null>(null);
 	const [wishlistLoading, setWishlistLoading] = useState(true);
+
+	const updateDatabaseWishlist = useDebouncedCallback(
+		async () => await postWishlist(session.data?.user.id!, wishlist!),
+		5000
+	);
 
 	useEffect(() => {
 		const setInitialWishlist = async () => {
@@ -32,7 +43,9 @@ export default function Wishlist({ children }: { children: React.ReactNode }) {
 		if (inClient && !wishlistLoading) {
 			// Sync wishlist with local storage
 			window.localStorage.setItem(ProductArrays.WISHLIST, JSON.stringify(wishlist));
+
 			// Sync local storage wishlist with database (throttled)
+			session.data && updateDatabaseWishlist();
 		}
 	}, [wishlist]);
 

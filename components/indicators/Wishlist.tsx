@@ -5,7 +5,7 @@ import React, { useContext } from "react";
 import { ActionIcon, Box, Center, Indicator, Skeleton, Text } from "@mantine/core";
 import { IconHeart } from "@tabler/icons-react";
 
-import ContextWishlist from "@/contexts/user/Wishlist";
+import ContextWishlist from "@/contexts/Wishlist";
 
 export default function Wishlist({ children }: { children: React.ReactNode }) {
 	const wishlistContext = useContext(ContextWishlist);

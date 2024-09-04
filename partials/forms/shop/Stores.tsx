@@ -1,29 +1,11 @@
-"use client";
-
 import { Group, Skeleton, Stack } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import InputCheckboxStores from "@/components/inputs/checkbox/Stores";
-import { typeStore } from "@/types/store";
-import getStores from "@/handlers/database/create/stores";
+import getStores from "@/handlers/database/getStores";
 
-export default function Stores() {
-	const [data, setData] = useState<typeStore[] | null>(null);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				setData(await getStores());
-			} catch (error) {
-				console.error("Error fetching categories:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchData();
-	}, []);
+export default async function Stores() {
+	const stores = await getStores();
 
 	const skeletons = [
 		{
@@ -48,16 +30,12 @@ export default function Stores() {
 
 	return (
 		<Stack>
-			{loading ? (
-				<Skeleton h={32} w={"100%"} />
-			) : (
-				data && <InputAutocompleteStores data={data.map(s => s.title)} />
-			)}
+			<InputAutocompleteStores data={stores.map(s => s.title)} />
 
 			<Stack gap={"xs"}>
-				{loading
-					? skeletons.map(s => s.element)
-					: data && data.map(store => <InputCheckboxStores key={store.id} title={store.title} />)}
+				{stores.map(store => (
+					<InputCheckboxStores key={store.id} title={store.title} />
+				))}
 			</Stack>
 		</Stack>
 	);

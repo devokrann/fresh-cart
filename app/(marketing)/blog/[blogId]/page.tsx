@@ -14,11 +14,12 @@ import classes from "./Blog.module.scss";
 import { IconBrandFacebook, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
 
 import { typeParams } from "../layout";
+import getPosts from "@/handlers/database/getPosts";
 
-import blog from "@/data/posts";
+export default async function Post({ params }: { params: typeParams }) {
+	const posts = await getPosts();
 
-export default function Post({ params }: { params: typeParams }) {
-	const data = blog.find(p => link.linkify(p.title) == params.blogId);
+	const data = posts.find(p => link.linkify(p.title) == params.blogId);
 
 	const elementQuote = (
 		<Stack gap={"xl"} my={"xl"} ta={"center"}>
@@ -80,7 +81,7 @@ export default function Post({ params }: { params: typeParams }) {
 							<Text inherit>
 								Read time:{" "}
 								<Text component="span" inherit fw={"bold"}>
-									{data?.length} min
+									{data?.readingTime} min
 								</Text>
 							</Text>
 						</Group>

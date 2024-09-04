@@ -1,11 +1,12 @@
 import { typeOrder } from "@/types/order";
 
-const getOrders = async (): Promise<typeOrder[]> => {
+const getOrders = async (userId: string): Promise<typeOrder[]> => {
 	try {
 		return [];
 	} catch (error) {
-		return [];
 		console.error("X-> Error fetching orders", error);
+
+		return [];
 	}
 };
 

@@ -46,7 +46,6 @@ import OperatorWishlist from "@/components/operators/Wishlist";
 import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";
 
-import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
 export default function List({ data }: { data: typeProduct }) {

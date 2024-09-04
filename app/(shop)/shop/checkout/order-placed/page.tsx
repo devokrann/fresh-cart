@@ -33,10 +33,16 @@ import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Order Placed" };
 
 export default async function OrderPlaced() {
+	const session = await auth();
+
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
 	return (
 		<LayoutPage>
 			<LayoutSection padded={120} containerized={"xs"}>

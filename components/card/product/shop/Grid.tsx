@@ -41,7 +41,6 @@ import classes from "./Grid.module.scss";
 import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";
 
-import ContextProducts from "@/contexts/Products";
 import { notifications } from "@mantine/notifications";
 
 import OperatorCart from "@/components/operators/Cart";

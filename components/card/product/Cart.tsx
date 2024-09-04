@@ -45,8 +45,6 @@ import getFraction from "@/handlers/fraction";
 
 import classes from "./Cart.module.scss";
 
-import ContextProducts from "@/contexts/Products";
-
 import InputNumberProduct from "@/components/inputs/number/Product";
 import OperatorCart from "@/components/operators/Cart";
 

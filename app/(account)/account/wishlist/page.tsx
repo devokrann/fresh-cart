@@ -30,10 +30,16 @@ import OperatorWishlist from "@/components/operators/Wishlist";
 import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Wishlist" };
 
 export default async function Wishlist() {
+	const session = await auth();
+
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
 	return (
 		<LayoutPage>
 			<LayoutSection>

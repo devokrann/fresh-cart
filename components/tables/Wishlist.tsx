@@ -28,7 +28,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextWishlist from "@/contexts/user/Wishlist";
+import ContextWishlist from "@/contexts/Wishlist";
 import { IconClearAll, IconMoodEmpty, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Wishlist.module.scss";
@@ -62,17 +62,20 @@ export default function Wishlist() {
 	};
 
 	const rows = wishlist?.map(item => (
-		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
+		<TableTr
+			key={item.compoundId}
+			bg={selectedRows.includes(item.compoundId) ? "var(--mantine-color-gray-light)" : undefined}
+		>
 			<TableTd w={widths.checkBox}>
 				<Stack align="end">
 					<Checkbox
 						aria-label="Select row"
-						checked={selectedRows.includes(item.id)}
+						checked={selectedRows.includes(item.compoundId)}
 						onChange={event =>
 							setSelectedRows(
 								event.currentTarget.checked
-									? [...selectedRows, item.id]
-									: selectedRows.filter(position => position !== item.id)
+									? [...selectedRows, item.compoundId]
+									: selectedRows.filter(position => position !== item.compoundId)
 							)
 						}
 					/>
@@ -134,7 +137,9 @@ export default function Wishlist() {
 						<Button
 							variant="outline"
 							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
-							onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+							onClick={() =>
+								setSelectedRows(selectedRows.filter(position => position !== item.compoundId))
+							}
 							size="xs"
 						>
 							Add to Cart
@@ -150,7 +155,7 @@ export default function Wishlist() {
 						size={32}
 						color="red.6"
 						variant="subtle"
-						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.compoundId))}
 					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
@@ -270,7 +275,7 @@ export default function Wishlist() {
 							variant="subtle"
 							color="gray"
 							leftSection={<IconSelect size={16} stroke={2} />}
-							onClick={() => setSelectedRows(wishlist.map(i => i.id))}
+							onClick={() => setSelectedRows(wishlist.map(i => i.compoundId))}
 							size="xs"
 						>
 							Select All ({selectedRows.length})
@@ -281,7 +286,13 @@ export default function Wishlist() {
 						<OperatorWishlist
 							operation={{
 								type: "remove",
-								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
+								items: selectedRows
+									.map(r => {
+										const item = wishlist.find(p => p.compoundId == r);
+
+										return { product: item?.product!, variant: item?.variant! };
+									})
+									.filter(p => p != undefined),
 							}}
 						>
 							<Button
@@ -298,14 +309,24 @@ export default function Wishlist() {
 						<OperatorWishlist
 							operation={{
 								type: "transfer",
-								items: selectedRows.map(r => wishlist.find(p => p.id == r)).filter(p => p != undefined),
+								items: selectedRows
+									.map(r => {
+										const item = wishlist.find(p => p.compoundId == r);
+
+										return { product: item?.product!, variant: item?.variant! };
+									})
+									.filter(p => p != undefined),
 							}}
 						>
 							<OperatorCart
 								operation={{
 									type: "add",
 									items: selectedRows
-										.map(r => wishlist.find(p => p.id == r))
+										.map(r => {
+											const item = wishlist.find(p => p.compoundId == r);
+
+											return { product: item?.product!, variant: item?.variant! };
+										})
 										.filter(p => p != undefined),
 								}}
 							>

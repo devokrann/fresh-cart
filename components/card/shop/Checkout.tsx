@@ -17,7 +17,7 @@ import {
 } from "@mantine/core";
 import React, { useContext } from "react";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 
 import FormShopRedeem from "@/partials/forms/shop/Redeem";
 

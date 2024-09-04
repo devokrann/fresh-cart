@@ -1,4 +1,3 @@
-import categories from "@/data/categories";
 import addPostCategories from "@/handlers/database/create/postCategories";
 import prisma from "@/services/prisma";
 
@@ -19,9 +18,9 @@ export async function POST(req: Request) {
 	try {
 		// const data = await req.json();
 
-		const response = await addPostCategories(categories.blog);
+		// const response = await addPostCategories(categories.blog);
 
-		return Response.json(response);
+		return Response.json("");
 	} catch (error) {
 		console.error("x-> Error adding post categories:", error);
 		return Response.error();

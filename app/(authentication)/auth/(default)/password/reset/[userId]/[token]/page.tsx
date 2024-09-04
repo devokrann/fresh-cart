@@ -16,10 +16,15 @@ import images from "@/assets/images";
 import contact from "@/data/contact";
 
 import { typeParams } from "../../../../layout";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = { title: "Reset Password" };
 
 export default async function Reset({ params }: { params: typeParams }) {
+	const session = await auth();
+
+	session && redirect("/");
+
 	return (
 		<LayoutPage>
 			<LayoutSection padded containerized={"responsive"}>

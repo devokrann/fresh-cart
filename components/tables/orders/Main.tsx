@@ -28,7 +28,6 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextOrders from "@/contexts/user/Orders";
 import { IconClearAll, IconEye, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import BadgeOrder from "@/components/badges/Order";
@@ -36,18 +35,15 @@ import BadgeOrder from "@/components/badges/Order";
 import classes from "./Main.module.scss";
 import Link from "next/link";
 import NotificationEmpty from "@/components/notification/Empty";
+import { typeOrder } from "@/types/order";
 
-export default function Main() {
-	const ordersContext = useContext(ContextOrders);
+export default function Main({ data }: { data: typeOrder[] }) {
+	const rows = data.map(order => {
+		let subTotal: number = 0;
 
-	if (!ordersContext) {
-		throw new Error("ChildComponent must be used within a ContextOrders.Provider");
-	}
+		order.orderedProducts.map(op => subTotal += op.variant.pricePresent);
 
-	const { orders, setOrders } = ordersContext;
-
-	const rows = orders?.map(order => {
-		const getTotal = () => order.subtotal + order.taxFee + order.serviceFee + order.shippingFee;
+		const getTotal = () => subTotal + order.taxFee + order.serviceFee + order.shippingFee;
 
 		return (
 			<TableTr key={order.id}>
@@ -63,7 +59,7 @@ export default function Main() {
 				</TableTd>
 				<TableTd>
 					<Text inherit fz={"sm"}>
-						{order.products.length}
+						{order.orderedProducts.length}
 					</Text>
 				</TableTd>
 				<TableTd>
@@ -110,31 +106,7 @@ export default function Main() {
 		</TableTr>
 	);
 
-	return !orders ? (
-		<Table
-			classNames={classes}
-			withColumnBorders={false}
-			captionSide="top"
-			style={{
-				borderRadius: "var(--mantine-radius-md)",
-				borderBottomRightRadius: "var(--mantine-radius-md)",
-				overflow: "hidden",
-			}}
-		>
-			<TableThead>
-				<TableTr>
-					<TableTh style={{ borderTopLeftRadius: "var(--mantine-radius-md)" }}>Order</TableTh>
-					<TableTh>Date</TableTh>
-					<TableTh>Items</TableTh>
-					<TableTh>Status</TableTh>
-					<TableTh>Amount</TableTh>
-					<TableTh style={{ borderTopRightRadius: "var(--mantine-radius-md)" }} />
-				</TableTr>
-			</TableThead>
-
-			<TableTbody>{skeletons}</TableTbody>
-		</Table>
-	) : orders.length > 0 ? (
+	return data.length > 0 ? (
 		<Table
 			classNames={classes}
 			withColumnBorders={false}

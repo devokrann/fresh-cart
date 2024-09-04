@@ -1,6 +1,5 @@
 "use client";
 
-import stores from "@/data/stores";
 import { Autocomplete } from "@mantine/core";
 import React, { useState } from "react";
 

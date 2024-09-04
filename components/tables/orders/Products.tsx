@@ -27,7 +27,6 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextProducts from "@/contexts/Products";
 import { IconClearAll, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Products.module.scss";
@@ -39,12 +38,12 @@ import { typeCart } from "@/types/cart";
 
 export default function Products({ data }: { data: typeCart[] }) {
 	const rows = data.map(item => (
-		<TableTr key={item.product.id}>
+		<TableTr key={item.variant.id}>
 			<TableTd>
 				<Center>
 					<Image
 						src={item.variant.image}
-						alt={item.product.title}
+						alt={item.variant.product.title}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -59,11 +58,11 @@ export default function Products({ data }: { data: typeCart[] }) {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.product.title)}`}
+						href={`/shop/products/${link.linkify(item.variant.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
-							{item.product.title}
+							{item.variant.product.title}
 						</Title>
 					</Anchor>
 

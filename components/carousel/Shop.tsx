@@ -7,18 +7,10 @@ import CardProductShopGrid from "../card/product/shop/Grid";
 import { Carousel, CarouselSlide } from "@mantine/carousel";
 
 import classes from "./Shop.module.scss";
-import ContextProducts from "@/contexts/Products";
 import { Skeleton } from "@mantine/core";
+import { typeProduct } from "@/types/product";
 
-export default function Shop() {
-	const productsContext = useContext(ContextProducts);
-
-	if (!productsContext) {
-		throw new Error("ChildComponent must be used within a ContextProducts.Provider");
-	}
-
-	const { products, setProducts } = productsContext;
-
+export default function Shop({ data }: { data: typeProduct[] }) {
 	const skeletons = [
 		{
 			id: "1",
@@ -55,17 +47,11 @@ export default function Shop() {
 			classNames={classes}
 			loop
 		>
-			{!products
-				? skeletons.map(s => (
-						<CarouselSlide key={s.id} pb={64} px={"xs"}>
-							{s.element}
-						</CarouselSlide>
-				  ))
-				: products.map(product => (
-						<CarouselSlide key={product.title} pb={64} px={"xs"}>
-							<CardProductShopGrid data={product} />
-						</CarouselSlide>
-				  ))}
+			{data.map(product => (
+				<CarouselSlide key={product.title} pb={64} px={"xs"}>
+					<CardProductShopGrid data={product} />
+				</CarouselSlide>
+			))}
 		</Carousel>
 	);
 }

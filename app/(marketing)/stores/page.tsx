@@ -11,11 +11,13 @@ import CardStore from "@/components/card/Store";
 
 import classes from "./Stores.module.scss";
 import images from "@/assets/images";
-import stores from "@/data/stores";
+import getStores from "@/handlers/database/getStores";
 
 export const metadata: Metadata = { title: "Stores" };
 
 export default async function Stores() {
+	const stores = await getStores();
+
 	return (
 		<LayoutPage>
 			<LayoutSection containerized={"responsive"} margined={48}>
@@ -47,7 +49,7 @@ export default async function Stores() {
 			<LayoutSection containerized={"responsive"} margined>
 				<Grid>
 					{stores.map(store => (
-						<GridCol key={store.title} span={{ base: 12, sm: 6, md: 4 }}>
+						<GridCol key={store.id} span={{ base: 12, sm: 6, md: 4 }}>
 							<CardStore data={store} />
 						</GridCol>
 					))}

@@ -29,7 +29,7 @@ import {
 	Title,
 } from "@mantine/core";
 
-import ContextCart from "@/contexts/user/Cart";
+import ContextCart from "@/contexts/Cart";
 import InputNumberProduct from "../inputs/number/Product";
 import NotificationEmpty from "../notification/Empty";
 
@@ -67,17 +67,20 @@ export default function Cart() {
 	};
 
 	const rows = cart?.map(item => (
-		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
+		<TableTr
+			key={item.compoundId}
+			bg={selectedRows.includes(item.compoundId) ? "var(--mantine-color-gray-light)" : undefined}
+		>
 			<TableTd w={widths.checkBox}>
 				<Stack align="end">
 					<Checkbox
 						aria-label="Select row"
-						checked={selectedRows.includes(item.id)}
+						checked={selectedRows.includes(item.compoundId)}
 						onChange={event =>
 							setSelectedRows(
 								event.currentTarget.checked
-									? [...selectedRows, item.id]
-									: selectedRows.filter(position => position !== item.id)
+									? [...selectedRows, item.compoundId]
+									: selectedRows.filter(position => position !== item.compoundId)
 							)
 						}
 					/>
@@ -138,7 +141,7 @@ export default function Cart() {
 						size={32}
 						color="red.6"
 						variant="subtle"
-						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.compoundId))}
 					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
@@ -322,7 +325,7 @@ export default function Cart() {
 							variant="subtle"
 							color="gray"
 							leftSection={<IconSelect size={16} stroke={2} />}
-							onClick={() => setSelectedRows(cart.map(i => i.id))}
+							onClick={() => setSelectedRows(cart.map(i => i.compoundId))}
 							size="xs"
 						>
 							Select All ({selectedRows.length})
@@ -332,7 +335,13 @@ export default function Cart() {
 					<OperatorCart
 						operation={{
 							type: "remove",
-							items: selectedRows.map(r => cart.find(p => p.id == r)).filter(p => p != undefined),
+							items: selectedRows
+								.map(r => {
+									const item = cart.find(p => p.compoundId == r);
+
+									return { product: item?.product!, variant: item?.variant! };
+								})
+								.filter(p => p != undefined),
 						}}
 					>
 						<Button
