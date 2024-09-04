@@ -108,7 +108,7 @@ export default function Variant({ data }: { data: typeProduct }) {
 				<OperatorCart
 					operation={{
 						type: "add",
-						items: [variantControlled ? variantControlled : variant],
+						items: [{ product: data, variant: variantControlled ? variantControlled : variant }],
 						quantity: valueNumber as number,
 					}}
 				>
@@ -120,7 +120,7 @@ export default function Variant({ data }: { data: typeProduct }) {
 				<OperatorWishlist
 					operation={{
 						type: "add",
-						items: [variantControlled ? variantControlled : variant],
+						items: [{ product: data, variant: variantControlled ? variantControlled : variant }],
 					}}
 				>
 					<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>

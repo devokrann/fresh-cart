@@ -62,17 +62,20 @@ export default function Wishlist() {
 	};
 
 	const rows = wishlist?.map(item => (
-		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
+		<TableTr
+			key={item.compoundId}
+			bg={selectedRows.includes(item.compoundId) ? "var(--mantine-color-gray-light)" : undefined}
+		>
 			<TableTd w={widths.checkBox}>
 				<Stack align="end">
 					<Checkbox
 						aria-label="Select row"
-						checked={selectedRows.includes(item.id)}
+						checked={selectedRows.includes(item.compoundId)}
 						onChange={event =>
 							setSelectedRows(
 								event.currentTarget.checked
-									? [...selectedRows, item.id]
-									: selectedRows.filter(position => position !== item.id)
+									? [...selectedRows, item.compoundId]
+									: selectedRows.filter(position => position !== item.compoundId)
 							)
 						}
 					/>
@@ -82,7 +85,7 @@ export default function Wishlist() {
 				<Center>
 					<Image
 						src={item.variant.image}
-						alt={item.variant.product.title}
+						alt={item.product.title}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -97,11 +100,11 @@ export default function Wishlist() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.variant.product.title)}`}
+						href={`/shop/products/${link.linkify(item.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
-							{item.variant.product.title}
+							{item.product.title}
 						</Title>
 					</Anchor>
 
@@ -125,12 +128,18 @@ export default function Wishlist() {
 				)}
 			</TableTd>
 			<TableTd w={widths.cart}>
-				<OperatorWishlist operation={{ type: "transfer", items: [item.variant] }}>
-					<OperatorCart operation={{ type: "add", items: [item.variant] }}>
+				<OperatorWishlist
+					operation={{ type: "transfer", items: [{ product: item.product, variant: item.variant }] }}
+				>
+					<OperatorCart
+						operation={{ type: "add", items: [{ product: item.product, variant: item.variant }] }}
+					>
 						<Button
 							variant="outline"
 							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
-							onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+							onClick={() =>
+								setSelectedRows(selectedRows.filter(position => position !== item.compoundId))
+							}
 							size="xs"
 						>
 							Add to Cart
@@ -139,12 +148,14 @@ export default function Wishlist() {
 				</OperatorWishlist>
 			</TableTd>
 			<TableTd w={widths.remove}>
-				<OperatorWishlist operation={{ type: "remove", items: [item.variant] }}>
+				<OperatorWishlist
+					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
+				>
 					<ActionIcon
 						size={32}
 						color="red.6"
 						variant="subtle"
-						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.compoundId))}
 					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
@@ -264,7 +275,7 @@ export default function Wishlist() {
 							variant="subtle"
 							color="gray"
 							leftSection={<IconSelect size={16} stroke={2} />}
-							onClick={() => setSelectedRows(wishlist.map(i => i.id))}
+							onClick={() => setSelectedRows(wishlist.map(i => i.compoundId))}
 							size="xs"
 						>
 							Select All ({selectedRows.length})
@@ -276,7 +287,11 @@ export default function Wishlist() {
 							operation={{
 								type: "remove",
 								items: selectedRows
-									.map(r => wishlist.find(p => p.id == r)?.variant)
+									.map(r => {
+										const item = wishlist.find(p => p.compoundId == r);
+
+										return { product: item?.product!, variant: item?.variant! };
+									})
 									.filter(p => p != undefined),
 							}}
 						>
@@ -295,7 +310,11 @@ export default function Wishlist() {
 							operation={{
 								type: "transfer",
 								items: selectedRows
-									.map(r => wishlist.find(p => p.id == r)?.variant)
+									.map(r => {
+										const item = wishlist.find(p => p.compoundId == r);
+
+										return { product: item?.product!, variant: item?.variant! };
+									})
 									.filter(p => p != undefined),
 							}}
 						>
@@ -303,7 +322,11 @@ export default function Wishlist() {
 								operation={{
 									type: "add",
 									items: selectedRows
-										.map(r => wishlist.find(p => p.id == r)?.variant)
+										.map(r => {
+											const item = wishlist.find(p => p.compoundId == r);
+
+											return { product: item?.product!, variant: item?.variant! };
+										})
 										.filter(p => p != undefined),
 								}}
 							>

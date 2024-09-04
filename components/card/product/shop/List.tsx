@@ -155,7 +155,7 @@ export default function List({ data }: { data: typeProduct }) {
 								<OperatorWishlist
 									operation={{
 										type: "add",
-										items: [defaultProductVariant],
+										items: [{ product: data, variant: defaultProductVariant }],
 									}}
 								>
 									<Tooltip label={"Add to Wishlist"} withArrow fz={"sm"}>
@@ -168,7 +168,7 @@ export default function List({ data }: { data: typeProduct }) {
 								<OperatorCart
 									operation={{
 										type: "add",
-										items: [defaultProductVariant],
+										items: [{ product: data, variant: defaultProductVariant }],
 									}}
 								>
 									<Tooltip label={"Add to Cart"} withArrow fz={"sm"}>

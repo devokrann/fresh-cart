@@ -67,17 +67,20 @@ export default function Cart() {
 	};
 
 	const rows = cart?.map(item => (
-		<TableTr key={item.id} bg={selectedRows.includes(item.id) ? "var(--mantine-color-gray-light)" : undefined}>
+		<TableTr
+			key={item.compoundId}
+			bg={selectedRows.includes(item.compoundId) ? "var(--mantine-color-gray-light)" : undefined}
+		>
 			<TableTd w={widths.checkBox}>
 				<Stack align="end">
 					<Checkbox
 						aria-label="Select row"
-						checked={selectedRows.includes(item.id)}
+						checked={selectedRows.includes(item.compoundId)}
 						onChange={event =>
 							setSelectedRows(
 								event.currentTarget.checked
-									? [...selectedRows, item.id]
-									: selectedRows.filter(position => position !== item.id)
+									? [...selectedRows, item.compoundId]
+									: selectedRows.filter(position => position !== item.compoundId)
 							)
 						}
 					/>
@@ -87,7 +90,7 @@ export default function Cart() {
 				<Center>
 					<Image
 						src={item.variant.image}
-						alt={item.variant.product.title}
+						alt={item.product.title}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -102,11 +105,11 @@ export default function Cart() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.variant.product.title)}`}
+						href={`/shop/products/${link.linkify(item.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
-							{item.variant.product.title}
+							{item.product.title}
 						</Title>
 					</Anchor>
 
@@ -133,12 +136,12 @@ export default function Cart() {
 				)}
 			</TableTd>
 			<TableTd w={widths.remove}>
-				<OperatorCart operation={{ type: "remove", items: [item.variant] }}>
+				<OperatorCart operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}>
 					<ActionIcon
 						size={32}
 						color="red.6"
 						variant="subtle"
-						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.id))}
+						onClick={() => setSelectedRows(selectedRows.filter(position => position !== item.compoundId))}
 					>
 						<IconTrash size={24} stroke={2} />
 					</ActionIcon>
@@ -322,7 +325,7 @@ export default function Cart() {
 							variant="subtle"
 							color="gray"
 							leftSection={<IconSelect size={16} stroke={2} />}
-							onClick={() => setSelectedRows(cart.map(i => i.id))}
+							onClick={() => setSelectedRows(cart.map(i => i.compoundId))}
 							size="xs"
 						>
 							Select All ({selectedRows.length})
@@ -333,7 +336,11 @@ export default function Cart() {
 						operation={{
 							type: "remove",
 							items: selectedRows
-								.map(r => cart.find(p => p.id == r)?.variant)
+								.map(r => {
+									const item = cart.find(p => p.compoundId == r);
+
+									return { product: item?.product!, variant: item?.variant! };
+								})
 								.filter(p => p != undefined),
 						}}
 					>

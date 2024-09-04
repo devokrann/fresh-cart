@@ -61,7 +61,7 @@ export default function Cart({ data }: { data: typeCart }) {
 					<Stack>
 						<Image
 							src={data.variant.image}
-							alt={data.variant.title}
+							alt={data.product.title}
 							w={"100%"}
 							radius={"md"}
 							component={NextImage}

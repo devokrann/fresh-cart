@@ -14,7 +14,7 @@ export default function Product({ data }: { data: typeCart }) {
 
 	return (
 		<Group justify="center" gap={0}>
-			<OperatorCart operation={{ type: "decrease", items: [data.variant] }}>
+			<OperatorCart operation={{ type: "decrease", items: [{ product: data.product, variant: data.variant }] }}>
 				<ActionIcon
 					variant="outline"
 					color="var(--mantine-color-default-border)"
@@ -50,7 +50,7 @@ export default function Product({ data }: { data: typeCart }) {
 				}}
 			/>
 
-			<OperatorCart operation={{ type: "increase", items: [data.variant] }}>
+			<OperatorCart operation={{ type: "increase", items: [{ product: data.product, variant: data.variant }] }}>
 				<ActionIcon
 					variant="outline"
 					color="var(--mantine-color-default-border)"

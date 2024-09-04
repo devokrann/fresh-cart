@@ -142,24 +142,26 @@ export default function Avatar() {
 					{session.status == "loading" ? (
 						<Skeleton height={8} radius="xl" />
 					) : (
-						<Stack gap={"xs"}>
-							{session.data?.user.name && (
-								<Text fz={"sm"} lh={1} ta={"center"}>
-									{session.data?.user.name}
+						session.data && (
+							<Stack gap={"xs"}>
+								{session.data?.user.name && (
+									<Text fz={"sm"} lh={1} ta={"center"}>
+										{session.data?.user.name}
+									</Text>
+								)}
+								<Text fz={"xs"} lh={1} ta={"center"}>
+									({session.data?.user.email})
 								</Text>
-							)}
-							<Text fz={"xs"} lh={1} ta={"center"}>
-								({session.data?.user.email})
-							</Text>
 
-							{/* <Text fz={"xs"} lh={1} ta={"center"}>
+								{/* <Text fz={"xs"} lh={1} ta={"center"}>
 								({session.data?.expires})
 							</Text> */}
-						</Stack>
+							</Stack>
+						)
 					)}
 				</Stack>
 
-				<MenuDivider />
+				{session.data && <MenuDivider />}
 
 				<MenuLabel>Activity</MenuLabel>
 				{menuItems.activity.map(item => (

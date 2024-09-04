@@ -76,7 +76,7 @@ export default function Cart() {
 						>
 							{cart.map(item => (
 								<Box
-									key={compoundId.getCompoundId(item)}
+									key={item.compoundId}
 									style={{
 										borderTop:
 											cart.indexOf(item) > 0
@@ -122,7 +122,7 @@ export default function Cart() {
 							>
 								View Cart
 							</Button>
-							<Button component={Link} href={"/shop/checkout"}>
+							<Button onClick={close} component={Link} href={"/shop/checkout"}>
 								Checkout
 							</Button>
 						</Group>
