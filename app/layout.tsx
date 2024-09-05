@@ -46,7 +46,7 @@ export default async function App({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	// obtain sessioin
+	// obtain session
 	const session = await auth();
 
 	return (
