@@ -8,7 +8,7 @@ import { Anchor, Divider, Group, Stack, Text, Title, Image } from "@mantine/core
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 import classes from "./Blog.module.scss";
 import { IconBrandFacebook, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
@@ -19,7 +19,7 @@ import getPosts from "@/handlers/database/getPosts";
 export default async function Post({ params }: { params: typeParams }) {
 	const posts = await getPosts();
 
-	const data = posts.find(p => link.linkify(p.title) == params.blogId);
+	const data = posts.find(p => linkify(p.title) == params.blogId);
 
 	const elementQuote = (
 		<Stack gap={"xl"} my={"xl"} ta={"center"}>
@@ -64,7 +64,7 @@ export default async function Post({ params }: { params: typeParams }) {
 						<Anchor
 							underline="never"
 							component={Link}
-							href={data?.category ? `#/blog/category/${link.linkify(data.category.id)}` : "#"}
+							href={data?.category ? `#/blog/category/${linkify(data.category.id)}` : "#"}
 						>
 							<Text className={classes.category} fw={500}>
 								{data?.category.title}

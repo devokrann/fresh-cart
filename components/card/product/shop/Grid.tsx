@@ -33,15 +33,11 @@ import {
 
 import ModalProduct from "../../../modal/Product";
 
-import link from "@/handlers/parsers/string/link";
-import getFraction from "@/handlers/fraction";
+import { linkify } from "@/handlers/parsers/string";
 
 import classes from "./Grid.module.scss";
 
 import { typeProduct } from "@/types/product";
-import { typeVariant } from "@/types/variant";
-
-import { notifications } from "@mantine/notifications";
 
 import OperatorCart from "@/components/operators/Cart";
 import OperatorWishlist from "@/components/operators/Wishlist";
@@ -131,7 +127,7 @@ export default function Grid({ data }: { data: typeProduct }) {
 						<Anchor
 							underline="never"
 							component={Link}
-							href={`/shop/products/${link.linkify(data.title)}`}
+							href={`/shop/products/${linkify(data.title)}`}
 							className={classes.link}
 						>
 							<Title order={3} fz={"md"} fw={"bold"}>

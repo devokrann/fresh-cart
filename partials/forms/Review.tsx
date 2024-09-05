@@ -8,10 +8,9 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import text from "@/handlers/validators/form/special/text";
-import email from "@/handlers/validators/form/special/email";
-import phone from "@/handlers/validators/form/special/phone";
-import capitalize from "@/handlers/parsers/string/capitalize";
+import text from "@/libraries/validators/special/text";
+import email from "@/libraries/validators/special/email";
+import { capitalizeWord } from "@/handlers/parsers/string";
 
 import { typeFormRating } from "@/types/form";
 
@@ -36,8 +35,8 @@ export default function Review() {
 
 	const parse = (rawData: typeFormRating) => {
 		return {
-			fname: capitalize.word(rawData.fname.trim()),
-			lname: capitalize.word(rawData.lname.trim()),
+			fname: capitalizeWord(rawData.fname.trim()),
+			lname: capitalizeWord(rawData.lname.trim()),
 			rating: rawData.rating,
 			review: rawData.review.trim(),
 		};

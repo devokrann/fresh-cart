@@ -7,7 +7,7 @@ import { Button, Flex, Group, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import ProviderAuthSignIn from "@/providers/auth/signIn";
+import ProviderAuthSignIn from "@/components/auth/signIn";
 
 import { IconArrowRight } from "@tabler/icons-react";
 import { auth } from "@/auth";

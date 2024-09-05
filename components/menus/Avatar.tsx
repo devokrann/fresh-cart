@@ -35,7 +35,7 @@ import {
 
 import classes from "./Avatar.module.scss";
 
-import initialize from "@/handlers/parsers/string/initialize";
+import {initialize} from '@/handlers/parsers/string'
 
 import { useSession } from "next-auth/react";
 

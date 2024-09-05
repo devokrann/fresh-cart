@@ -29,12 +29,11 @@ import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import CarouselShop from "@/components/carousel/Shop";
 
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 import TabsProduct from "@/components/tabs/product/Images";
 import SelectorVariant from "@/components/selector/Variant";
 
 import { typeParams } from "./layout";
-import getFraction from "@/handlers/fraction";
 import { typeProduct } from "@/types/product";
 
 import TabsReview from "@/components/tabs/product/Review";
@@ -43,7 +42,7 @@ import getProducts from "@/handlers/database/getProducts";
 export default async function Shop({ params }: { params: typeParams }) {
 	const products = await getProducts();
 
-	const data: typeProduct | undefined = products?.find(p => link.linkify(p.title) == params.product);
+	const data: typeProduct | undefined = products?.find(p => linkify(p.title) == params.product);
 
 	const variant = data?.variants[0];
 

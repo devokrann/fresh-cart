@@ -12,7 +12,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 
 import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
-import email from "@/handlers/validators/form/special/email";
+import email from "@/libraries/validators/special/email";
 
 interface typeAccountDelete {
 	password: string;

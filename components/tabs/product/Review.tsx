@@ -35,7 +35,7 @@ import FormReview from "@/partials/forms/Review";
 
 import { typeProduct } from "@/types/product";
 import reviews from "@/data/reviews";
-import getFraction from "@/handlers/fraction";
+import { getFraction } from "@/utilities/fraction";
 
 export default function Review({ data }: { data: typeProduct }) {
 	const details = [

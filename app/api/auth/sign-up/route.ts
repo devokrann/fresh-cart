@@ -1,7 +1,7 @@
 import { createOtp } from "@/controllers/otp/signUp";
 import { createUser } from "@/controllers/user/signUp";
-import { verifyEmail } from "@/handlers/email/signUp";
-import otp from "@/handlers/generators/otp";
+import { verifyEmail } from "@/libraries/email/signUp";
+import { generateOtp } from "@/libraries/generators/otp";
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 				passwordHash && (await createUser({ email, password: passwordHash }));
 
 				// create otp
-				const otpValue = otp();
+				const otpValue = generateOtp();
 				// create otp hash
 				const otpHash = await hasher.create(otpValue.toString());
 				// create otp record

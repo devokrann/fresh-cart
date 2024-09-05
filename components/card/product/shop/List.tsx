@@ -35,8 +35,7 @@ import {
 
 import ModalProduct from "../../../modal/Product";
 
-import link from "@/handlers/parsers/string/link";
-import getFraction from "@/handlers/fraction";
+import { linkify } from "@/handlers/parsers/string";
 
 import classes from "./List.module.scss";
 
@@ -106,7 +105,7 @@ export default function List({ data }: { data: typeProduct }) {
 								<Anchor
 									underline="never"
 									component={Link}
-									href={`/shop/products/${link.linkify(data.title)}`}
+									href={`/shop/products/${linkify(data.title)}`}
 									className={classes.link}
 								>
 									<Title order={3} fz={"md"} fw={"bold"}>

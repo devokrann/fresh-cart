@@ -5,8 +5,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { IconHeartMinus, IconHeartPlus, IconShoppingCartPlus } from "@tabler/icons-react";
 import { Box, Text } from "@mantine/core";
-import array from "@/utilities/array";
-import compoundId from "@/handlers/parsers/string/compoundId";
+import { elementIsPresentInArray } from "@/utilities/array";
+import { joinIds } from "@/handlers/parsers/string";
 import ContextWishlist from "@/contexts/Wishlist";
 import { typeProductVariant } from "@/types/productVariant";
 
@@ -33,26 +33,20 @@ export default function Wishlist({
 
 	const addToWishlist = (set: typeProductVariant[]) => {
 		const itemsToIgnore = wishlist
-			? set.filter(item =>
-					array.elementIsPresent(compoundId.getCompoundId(item.product.id, item.variant.id), wishlist)
-			  )
+			? set.filter(item => elementIsPresentInArray(joinIds(item.product.id, item.variant.id), wishlist))
 			: [];
 
 		if (itemsToIgnore.length != set.length) {
 			// Filter out all items already included
-			const compoundIdsToIgnore = itemsToIgnore.map(item =>
-				compoundId.getCompoundId(item.product.id, item.variant.id)
-			);
+			const compoundIdsToIgnore = itemsToIgnore.map(item => joinIds(item.product.id, item.variant.id));
 
 			wishlist &&
 				setWishlist(
 					wishlist.concat(
 						set
 							.map(s => {
-								if (
-									!compoundIdsToIgnore.includes(compoundId.getCompoundId(s.product.id, s.variant.id))
-								) {
-									return { ...s, compoundId: compoundId.getCompoundId(s.product.id, s.variant.id) };
+								if (!compoundIdsToIgnore.includes(joinIds(s.product.id, s.variant.id))) {
+									return { ...s, compoundId: joinIds(s.product.id, s.variant.id) };
 								} else {
 									return undefined;
 								}
@@ -62,9 +56,7 @@ export default function Wishlist({
 				);
 
 			notifications.show({
-				id: `wishlist-add-${set
-					.map(item => compoundId.getCompoundId(item.product.id, item.variant.id))
-					.join("-")}`,
+				id: `wishlist-add-${set.map(item => joinIds(item.product.id, item.variant.id)).join("-")}`,
 				icon: <IconHeartPlus size={16} stroke={1.5} />,
 				title: `Added to Wishlist`,
 				message: (
@@ -96,22 +88,18 @@ export default function Wishlist({
 
 	const removeFromWishlist = (set: typeProductVariant[]) => {
 		const itemsToRemove = wishlist
-			? set.filter(item =>
-					array.elementIsPresent(compoundId.getCompoundId(item.product.id, item.variant.id), wishlist)
-			  )
+			? set.filter(item => elementIsPresentInArray(joinIds(item.product.id, item.variant.id), wishlist))
 			: [];
 
 		if (itemsToRemove.length > 0) {
 			// Update the wishlist by filtering out all items in one go
-			const compoundIdsToRemove = itemsToRemove.map(item =>
-				compoundId.getCompoundId(item.product.id, item.variant.id)
-			);
+			const compoundIdsToRemove = itemsToRemove.map(item => joinIds(item.product.id, item.variant.id));
 			wishlist && setWishlist(wishlist.filter(p => !compoundIdsToRemove.includes(p.compoundId)));
 
 			operation.type != "transfer" &&
 				notifications.show({
 					id: `wishlist-remove-${itemsToRemove
-						.map(item => compoundId.getCompoundId(item.product.id, item.variant.id))
+						.map(item => joinIds(item.product.id, item.variant.id))
 						.join("-")}`,
 					icon: <IconHeartMinus size={16} stroke={1.5} />,
 					title: `Removed From Wishlist`,

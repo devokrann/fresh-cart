@@ -34,11 +34,11 @@ import { IconClearAll, IconMoodEmpty, IconSelect, IconShoppingCartPlus, IconTras
 import classes from "./Wishlist.module.scss";
 import Link from "next/link";
 import NotificationEmpty from "../notification/Empty";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 import OperatorCart from "@/components/operators/Cart";
 import OperatorWishlist from "@/components/operators/Wishlist";
-import variant from "@/handlers/variant";
+import { getUnits } from "@/utilities/variant";
 
 export default function Wishlist() {
 	const wishlistContext = useContext(ContextWishlist);
@@ -100,7 +100,7 @@ export default function Wishlist() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.product?.title!)}`}
+						href={`/shop/products/${linkify(item.product?.title!)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
@@ -109,7 +109,7 @@ export default function Wishlist() {
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant?.unitValue} {variant.getUnit(item.variant!)}
+						{item.variant?.unitValue} {getUnits(item.variant!)}
 					</Text>
 				</Stack>
 			</TableTd>

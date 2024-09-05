@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import PartialHeroHome from "@/partials/heros/Home";
 import PartialHeroRoute from "@/partials/heros/Route";
 
-import crumbify from "@/handlers/parsers/string/crumbify";
+import { crumbify } from "@/handlers/parsers/string";
 
 import classes from "./Main.module.scss";
 

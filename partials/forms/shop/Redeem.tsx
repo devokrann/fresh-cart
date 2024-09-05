@@ -10,8 +10,7 @@ import { notifications } from "@mantine/notifications";
 
 import { IconX } from "@tabler/icons-react";
 
-import email from "@/handlers/validators/form/special/email";
-import converter from "@/utilities/converter";
+import email from "@/libraries/validators/special/email";
 
 interface typeRedeem {
 	code: string;

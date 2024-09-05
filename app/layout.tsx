@@ -29,8 +29,8 @@ import contact from "@/data/contact";
 
 import { SessionProvider } from "next-auth/react";
 
-import ProviderContextUserCart from "@/providers/context/Cart";
-import ProviderContextUserWishlist from "@/providers/context/Wishlist";
+import ProviderContextUserCart from "@/providers/Cart";
+import ProviderContextUserWishlist from "@/providers/Wishlist";
 
 import { auth } from "@/auth";
 

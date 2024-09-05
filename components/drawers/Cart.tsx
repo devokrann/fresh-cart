@@ -26,8 +26,7 @@ import classes from "./Cart.module.scss";
 
 import ContextCart from "@/contexts/Cart";
 import Link from "next/link";
-import compoundId from "@/handlers/parsers/string/compoundId";
-import total from "@/handlers/total";
+import { getTotal } from "@/utilities/total";
 
 export default function Cart() {
 	const cartContext = useContext(ContextCart);
@@ -105,7 +104,7 @@ export default function Cart() {
 									<NumberFormatter
 										prefix="$ "
 										suffix=".00"
-										value={total.getTotal(cart)}
+										value={getTotal(cart)}
 										thousandSeparator
 									/>
 								</Text>

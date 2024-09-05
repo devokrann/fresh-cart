@@ -5,7 +5,6 @@ import { Badge, Button, Card, CardSection, Group, Stack, Text, Title } from "@ma
 import classes from "./Main.module.scss";
 
 import { typeAddress } from "@/types/address";
-import capitalize from "@/handlers/parsers/string/capitalize";
 
 import ModalAddress from "@/components/modal/Address";
 

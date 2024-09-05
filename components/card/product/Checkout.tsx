@@ -39,18 +39,12 @@ import {
 	IconTrash,
 } from "@tabler/icons-react";
 
-import ModalProduct from "../../modal/Product";
-
-import link from "@/handlers/parsers/string/link";
-import getFraction from "@/handlers/fraction";
+import { linkify } from "@/handlers/parsers/string";
 
 import classes from "./Checkout.module.scss";
 
-import InputNumberProduct from "@/components/inputs/number/Product";
-
-import { notifications } from "@mantine/notifications";
 import { typeCart } from "@/types/cart";
-import variant from "@/handlers/variant";
+import { getUnits } from "@/utilities/variant";
 
 export default function Checkout({ data }: { data: typeCart }) {
 	return (
@@ -76,7 +70,7 @@ export default function Checkout({ data }: { data: typeCart }) {
 						<Anchor
 							underline="never"
 							component={Link}
-							href={`/shop/products/${link.linkify(data.product.title)}`}
+							href={`/shop/products/${linkify(data.product.title)}`}
 							className={classes.link}
 						>
 							<Title order={3} fz={"sm"} fw={"bold"} lh={1}>
@@ -85,7 +79,7 @@ export default function Checkout({ data }: { data: typeCart }) {
 						</Anchor>
 
 						<Text inherit fz={"sm"}>
-							{data.variant.unitValue} {variant.getUnit(data.variant)}
+							{data.variant.unitValue} {getUnits(data.variant)}
 						</Text>
 					</Stack>
 				</GridCol>

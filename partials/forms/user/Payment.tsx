@@ -32,13 +32,12 @@ import { MonthPickerInput } from "@mantine/dates";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import text from "@/handlers/validators/form/special/text";
-import email from "@/handlers/validators/form/special/email";
-import phone from "@/handlers/validators/form/special/phone";
-import capitalize from "@/handlers/parsers/string/capitalize";
+import text from "@/libraries/validators/special/text";
+import email from "@/libraries/validators/special/email";
+import { capitalizeWord } from "@/handlers/parsers/string";
 
-import { typePaymentMethods } from "@/types/payment";
-import image from "@/handlers/getters/image";
+import { typePaymentMethod } from "@/types/payment";
+import { getPaymentCardImage } from "@/utilities/image";
 
 export default function Payment({ modal }: { modal?: boolean }) {
 	const [submitted, setSubmitted] = useState(false);
@@ -68,10 +67,10 @@ export default function Payment({ modal }: { modal?: boolean }) {
 		},
 	});
 
-	const parse = (rawData: typePaymentMethods) => {
+	const parse = (rawData: typePaymentMethod) => {
 		return {
-			title: capitalize.word(rawData.title.trim()),
-			name: capitalize.word(rawData.name.trim()),
+			title: capitalizeWord(rawData.title.trim()),
+			name: capitalizeWord(rawData.name.trim()),
 			number: rawData.type == "paypal express" ? "" : rawData.number,
 			email: rawData.type == "paypal express" ? rawData.email?.trim().toLowerCase() : "",
 			expiry: rawData.type == "paypal express" ? "" : rawData.expiry?.trim(),
@@ -80,7 +79,7 @@ export default function Payment({ modal }: { modal?: boolean }) {
 		};
 	};
 
-	const handleSubmit = async (formValues: typePaymentMethods) => {
+	const handleSubmit = async (formValues: typePaymentMethod) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
@@ -202,7 +201,7 @@ export default function Payment({ modal }: { modal?: boolean }) {
 									label={
 										<Stack justify="center">
 											<Image
-												src={image.getPaymentCardImage(type)}
+												src={getPaymentCardImage(type)}
 												alt={type}
 												radius={"md"}
 												component={NextImage}
