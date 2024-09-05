@@ -105,6 +105,6 @@ export default function Products({ data }: { data: typeCart[] }) {
 			<TableTbody>{rows}</TableTbody>
 		</Table>
 	) : (
-		<NotificationEmpty label="wishlist" />
+		<NotificationEmpty label="Your wishlist is empty" />
 	);
 }

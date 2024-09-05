@@ -358,6 +358,6 @@ export default function Cart() {
 			</TableCaption>
 		</Table>
 	) : (
-		<NotificationEmpty label="cart" />
+		<NotificationEmpty label="Your cart is empty" />
 	);
 }

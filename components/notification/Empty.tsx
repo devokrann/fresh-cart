@@ -9,7 +9,7 @@ export default function Empty({ label }: { label: string }) {
 				<IconMoodEmpty size={40} stroke={1} />
 
 				<Text fz={"sm"} ta={"center"}>
-					Your {label} is empty.
+					{label}
 				</Text>
 			</Stack>
 		</Center>

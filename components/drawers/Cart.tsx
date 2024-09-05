@@ -92,7 +92,7 @@ export default function Cart() {
 							))}
 						</Stack>
 					) : (
-						<NotificationEmpty label="cart" />
+						<NotificationEmpty label="Your cart is empty" />
 					)}
 
 					<Stack gap={"xs"} px={"md"}>

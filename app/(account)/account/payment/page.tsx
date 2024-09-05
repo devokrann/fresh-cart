@@ -3,7 +3,7 @@ import React from "react";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import { Metadata } from "next";
-import { Divider, Grid, GridCol, Group, Stack, Text, Title } from "@mantine/core";
+import { Center, Divider, Grid, GridCol, Group, Stack, Text, Title } from "@mantine/core";
 import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardPaymentMain from "@/components/card/payment/Main";
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
@@ -11,6 +11,7 @@ import FormUserPayment from "@/partials/forms/user/Payment";
 import getPaymentMethods from "@/handlers/database/getPaymentMethods";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import NotificationEmpty from "@/components/notification/Empty";
 
 export const metadata: Metadata = { title: "Payment" };
 
@@ -38,11 +39,19 @@ export default async function Payment() {
 
 					<GridCol span={12}>
 						<Grid>
-							{paymentMethods?.map(method => (
-								<GridCol key={method.id} span={{ base: 12, md: 6, lg: 4 }}>
-									<CardPaymentMain data={method} />
+							{paymentMethods.length > 0 ? (
+								paymentMethods?.map(method => (
+									<GridCol key={method.id} span={{ base: 12, md: 6, lg: 4 }}>
+										<CardPaymentMain data={method} />
+									</GridCol>
+								))
+							) : (
+								<GridCol span={12}>
+									<Center>
+										<NotificationEmpty label="No payment methods" />
+									</Center>
 								</GridCol>
-							))}
+							)}
 						</Grid>
 					</GridCol>
 
