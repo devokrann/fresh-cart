@@ -19,7 +19,7 @@ export default async function Payment() {
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
-	const paymentMethods = session?.user.id ? await getPaymentMethods() : null;
+	const paymentMethods = await getPaymentMethods();
 
 	return (
 		<LayoutPage>
