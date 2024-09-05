@@ -33,17 +33,17 @@ import ContextCart from "@/contexts/Cart";
 import InputNumberProduct from "../inputs/number/Product";
 import NotificationEmpty from "../notification/Empty";
 
-import total from "@/handlers/total";
-
 import OperatorCart from "@/components/operators/Cart";
 
 import { IconClearAll, IconGift, IconSelect, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
 
 import classes from "./Cart.module.scss";
 import Link from "next/link";
-import link from "@/handlers/parsers/string/link";
-import variant from "@/handlers/variant";
+import { linkify } from "@/handlers/parsers/string";
+import { getUnits } from "@/utilities/variant";
 import { typeCart } from "@/types/cart";
+
+import { getTotal } from "@/utilities/total";
 
 export default function Cart() {
 	const cartContext = useContext(ContextCart);
@@ -105,7 +105,7 @@ export default function Cart() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.product.title)}`}
+						href={`/shop/products/${linkify(item.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
@@ -114,7 +114,7 @@ export default function Cart() {
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant.unitValue} {variant.getUnit(item.variant)}
+						{item.variant.unitValue} {getUnits(item.variant)}
 					</Text>
 				</Stack>
 			</TableTd>
@@ -193,10 +193,10 @@ export default function Cart() {
 
 	const mininumDiscountPrice = 300;
 
-	const [value, setValue] = useState(cart ? total.getTotal(cart) : 0);
+	const [value, setValue] = useState(cart ? getTotal(cart) : 0);
 
 	useEffect(() => {
-		setValue(cart ? total.getTotal(cart) : 0);
+		setValue(cart ? getTotal(cart) : 0);
 	}, [cart]);
 
 	return !cart ? (
@@ -261,7 +261,7 @@ export default function Cart() {
 
 			<TableCaption>
 				<Stack p={"xs"} ta={"start"}>
-					{total.getTotal(cart) > mininumDiscountPrice ? (
+					{getTotal(cart) > mininumDiscountPrice ? (
 						<Text inherit c={"light-dark(var(--mantine-color-gray-6),var(--mantine-color-text))"}>
 							You&apos;ve spent more than{" "}
 							<Text component="span" inherit fw={"bold"}>
@@ -277,7 +277,7 @@ export default function Cart() {
 						<Text inherit c={"light-dark(var(--mantine-color-gray-6),var(--mantine-color-text))"}>
 							Spend{" "}
 							<Text component="span" inherit fw={"bold"}>
-								${mininumDiscountPrice - total.getTotal(cart)}
+								${mininumDiscountPrice - getTotal(cart)}
 							</Text>{" "}
 							more to get{" "}
 							<Text component="span" inherit fw={"bold"}>

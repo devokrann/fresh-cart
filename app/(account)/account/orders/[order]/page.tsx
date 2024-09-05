@@ -27,14 +27,12 @@ import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import CarouselShop from "@/components/carousel/Shop";
 
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
-import link from "@/handlers/parsers/string/link";
 import TabsProduct from "@/components/tabs/product/Images";
 
 import CardShopCheckout from "@/components/card/shop/Checkout";
 import CardAddressOrder from "@/components/card/address/Order";
 
 import { typeParams } from "./layout";
-import getFraction from "@/handlers/fraction";
 import TableOrdersProducts from "@/components/tables/orders/Products";
 
 import TabsReview from "@/components/tabs/product/Review";

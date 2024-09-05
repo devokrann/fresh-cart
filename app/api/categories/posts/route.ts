@@ -1,4 +1,3 @@
-import addPostCategories from "@/handlers/database/create/postCategories";
 import prisma from "@/services/prisma";
 
 export async function GET(req: Request) {

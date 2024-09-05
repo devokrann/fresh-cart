@@ -4,8 +4,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { notifications } from "@mantine/notifications";
 import { IconShoppingCartMinus, IconShoppingCartPlus, IconShoppingCartX } from "@tabler/icons-react";
 import { Box, Text } from "@mantine/core";
-import array from "@/utilities/array";
-import compoundId from "@/handlers/parsers/string/compoundId";
+import { elementIsPresentInArray } from "@/utilities/array";
+import { joinIds } from "@/handlers/parsers/string";
 import ContextCart from "@/contexts/Cart";
 import { typeProductVariant } from "@/types/productVariant";
 
@@ -33,27 +33,21 @@ export default function Cart({
 
 	const addToCart = (set: typeProductVariant[]) => {
 		const itemsToIgnore = cart
-			? set.filter(item =>
-					array.elementIsPresent(compoundId.getCompoundId(item.product.id, item.variant.id), cart)
-			  )
+			? set.filter(item => elementIsPresentInArray(joinIds(item.product.id, item.variant.id), cart))
 			: [];
 
 		if (itemsToIgnore.length != set.length) {
 			// Filter out all items already included
-			const compoundIdsToIgnore = itemsToIgnore.map(item =>
-				compoundId.getCompoundId(item.product.id, item.variant.id)
-			);
+			const compoundIdsToIgnore = itemsToIgnore.map(item => joinIds(item.product.id, item.variant.id));
 
 			cart &&
 				setCart(
 					cart.concat(
 						set
 							.map(s => {
-								if (
-									!compoundIdsToIgnore?.includes(compoundId.getCompoundId(s.product.id, s.variant.id))
-								) {
+								if (!compoundIdsToIgnore?.includes(joinIds(s.product.id, s.variant.id))) {
 									return {
-										compoundId: compoundId.getCompoundId(s.product.id, s.variant.id),
+										compoundId: joinIds(s.product.id, s.variant.id),
 										quantity: set.length > 1 ? 1 : operation.quantity ? operation.quantity : 1,
 										...s,
 									};
@@ -66,7 +60,7 @@ export default function Cart({
 				);
 
 			notifications.show({
-				id: `cart-add-${set.map(item => compoundId.getCompoundId(item.product.id, item.variant.id)).join("-")}`,
+				id: `cart-add-${set.map(item => joinIds(item.product.id, item.variant.id)).join("-")}`,
 				icon: <IconShoppingCartPlus size={16} stroke={1.5} />,
 				title: `Added to Cart`,
 				message: (
@@ -96,22 +90,16 @@ export default function Cart({
 
 	const removeFromCart = (set: typeProductVariant[]) => {
 		const itemsToRemove = cart
-			? set.filter(item =>
-					array.elementIsPresent(compoundId.getCompoundId(item.product.id, item.variant.id), cart)
-			  )
+			? set.filter(item => elementIsPresentInArray(joinIds(item.product.id, item.variant.id), cart))
 			: [];
 
 		if (itemsToRemove.length > 0) {
 			// Update the cart by filtering out all items in one go
-			const compoundIdsToRemove = itemsToRemove.map(item =>
-				compoundId.getCompoundId(item.product.id, item.variant.id)
-			);
+			const compoundIdsToRemove = itemsToRemove.map(item => joinIds(item.product.id, item.variant.id));
 			cart && setCart(cart.filter(p => !compoundIdsToRemove.includes(p.compoundId)));
 
 			notifications.show({
-				id: `cart-remove-${itemsToRemove
-					.map(item => compoundId.getCompoundId(item.product.id, item.variant.id))
-					.join("-")}`,
+				id: `cart-remove-${itemsToRemove.map(item => joinIds(item.product.id, item.variant.id)).join("-")}`,
 				icon: <IconShoppingCartMinus size={16} stroke={1.5} />,
 				title: `Removed From Cart`,
 				message: (
@@ -166,13 +154,9 @@ export default function Cart({
 			operation.type == "add" && addToCart(operation.items);
 			operation.type == "remove" && removeFromCart(operation.items);
 			operation.type == "decrease" &&
-				updateQuantity.decrease(
-					compoundId.getCompoundId(operation.items[0].product.id, operation.items[0].variant.id)
-				);
+				updateQuantity.decrease(joinIds(operation.items[0].product.id, operation.items[0].variant.id));
 			operation.type == "increase" &&
-				updateQuantity.increase(
-					compoundId.getCompoundId(operation.items[0].product.id, operation.items[0].variant.id)
-				);
+				updateQuantity.increase(joinIds(operation.items[0].product.id, operation.items[0].variant.id));
 		}
 
 		operation.unmount && setMounted(false);

@@ -38,7 +38,7 @@ import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from
 
 import ModalPayment from "../modal/Payment";
 import ModalAddress from "../modal/Address";
-import image from "@/handlers/getters/image";
+import { getPaymentCardImage } from "@/utilities/image";
 import { typeAddress } from "@/types/address";
 import { typePaymentMethod } from "@/types/payment";
 
@@ -243,7 +243,7 @@ export default function Checkout({
 												<Group justify="start">
 													<Stack h={64} justify="center">
 														<Image
-															src={image.getPaymentCardImage(method.type)}
+															src={getPaymentCardImage(method.type)}
 															alt={method.title}
 															radius={"md"}
 															component={NextImage}

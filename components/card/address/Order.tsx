@@ -5,7 +5,7 @@ import { Card, CardSection, Stack, Text, Title } from "@mantine/core";
 import classes from "./Order.module.scss";
 
 import { typeAddress } from "@/types/address";
-import capitalize from "@/handlers/parsers/string/capitalize";
+import {capitalizeWord} from "@/handlers/parsers/string";
 
 export default function Order({ data }: { data: typeAddress }) {
 	return (
@@ -13,7 +13,7 @@ export default function Order({ data }: { data: typeAddress }) {
 			<Stack>
 				<CardSection className={classes.header}>
 					<Title order={3} fz={"md"}>
-						{capitalize.word(data.type)} Address
+						{capitalizeWord(data.type)} Address
 					</Title>
 				</CardSection>
 

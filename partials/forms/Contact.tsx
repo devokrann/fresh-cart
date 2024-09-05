@@ -8,10 +8,10 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import text from "@/handlers/validators/form/special/text";
-import email from "@/handlers/validators/form/special/email";
-import phone from "@/handlers/validators/form/special/phone";
-import capitalize from "@/handlers/parsers/string/capitalize";
+import text from "@/libraries/validators/special/text";
+import email from "@/libraries/validators/special/email";
+import phone from "@/libraries/validators/special/phone";
+import { capitalizeWord, capitalizeWords } from "@/handlers/parsers/string";
 
 import { typeFormContact } from "@/types/form";
 
@@ -40,11 +40,11 @@ export default function Contact() {
 
 	const parse = (rawData: typeFormContact) => {
 		return {
-			fname: capitalize.word(rawData.fname.trim()),
-			lname: capitalize.word(rawData.lname.trim()),
+			fname: capitalizeWord(rawData.fname.trim()),
+			lname: capitalizeWord(rawData.lname.trim()),
 			email: rawData.email.trim().toLowerCase(),
 			phone: rawData.phone?.trim() ? (rawData.phone.trim().length > 0 ? rawData.phone : null) : null,
-			subject: capitalize.words(rawData.subject.trim()),
+			subject: capitalizeWords(rawData.subject.trim()),
 			message: rawData.message.trim(),
 		};
 	};

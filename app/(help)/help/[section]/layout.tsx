@@ -6,7 +6,7 @@ import LayoutBody from "@/layouts/Body";
 
 import contact from "@/data/contact";
 import help from "@/data/help";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 export interface typeParams {
 	section: string;
@@ -14,7 +14,7 @@ export interface typeParams {
 }
 
 export const generateMetadata = ({ params }: { params: typeParams }): Metadata => {
-	const section = help.links.find(l => link.linkify(l.title) == params.section)?.title;
+	const section = help.links.find(l => linkify(l.title) == params.section)?.title;
 
 	return {
 		title: {

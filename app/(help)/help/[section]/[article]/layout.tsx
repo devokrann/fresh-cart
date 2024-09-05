@@ -6,15 +6,15 @@ import LayoutBody from "@/layouts/Body";
 import AsideHelp from "@/partials/asides/Help";
 import SectionHelp from "@/partials/sections/Help";
 
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 import help from "@/data/help";
 
 import { typeParams } from "../layout";
 
 export const generateMetadata = ({ params }: { params: typeParams }): Metadata => {
-	const section = help.links.find(l => link.linkify(l.title) == params.section);
-	const article = section?.desc.find(a => link.linkify(a) == params.article);
+	const section = help.links.find(l => linkify(l.title) == params.section);
+	const article = section?.desc.find(a => linkify(a) == params.article);
 
 	return { title: article };
 };

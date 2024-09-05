@@ -25,7 +25,7 @@ import { IconEye, IconHeart, IconShoppingCart, IconX } from "@tabler/icons-react
 import TabsProduct from "../tabs/product/Images";
 import SelectorVariant from "@/components/selector/Variant";
 
-import getFraction from "@/handlers/fraction";
+import { getFraction } from "@/utilities/fraction";
 
 import { typeProduct } from "@/types/product";
 import { typeVariant } from "@/types/variant";

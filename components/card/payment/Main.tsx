@@ -7,9 +7,7 @@ import { Badge, Button, Image, Card, CardSection, Group, Stack, Text, Title, Pap
 import classes from "./Main.module.scss";
 
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
-import capitalize from "@/handlers/parsers/string/capitalize";
-import images from "@/assets/images";
-import image from "@/handlers/getters/image";
+import { getPaymentCardImage } from "@/utilities/image";
 
 export default function Main({ data }: { data: typePaymentMethod }) {
 	return (
@@ -30,7 +28,7 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 								<Paper bg={"light-dark(transparent, var(--mantine-color-white))"} px={"md"}>
 									<Stack h={64} justify="center">
 										<Image
-											src={image.getPaymentCardImage(data.type)}
+											src={getPaymentCardImage(data.type)}
 											alt={data.title}
 											radius={"md"}
 											component={NextImage}

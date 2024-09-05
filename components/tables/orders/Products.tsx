@@ -32,8 +32,8 @@ import { IconClearAll, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } f
 import classes from "./Products.module.scss";
 import Link from "next/link";
 import NotificationEmpty from "@/components/notification/Empty";
-import link from "@/handlers/parsers/string/link";
-import variant from "@/handlers/variant";
+import { linkify } from "@/handlers/parsers/string";
+import { getUnits } from "@/utilities/variant";
 import { typeCart } from "@/types/cart";
 
 export default function Products({ data }: { data: typeCart[] }) {
@@ -58,7 +58,7 @@ export default function Products({ data }: { data: typeCart[] }) {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.variant.product.title)}`}
+						href={`/shop/products/${linkify(item.variant.product.title)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
@@ -67,7 +67,7 @@ export default function Products({ data }: { data: typeCart[] }) {
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant.unitValue} {variant.getUnit(item.variant)}
+						{item.variant.unitValue} {getUnits(item.variant)}
 					</Text>
 				</Stack>
 			</TableTd>

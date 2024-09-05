@@ -2,7 +2,7 @@ import React from "react";
 
 import LayoutBody from "@/layouts/Body";
 import { Metadata } from "next";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 import getProducts from "@/handlers/database/getProducts";
 
 export interface typeParams {
@@ -12,7 +12,7 @@ export interface typeParams {
 export const generateMetadata = async ({ params }: { params: typeParams }): Promise<Metadata> => {
 	const products = await getProducts();
 
-	return { title: products.find(p => link.linkify(p.title) == params.product)?.title };
+	return { title: products.find(p => linkify(p.title) == params.product)?.title };
 };
 
 export default function ProductDetails({

@@ -9,10 +9,10 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 
 import { useSession } from "next-auth/react";
-import text from "@/handlers/validators/form/special/text";
-import email from "@/handlers/validators/form/special/email";
-import capitalize from "@/handlers/parsers/string/capitalize";
-import phone from "@/handlers/validators/form/special/phone";
+import text from "@/libraries/validators/special/text";
+import email from "@/libraries/validators/special/email";
+import { capitalizeWords } from "@/handlers/parsers/string";
+import phone from "@/libraries/validators/special/phone";
 
 interface typeProfileDetails {
 	name?: string | null;
@@ -41,7 +41,7 @@ export default function Details() {
 
 	const parse = (rawData: typeProfileDetails) => {
 		return {
-			name: rawData.name && capitalize.words(rawData.name),
+			name: rawData.name && capitalizeWords(rawData.name),
 			email: rawData.email && rawData.email.trim().toLowerCase(),
 			phone: rawData.phone?.trim() ? (rawData.phone.trim().length > 0 ? rawData.phone : null) : null,
 		};

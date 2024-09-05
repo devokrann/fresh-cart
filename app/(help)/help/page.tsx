@@ -42,7 +42,7 @@ import classes from "./Contact.module.scss";
 import help from "@/data/help";
 import Link from "next/link";
 import faqs from "@/data/faqs";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 export const metadata: Metadata = { title: "Help" };
 
@@ -74,7 +74,7 @@ export default async function Help() {
 												<ListItem key={subitem}>
 													<Anchor
 														component={Link}
-														href={`/help/${link.linkify(item.title)}/${link.linkify(
+														href={`/help/${linkify(item.title)}/${linkify(
 															subitem
 														)}`}
 														inherit
@@ -92,7 +92,7 @@ export default async function Help() {
 										variant="transparent"
 										rightSection={<IconChevronRight size={16} stroke={1.5} />}
 										component={Link}
-										href={`/help/${link.linkify(item.title)}`}
+										href={`/help/${linkify(item.title)}`}
 										color="gray"
 										px={0}
 									>

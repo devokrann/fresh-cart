@@ -1,4 +1,3 @@
-import addProductCategories from "@/handlers/database/create/productCategories";
 import prisma from "@/services/prisma";
 
 export async function GET(req: Request) {

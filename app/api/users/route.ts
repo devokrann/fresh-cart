@@ -1,5 +1,4 @@
 import prisma from "@/services/prisma";
-import addUsers from "@/handlers/database/create/users";
 
 export async function GET(req: Request) {
 	try {

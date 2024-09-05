@@ -10,7 +10,7 @@ import { IconArrowRight } from "@tabler/icons-react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import ProviderAuthSignOut from "@/providers/auth/signOut";
+import ProviderAuthSignOut from "@/components/auth/signOut";
 
 import { auth } from "@/auth";
 
