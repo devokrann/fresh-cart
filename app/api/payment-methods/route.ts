@@ -1,16 +1,17 @@
 import { auth } from "@/auth";
 import prisma from "@/services/prisma";
+import { cookies } from "next/headers";
 
 export async function GET(req: Request) {
 	try {
 		const session = await auth();
 
-		// const user = await prisma.user.findUnique({
-		// 	where: { id: session?.user.id! },
-		// 	include: { paymentMethods: true },
-		// });
+		const user = await prisma.user.findUnique({
+			where: { id: session?.user.id! },
+			include: { paymentMethods: true },
+		});
 
-		return Response.json(session);
+		return Response.json(user?.paymentMethods);
 	} catch (error) {
 		console.error("x-> Error getting payment methods:", error);
 		return Response.error();
