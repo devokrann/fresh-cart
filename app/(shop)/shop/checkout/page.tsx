@@ -56,7 +56,7 @@ export default async function Checkout() {
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	const addresses = await getAddresses(session?.user.id!);
-	const paymentMethods = await getPaymentMethods(session?.user.id!);
+	const paymentMethods = await getPaymentMethods();
 
 	return (
 		<LayoutPage>

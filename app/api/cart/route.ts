@@ -20,10 +20,12 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
 	try {
-		const { userId, cart } = await req.json();
+		const session = await auth();
+
+		const cart = await req.json();
 
 		const databaseCart = await prisma.user.findUnique({
-			where: { id: userId },
+			where: { id: session?.user.id },
 			include: { cart: { include: { variant: true, product: true } } },
 		});
 
@@ -40,7 +42,7 @@ export async function POST(req: Request) {
 				itemsToRemove.map(
 					async i =>
 						await prisma.cart.delete({
-							where: { userId_compoundId: { compoundId: i.compoundId, userId } },
+							where: { userId_compoundId: { compoundId: i.compoundId, userId: session?.user.id! } },
 							include: { product: true, variant: true },
 						})
 				)
@@ -59,7 +61,7 @@ export async function POST(req: Request) {
 
 			// add filtrate to database
 			const result = await prisma.user.update({
-				where: { id: userId },
+				where: { id: session?.user.id! },
 				data: {
 					cart: {
 						createMany: {
