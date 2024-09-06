@@ -9,6 +9,9 @@ import classes from "./Main.module.scss";
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
 import { getPaymentCardImage } from "@/utilities/image";
 
+import ModalPaymentDelete from "@/components/modal/payment/Delete";
+import ModalPaymentEdit from "@/components/modal/payment/Edit";
+
 export default function Main({ data }: { data: typePaymentMethod }) {
 	return (
 		<Card className={classes.card} withBorder>
@@ -89,12 +92,17 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 					)}
 
 					<Group gap={"xs"}>
-						<Button variant="subtle" color="gray" size="xs">
-							Edit
-						</Button>
-						<Button variant="subtle" color="red.6" size="xs">
-							Delete
-						</Button>
+						<ModalPaymentEdit mode="edit" data={data}>
+							<Button variant="subtle" color="gray" size="xs">
+								Edit
+							</Button>
+						</ModalPaymentEdit>
+
+						<ModalPaymentDelete>
+							<Button variant="subtle" color="red.6" size="xs">
+								Delete
+							</Button>
+						</ModalPaymentDelete>
 					</Group>
 				</Group>
 			</Stack>
