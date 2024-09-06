@@ -7,7 +7,7 @@ import ContextUserCart from "@/contexts/Cart";
 import { typeCart } from "@/types/cart";
 import getCart from "@/handlers/database/getCart";
 
-import { ProductArrays } from "@/types/enums";
+import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
 import postCart from "@/handlers/database/postCart";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -22,7 +22,7 @@ export default function Cart({ children }: { children: React.ReactNode }) {
 	const [cart, setCart] = useState<typeCart[] | null>(null);
 	const [cartLoading, setCartLoading] = useState(true);
 
-	const updateDatabaseCart = useDebouncedCallback(async () => await postCart(session?.user.id!, cart!), 5000);
+	const updateDatabaseCart = useDebouncedCallback(async () => await postCart(cart!), 5000);
 
 	useEffect(() => {
 		const setInitialCart = async () => {
@@ -38,7 +38,7 @@ export default function Cart({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		if (inClient && !cartLoading) {
 			// Sync cart with local storage
-			window.localStorage.setItem(ProductArrays.CART, JSON.stringify(cart));
+			window.localStorage.setItem(UserData.CART, JSON.stringify(cart));
 
 			// Sync local storage cart with database (throttled)
 			session && updateDatabaseCart();
@@ -51,7 +51,7 @@ export default function Cart({ children }: { children: React.ReactNode }) {
 const handleSetCart = async (id?: string): Promise<typeCart[]> => {
 	try {
 		// Initialize from session storage
-		const savedCart = window.localStorage.getItem(ProductArrays.CART);
+		const savedCart = window.localStorage.getItem(UserData.CART);
 
 		if (!savedCart) {
 			return [];
@@ -74,7 +74,7 @@ const handleSetCart = async (id?: string): Promise<typeCart[]> => {
 			return parsedSavedCart;
 		}
 	} catch (error) {
-		console.error(`x-> Failed to parse ${ProductArrays.CART}:`, error);
+		console.error(`x-> Failed to parse ${UserData.CART}:`, error);
 		return [];
 	}
 };
