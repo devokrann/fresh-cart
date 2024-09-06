@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useContext, useEffect } from "react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
@@ -8,19 +10,25 @@ import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardPaymentMain from "@/components/card/payment/Main";
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
 import FormUserPayment from "@/partials/forms/user/Payment";
-import getPaymentMethods from "@/handlers/database/getPaymentMethods";
-import { auth } from "@/auth";
+
 import { redirect } from "next/navigation";
 import NotificationEmpty from "@/components/notification/Empty";
+import { useSession } from "next-auth/react";
 
-export const metadata: Metadata = { title: "Payment" };
+import PaymentMethods from "@/contexts/Payment";
 
-export default async function Payment() {
-	const session = await auth();
+export default function Payment() {
+	const { data: session } = useSession();
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
-	const paymentMethods = await getPaymentMethods();
+	const paymentMethodsContext = useContext(PaymentMethods);
+
+	if (!paymentMethodsContext) {
+		throw new Error("ChildComponent must be used within a ContextPaymentMethods.Provider");
+	}
+
+	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
 
 	return (
 		<LayoutPage>
@@ -39,7 +47,7 @@ export default async function Payment() {
 
 					<GridCol span={12}>
 						<Grid>
-							{paymentMethods.length > 0 ? (
+							{paymentMethods?.length! > 0 ? (
 								paymentMethods?.map(method => (
 									<GridCol key={method.id} span={{ base: 12, md: 6, lg: 4 }}>
 										<CardPaymentMain data={method} />
@@ -71,7 +79,7 @@ export default async function Payment() {
 					</GridCol>
 
 					<GridCol span={12}>
-						<FormUserPayment />
+						<FormUserPayment mode="add" />
 					</GridCol>
 				</Grid>
 			</LayoutSection>

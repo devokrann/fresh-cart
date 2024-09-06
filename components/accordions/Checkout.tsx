@@ -36,7 +36,7 @@ import CardPaymentMain from "../card/payment/Main";
 import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
-import ModalPayment from "../modal/Payment";
+import ModalPaymentEdit from "../modal/payment/Edit";
 import ModalAddress from "../modal/Address";
 import { getPaymentCardImage } from "@/utilities/image";
 import { typeAddress } from "@/types/address";
@@ -214,11 +214,11 @@ export default function Checkout({
 			panel: (
 				<Stack>
 					<Group justify="end">
-						<ModalPayment>
+						<ModalPaymentEdit mode="add">
 							<Button size="xs" variant="outline" color="gray">
 								Add a New Payment Method
 							</Button>
-						</ModalPayment>
+						</ModalPaymentEdit>
 					</Group>
 
 					<RadioGroup>

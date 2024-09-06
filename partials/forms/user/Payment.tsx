@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import NextImage from "next/image";
 
@@ -26,56 +26,67 @@ import {
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
-import InputMask from "react-input-mask";
-
-import { MonthPickerInput } from "@mantine/dates";
-
 import { IconCheck, IconX } from "@tabler/icons-react";
+
+import IMaskInput from "@/components/inputs/Imask";
 
 import text from "@/libraries/validators/special/text";
 import email from "@/libraries/validators/special/email";
-import { capitalizeWord } from "@/handlers/parsers/string";
+import { capitalizeWords } from "@/handlers/parsers/string";
 
 import { typePaymentMethod } from "@/types/payment";
 import { getPaymentCardImage } from "@/utilities/image";
 
-export default function Payment({ modal }: { modal?: boolean }) {
-	const [submitted, setSubmitted] = useState(false);
+enum typeRequest {
+	POST = "POST",
+	PUT = "PUT",
+}
 
-	const [value, setValue] = useState("mastercard");
+export default function Payment({ data, mode }: { data?: typePaymentMethod; mode: "add" | "edit" }) {
+	const [submitted, setSubmitted] = useState(false);
+	const [previousValues, setPreviousValues] = useState(data);
+
+	const cardTypes = ["mastercard", "visa", "discover", "american express", "paypal express"];
 
 	const form = useForm({
 		initialValues: {
-			title: "",
-			name: "",
-			number: "",
-			cvc: "",
-			email: "",
-			expiry: "",
-			type: "",
-			default: false,
+			title: previousValues?.title ? previousValues.title : "",
+			name: previousValues?.name ? previousValues.name : "",
+			number: previousValues?.number ? previousValues.number : "",
+			cvc: previousValues?.cvc ? previousValues.cvc : "",
+			email: previousValues?.email ? previousValues.email : "",
+			expiry: previousValues?.expiry ? previousValues.expiry : "",
+			type: previousValues?.type ? previousValues.type : cardTypes[0],
+			default: previousValues?.default ? previousValues.default : false,
 		},
 
 		validate: {
 			title: value => text(value, 2, 24),
 			name: value => text(value, 2, 24),
-			number: value => text(value, 2, 48),
-			cvc: value => text(value, 2, 48),
-			email: value => value.trim().length > 0 && email(value),
-			expiry: value => text(value, 2, 48),
-			type: value => text(value, 2, 24),
+			number: (value, values) => values.type != "paypal express" && (value?.trim().length! < 19 ? true : null),
+			cvc: (value, values) => values.type != "paypal express" && (value?.trim().length! < 3 ? true : null),
+			email: (value, values) => values.type == "paypal express" && email(value!),
+			expiry: (value, values) => values.type != "paypal express" && (value?.trim().length! < 5 ? true : null),
 		},
 	});
 
 	const parse = (rawData: typePaymentMethod) => {
 		return {
-			title: capitalizeWord(rawData.title.trim()),
-			name: capitalizeWord(rawData.name.trim()),
-			number: rawData.type == "paypal express" ? "" : rawData.number,
-			email: rawData.type == "paypal express" ? rawData.email?.trim().toLowerCase() : "",
-			expiry: rawData.type == "paypal express" ? "" : rawData.expiry?.trim(),
+			title: rawData.title.trim(),
+			name: capitalizeWords(rawData.name.trim()),
+			number: rawData.number && rawData.type !== "paypal express" ? rawData.number : null,
+			cvc: rawData.cvc && rawData.type !== "paypal express" ? rawData.cvc : null,
+			email: rawData.email && rawData.type === "paypal express" ? rawData.email.trim().toLowerCase() : null,
+			expiry: rawData.expiry && rawData.type !== "paypal express" ? rawData.expiry : null,
 			type: rawData.type,
 			default: rawData.default,
+			mode,
+			formerValues: previousValues
+				? {
+						name: previousValues.name,
+						title: previousValues.title,
+				  }
+				: null,
 		};
 	};
 
@@ -84,114 +95,72 @@ export default function Payment({ modal }: { modal?: boolean }) {
 			try {
 				setSubmitted(true);
 
-				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
-					method: "POST",
-					body: JSON.stringify(parse(formValues)),
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-					},
-				});
-
-				const result = await response.json();
-
-				if (!result) {
+				if ((mode == "edit" && !form.isDirty()) || previousValues == form.values) {
 					notifications.show({
-						id: "form-contact-failed-no-response",
+						id: "payment-method-failed-no-changes",
 						icon: <IconX size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Server Unavailable",
-						message: `There was no response from the server.`,
+						title: "No Changes",
+						message: `None of the fields have been modified.`,
 						variant: "failed",
 					});
 				} else {
-					notifications.show({
-						id: "form-contact-success",
-						icon: <IconCheck size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Form Submitted",
-						message: "Someone will get back to you within 24 hours",
-						variant: "success",
+					console.log(previousValues);
+
+					const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/payment-methods", {
+						method: mode == "add" ? typeRequest.POST : typeRequest.PUT,
+						body: JSON.stringify(parse(formValues)),
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "application/json",
+						},
 					});
+
+					const result = await response.json();
+
+					if (!result) {
+						notifications.show({
+							id: "payment-method-failed-no-response",
+							icon: <IconX size={16} stroke={1.5} />,
+							title: "Server Unavailable",
+							message: `There was no response from the server.`,
+							variant: "failed",
+						});
+					} else {
+						notifications.show({
+							id: "payment-method-success",
+							icon: <IconCheck size={16} stroke={1.5} />,
+							title: `Details ${mode == "add" ? "Added" : "Updated"}`,
+							message: `Your payment details have been ${mode == "add" ? "added" : "updated"}.`,
+							variant: "success",
+						});
+
+						setPreviousValues(form.values);
+					}
 				}
 			} catch (error) {
 				notifications.show({
-					id: "form-contact-failed",
+					id: "payment-method-failed",
 					icon: <IconX size={16} stroke={1.5} />,
-					autoClose: 5000,
-					title: "Submisstion Failed",
+					title: "Failed",
 					message: (error as Error).message,
 					variant: "failed",
 				});
 			} finally {
-				form.reset();
+				// form.reset();
 				setSubmitted(false);
 			}
 		}
 	};
 
-	const cardTypes = ["mastercard", "visa", "discover", "american express", "paypal express"];
-
 	return (
 		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
-			<Grid pb={"md"}>
-				<GridCol span={{ base: 12, xs: 6 }}>
-					<TextInput
-						required
-						label="Title"
-						placeholder="Card Title"
-						description="Ex. Company Mastercard, Joe's Credit Card, etc."
-						{...form.getInputProps("title")}
-					/>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 6 }}>
-					<TextInput
-						required
-						label="Name on Card"
-						description="Card Holder Name"
-						placeholder="Name on Card"
-						{...form.getInputProps("lname")}
-					/>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 6 }}>
-					<InputWrapper required label="Card Number">
-						<Input
-							placeholder="XXXX XXXX XXXX XXXX"
-							component={InputMask}
-							mask="9999 9999 9999 9999"
-							maskChar=" "
-							value={value}
-							{...form.getInputProps("number")}
-						/>
-					</InputWrapper>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 3 }}>
-					<InputWrapper required label="CVC">
-						<Input
-							placeholder="XXX"
-							component={InputMask}
-							mask="999"
-							maskChar=" "
-							value={value}
-							{...form.getInputProps("cvc")}
-						/>
-					</InputWrapper>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 3 }}>
-					<MonthPickerInput
-						required
-						label="Expiry Date"
-						placeholder="Card Expiry Date"
-						{...form.getInputProps("expiry")}
-					/>
-				</GridCol>
+			<Grid>
 				<GridCol span={{ base: 12, xs: 12 }}>
 					<RadioGroup
 						ml={{ md: "lg" }}
 						name="paymentType"
 						label="Payment Type"
-						value={value}
-						onChange={setValue}
+						{...form.getInputProps("type")}
 					>
 						<Group mt="md" gap={"xl"}>
 							{cardTypes.map(type => (
@@ -217,6 +186,73 @@ export default function Payment({ modal }: { modal?: boolean }) {
 						</Group>
 					</RadioGroup>
 				</GridCol>
+
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label="Title"
+						placeholder={`${form.values.type == "paypal express" ? "Account" : "Card"} Title`}
+						description="Ex. Company Mastercard, Joe's Credit Card, etc."
+						{...form.getInputProps("title")}
+					/>
+				</GridCol>
+
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={`Name on ${form.values.type == "paypal express" ? "Account" : "Card"}`}
+						description={`${form.values.type == "paypal express" ? "Account" : "Card"} Holder Name`}
+						placeholder={`Name on ${form.values.type == "paypal express" ? "Account" : "Card"}`}
+						{...form.getInputProps("name")}
+					/>
+				</GridCol>
+
+				<GridCol span={{ base: 12, xs: 6 }} display={form.values.type == "paypal express" ? undefined : "none"}>
+					<TextInput
+						required
+						label={`Email`}
+						description="Email linked to Account"
+						placeholder={`Account Email`}
+						{...form.getInputProps("email")}
+					/>
+				</GridCol>
+
+				<GridCol span={{ base: 12, xs: 6 }} display={form.values.type == "paypal express" ? "none" : undefined}>
+					<IMaskInput
+						required
+						label="Card Number"
+						placeholder="XXXX XXXX XXXX XXXX"
+						mask="0000-0000-0000-0000"
+						value={form.values.number!}
+						onChange={(value: string) => form.setFieldValue("number", value)}
+						error={form.errors.number}
+					/>
+				</GridCol>
+
+				<GridCol span={{ base: 12, xs: 3 }} display={form.values.type == "paypal express" ? "none" : undefined}>
+					<IMaskInput
+						required
+						label="CVC"
+						placeholder="XXX"
+						mask="000"
+						value={form.values.cvc!}
+						onChange={(value: string) => form.setFieldValue("cvc", value)}
+						error={form.errors.cvc}
+					/>
+				</GridCol>
+
+				<GridCol span={{ base: 12, xs: 3 }} display={form.values.type == "paypal express" ? "none" : undefined}>
+					<IMaskInput
+						required
+						label="Expiry Date"
+						placeholder="MM/YY"
+						mask="00/00"
+						value={form.values.expiry!}
+						onChange={(value: string) => form.setFieldValue("expiry", value)}
+						error={form.errors.expiry}
+					/>
+				</GridCol>
+
 				<GridCol span={{ base: 12 }} mt={{ md: "md" }}>
 					<Checkbox
 						label="Make default payment method"
@@ -224,6 +260,7 @@ export default function Payment({ modal }: { modal?: boolean }) {
 						{...form.getInputProps("default", { type: "checkbox" })}
 					/>
 				</GridCol>
+
 				<GridCol span={12}>
 					<Button type="submit" loading={submitted} mt={"md"}>
 						{submitted ? "Saving" : "Save Payment Method"}

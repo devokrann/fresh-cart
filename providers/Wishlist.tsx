@@ -7,7 +7,7 @@ import ContextUserWishlist from "@/contexts/Wishlist";
 import { typeWishlist } from "@/types/wishlist";
 import getWishlist from "@/handlers/database/getWishlist";
 
-import { ProductArrays } from "@/types/enums";
+import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
 
 import postWishlist from "@/handlers/database/postWishlist";
@@ -23,10 +23,7 @@ export default function Wishlist({ children }: { children: React.ReactNode }) {
 	const [wishlist, setWishlist] = useState<typeWishlist[] | null>(null);
 	const [wishlistLoading, setWishlistLoading] = useState(true);
 
-	const updateDatabaseWishlist = useDebouncedCallback(
-		async () => await postWishlist(session?.user.id!, wishlist!),
-		5000
-	);
+	const updateDatabaseWishlist = useDebouncedCallback(async () => await postWishlist(wishlist!), 5000);
 
 	useEffect(() => {
 		const setInitialWishlist = async () => {
@@ -42,7 +39,7 @@ export default function Wishlist({ children }: { children: React.ReactNode }) {
 	useEffect(() => {
 		if (inClient && !wishlistLoading) {
 			// Sync wishlist with local storage
-			window.localStorage.setItem(ProductArrays.WISHLIST, JSON.stringify(wishlist));
+			window.localStorage.setItem(UserData.WISHLIST, JSON.stringify(wishlist));
 
 			// Sync local storage wishlist with database (throttled)
 			session && updateDatabaseWishlist();
@@ -55,7 +52,7 @@ export default function Wishlist({ children }: { children: React.ReactNode }) {
 const handleSetlWishlist = async (id?: string): Promise<typeWishlist[]> => {
 	try {
 		// Initialize from local storage
-		const savedWishlist = window.localStorage.getItem(ProductArrays.WISHLIST);
+		const savedWishlist = window.localStorage.getItem(UserData.WISHLIST);
 
 		if (!savedWishlist) {
 			return [];
@@ -78,7 +75,7 @@ const handleSetlWishlist = async (id?: string): Promise<typeWishlist[]> => {
 			return parsedSavedWishlist;
 		}
 	} catch (error) {
-		console.error(`x-> Failed to get ${ProductArrays.WISHLIST}:`, error);
+		console.error(`x-> Failed to get ${UserData.WISHLIST}:`, error);
 		return [];
 	}
 };

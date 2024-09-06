@@ -1,10 +1,10 @@
 import { typeWishlist } from "@/types/wishlist";
 
-const postWishlist = async (userId: string, wishlist: typeWishlist[]): Promise<typeWishlist[]> => {
+const postWishlist = async (wishlist: typeWishlist[]): Promise<typeWishlist[]> => {
 	try {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/wishlist`, {
 			method: "POST",
-			body: JSON.stringify({ userId, wishlist }),
+			body: JSON.stringify(wishlist),
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",

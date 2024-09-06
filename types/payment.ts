@@ -6,13 +6,13 @@ export type typePaymentType = "mastercard" | "visa" | "discover" | "american exp
 export interface typePaymentMethod extends typeDatabaseFields {
 	title: string;
 	name: string;
-	number?: string;
-	cvc?: string;
-	email?: string;
-	expiry?: string;
+	number: string | null;
+	cvc: string | null;
+	email: string | null;
+	expiry: string | null;
 	type: typePaymentType | string;
 	default: boolean;
 
 	// relationships
-	user: typeUser;
+	user?: typeUser;
 }

@@ -207,6 +207,7 @@ model PaymentMethod {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
+  @@unique([userId, name, title])
   @@map("payment_methods")
 }
 
