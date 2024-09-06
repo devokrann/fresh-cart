@@ -1,10 +1,10 @@
 import { typeCart } from "@/types/cart";
 
-const postCart = async (userId: string, cart: typeCart[]): Promise<typeCart[]> => {
+const postCart = async (cart: typeCart[]): Promise<typeCart[]> => {
 	try {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cart`, {
 			method: "POST",
-			body: JSON.stringify({ userId, cart }),
+			body: JSON.stringify(cart),
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",
