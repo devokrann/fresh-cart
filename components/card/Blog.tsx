@@ -20,7 +20,7 @@ import {
 import classes from "./Blog.module.scss";
 
 import { typePost } from "@/types/post";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 import Link from "next/link";
 
 export default function Blog({
@@ -37,7 +37,7 @@ export default function Blog({
 			align={orientation == "vertical" ? undefined : "center"}
 		>
 			<GridCol span={orientation == "vertical" ? 12 : { base: 12, sm: 6, md: 8 }}>
-				<Anchor underline="never" component={Link} href={`/blog/${link.linkify(data.title)}`}>
+				<Anchor underline="never" component={Link} href={`/blog/${linkify(data.title)}`}>
 					<div className={classes.imageContainer}>
 						<Image
 							src={data.image}
@@ -60,11 +60,7 @@ export default function Blog({
 					h={"100%"}
 					px={orientation == "vertical" ? undefined : { base: 0, md: "lg" }}
 				>
-					<Anchor
-						underline="never"
-						component={Link}
-						href={`/blog/categories/${link.linkify(data.category.id)}`}
-					>
+					<Anchor underline="never" component={Link} href={`/blog/categories/${linkify(data.category.id)}`}>
 						<Text className={classes.category} fw={500}>
 							{data.category.title}
 						</Text>
@@ -72,7 +68,7 @@ export default function Blog({
 
 					<Stack gap={"sm"} justify={orientation == "vertical" ? "space-between" : undefined} h={"100%"}>
 						<Stack gap={4} align="start">
-							<Anchor underline="never" component={Link} href={`/blog/${link.linkify(data.title)}`}>
+							<Anchor underline="never" component={Link} href={`/blog/${linkify(data.title)}`}>
 								<Title
 									order={3}
 									className={classes.title}

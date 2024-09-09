@@ -7,11 +7,15 @@ import { Badge, Button, Image, Card, CardSection, Group, Stack, Text, Title, Pap
 import classes from "./Main.module.scss";
 
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
-import capitalize from "@/handlers/parsers/string/capitalize";
-import images from "@/assets/images";
-import image from "@/handlers/getters/image";
+import { getPaymentCardImage } from "@/utilities/image";
+
+import ModalPaymentDelete from "@/components/modal/payment/Delete";
+import ModalPaymentEdit from "@/components/modal/payment/Edit";
+import ModalPaymentDefault from "@/components/modal/payment/Default";
+import { hasDatePassed } from "@/handlers/parsers/string";
 
 export default function Main({ data }: { data: typePaymentMethod }) {
+	const expired = hasDatePassed(data.expiry!);
 	return (
 		<Card className={classes.card} withBorder>
 			<Stack justify="space-between" h={"100%"}>
@@ -22,15 +26,17 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 								{data.title}
 							</Title>
 
-							<Group justify="space-between">
-								<Badge color="red" size="sm">
-									expired
-								</Badge>
+							<Group align="start" justify={expired ? "space-between" : "end"}>
+								{expired && (
+									<Badge color="red" size="sm">
+										expired
+									</Badge>
+								)}
 
 								<Paper bg={"light-dark(transparent, var(--mantine-color-white))"} px={"md"}>
 									<Stack h={64} justify="center">
 										<Image
-											src={image.getPaymentCardImage(data.type)}
+											src={getPaymentCardImage(data.type)}
 											alt={data.title}
 											radius={"md"}
 											component={NextImage}
@@ -85,18 +91,25 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 							default
 						</Badge>
 					) : (
-						<Button variant="subtle" color="green.6" size="xs">
-							Set as Default
-						</Button>
+						<ModalPaymentDefault data={data}>
+							<Button variant="subtle" color="green.6" size="xs">
+								Set as Default
+							</Button>
+						</ModalPaymentDefault>
 					)}
 
 					<Group gap={"xs"}>
-						<Button variant="subtle" color="gray" size="xs">
-							Edit
-						</Button>
-						<Button variant="subtle" color="red.6" size="xs">
-							Delete
-						</Button>
+						<ModalPaymentEdit mode="edit" data={data}>
+							<Button variant="subtle" color="gray" size="xs">
+								Edit
+							</Button>
+						</ModalPaymentEdit>
+
+						<ModalPaymentDelete data={data}>
+							<Button variant="subtle" color="red.6" size="xs">
+								Delete
+							</Button>
+						</ModalPaymentDelete>
 					</Group>
 				</Group>
 			</Stack>

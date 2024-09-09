@@ -31,11 +31,11 @@ import LayoutSection from "@/layouts/Section";
 import AuthProviders from "@/partials/auth/Providers";
 import AuthHeader from "@/partials/auth/Header";
 
-import email from "@/handlers/validators/form/special/email";
-import password from "@/handlers/validators/form/special/password";
+import email from "@/libraries/validators/special/email";
+import password from "@/libraries/validators/special/password";
 
-import compare from "@/handlers/validators/form/special/compare";
-import converter from "@/utilities/converter";
+import compare from "@/libraries/validators/special/compare";
+import { millToMinSec } from "@/handlers/parsers/number";
 
 import { typeFormSignUp } from "@/types/form";
 
@@ -334,7 +334,7 @@ export default function SignUp({ userEmail }: { userEmail?: string }) {
 							form2.reset();
 						} else {
 							if (!result.otp.expired) {
-								setTime(converter.millSec(result.otp.expiry));
+								setTime(millToMinSec(result.otp.expiry));
 
 								// // test otp tte response
 								// console.log(res.otp.time);

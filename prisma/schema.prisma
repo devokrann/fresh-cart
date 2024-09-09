@@ -207,6 +207,7 @@ model PaymentMethod {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
+  @@unique([userId, name, title])
   @@map("payment_methods")
 }
 
@@ -429,7 +430,7 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
-  @@map("verification_tokens")
+  @@map("verificationtokens")
 }
 
 model Authenticator {

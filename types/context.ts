@@ -3,6 +3,7 @@ import { typeProduct } from "./product";
 import { typeCart } from "./cart";
 import { typeOrder } from "./order";
 import { typeWishlist } from "./wishlist";
+import { typePaymentMethod } from "./payment";
 
 export interface typeContextProducts {
 	products: typeProduct[] | null;
@@ -22,4 +23,9 @@ export interface typeContextOrders {
 export interface typeContextWishlist {
 	wishlist: typeWishlist[] | null;
 	setWishlist: Dispatch<SetStateAction<typeWishlist[] | null>>;
+}
+
+export interface typeContextPaymentMethod {
+	paymentMethods: typePaymentMethod[] | null;
+	setPaymentMethods: Dispatch<SetStateAction<typePaymentMethod[] | null>>;
 }

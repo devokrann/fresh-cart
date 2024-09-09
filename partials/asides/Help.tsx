@@ -26,10 +26,10 @@ import LayoutSection from "@/layouts/Section";
 import { signOut } from "next-auth/react";
 import { typeParams } from "@/app/(help)/help/[section]/layout";
 import help from "@/data/help";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 export default function Help({ params }: { params: typeParams }) {
-	const links = help.links.find(l => link.linkify(l.title) == params.section)?.desc;
+	const links = help.links.find(l => linkify(l.title) == params.section)?.desc;
 
 	return (
 		<LayoutSection pos={"sticky"} top={32}>
@@ -45,7 +45,7 @@ export default function Help({ params }: { params: typeParams }) {
 							inherit
 							c={"var(--mantine-color-text)"}
 							component={Link}
-							href={link.linkify(sublink)}
+							href={linkify(sublink)}
 						>
 							{sublink}
 						</Anchor>

@@ -1,6 +1,7 @@
-import otp from "@/handlers/generators/otp";
-import contact from "@/handlers/resend/contact";
-import code from "@/handlers/resend/email/auth/code";
+import { createOtp } from "@/controllers/otp/signUp";
+import { createUser } from "@/controllers/user/signUp";
+import { verifyEmail } from "@/libraries/email/signUp";
+import { generateOtp } from "@/libraries/generators/otp";
 import prisma from "@/services/prisma";
 import hasher from "@/utilities/hasher";
 
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
 				passwordHash && (await createUser({ email, password: passwordHash }));
 
 				// create otp
-				const otpValue = otp();
+				const otpValue = generateOtp();
 				// create otp hash
 				const otpHash = await hasher.create(otpValue.toString());
 				// create otp record
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
 					user: { exists: false },
 					otp: { value: otpValue },
 					// // send otp email and output result in response body
-					// resend: await verify(otpValue, email),
+					// resend: await verifyEmail(otpValue, email),
 				});
 			}
 		} else {
@@ -56,49 +57,3 @@ export async function POST(req: Request) {
 		return Response.error();
 	}
 }
-
-const createUser = async (fields: { name?: string; email: string; image?: string; password: string | null }) => {
-	try {
-		await prisma.user.create({
-			data: {
-				name: fields.name,
-				email: fields.email,
-				image: fields.image,
-				password: fields.password ? fields.password : null,
-				verified: fields.password ? false : true,
-			},
-		});
-	} catch (error) {
-		console.error("x-> Error creating user record:", (error as Error).message);
-		throw error;
-	}
-};
-
-const createOtp = async (fields: { email: string; otp: string }) => {
-	const expiry = new Date(Date.now() + 60 * 60 * 1000);
-
-	try {
-		await prisma.user.update({
-			where: {
-				email: fields.email,
-			},
-			data: {
-				otps: {
-					create: [{ email: fields.email, otp: fields.otp, expiresAt: expiry }],
-				},
-			},
-		});
-	} catch (error) {
-		console.error("x-> Error creating otp record:", (error as Error).message);
-		throw error;
-	}
-};
-
-const verify = async (otpValue: number, email: string) => {
-	// send otp email
-	const emailResponse = await code.signUp({ otp: otpValue.toString(), email });
-	// add to audience
-	const contactResponse = await contact.create({ email });
-
-	return { email: emailResponse, contact: contactResponse };
-};

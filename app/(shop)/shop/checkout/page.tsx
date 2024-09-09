@@ -44,7 +44,6 @@ import TemplateEmailContact from "@/templates/email/Contact";
 import contact from "@/data/contact";
 import Link from "next/link";
 import getAddresses from "@/handlers/database/getAddresses";
-import getPaymentMethods from "@/handlers/database/getPaymentMethods";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
@@ -54,9 +53,6 @@ export default async function Checkout() {
 	const session = await auth();
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
-
-	const addresses = await getAddresses(session?.user.id!);
-	const paymentMethods = await getPaymentMethods(session?.user.id!);
 
 	return (
 		<LayoutPage>
@@ -83,7 +79,7 @@ export default async function Checkout() {
 						<Grid gutter={{ md: 48 }}>
 							<GridCol span={{ md: 7, lg: 8 }}>
 								<Box pos={"sticky"} top={48}>
-									<AccordionCheckout data={{ addresses, paymentMethods }} />
+									<AccordionCheckout />
 								</Box>
 							</GridCol>
 

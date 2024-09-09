@@ -28,7 +28,7 @@ import { notifications } from "@mantine/notifications";
 import OperatorCart from "@/components/operators/Cart";
 import OperatorWishlist from "@/components/operators/Wishlist";
 
-import handlerVariant from "@/handlers/variant";
+import { getUnits } from "@/utilities/variant";
 
 export default function Variant({ data }: { data: typeProduct }) {
 	const variant = data.variants[0];
@@ -46,7 +46,7 @@ export default function Variant({ data }: { data: typeProduct }) {
 				<Group mt={"sm"}>
 					{data.variants.map(variant => (
 						<Chip radius={"md"} size="lg" key={variant.id} value={variant.unitValue}>
-							{variant.unitValue} {handlerVariant.getUnit(variant)}
+							{variant.unitValue} {getUnits(variant)}
 						</Chip>
 					))}
 				</Group>

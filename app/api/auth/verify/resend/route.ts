@@ -1,7 +1,6 @@
-import otp from "@/handlers/generators/otp";
-import code from "@/handlers/resend/email/auth/code";
+import { generateOtp } from "@/libraries/generators/otp";
+import { sendSignUpEmail } from "@/handlers/email";
 import prisma from "@/services/prisma";
-import converter from "@/utilities/converter";
 import hasher from "@/utilities/hasher";
 
 export async function POST(req: Request) {
@@ -20,7 +19,7 @@ export async function POST(req: Request) {
 
 				if (!otpRecord) {
 					// create otp record
-					const otpValue = otp();
+					const otpValue = generateOtp();
 					const otpHash = await hasher.create(otpValue.toString());
 					otpHash && (await createOtp({ email, otp: otpHash }));
 
@@ -28,7 +27,7 @@ export async function POST(req: Request) {
 						user: { exists: true, verified: false },
 						otp: { exists: false, value: otpValue },
 						// send otp email
-						resend: await code.signUp({ otp: otpValue.toString(), email }),
+						resend: await sendSignUpEmail({ otp: otpValue.toString(), email }),
 					});
 				} else {
 					const now = new Date();
@@ -46,7 +45,7 @@ export async function POST(req: Request) {
 						await prisma.otp.delete({ where: { email } });
 
 						// create new otp record
-						const otpValueNew = otp();
+						const otpValueNew = generateOtp();
 						const otpNewHash = await hasher.create(otpValueNew.toString());
 						otpNewHash && (await createOtp({ email, otp: otpNewHash }));
 
@@ -54,7 +53,7 @@ export async function POST(req: Request) {
 							user: { exists: true, verified: false },
 							otp: { exists: true, expired: true, value: otpValueNew },
 							// send new otp email
-							resend: await code.signUp({ otp: otpValueNew.toString(), email }),
+							resend: await sendSignUpEmail({ otp: otpValueNew.toString(), email }),
 						});
 					}
 				}

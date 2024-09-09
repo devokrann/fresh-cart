@@ -29,8 +29,8 @@ import contact from "@/data/contact";
 
 import { SessionProvider } from "next-auth/react";
 
-import ProviderContextUserCart from "@/providers/context/Cart";
-import ProviderContextUserWishlist from "@/providers/context/Wishlist";
+import ProviderContextUserCart from "@/providers/Cart";
+import ProviderContextUserWishlist from "@/providers/Wishlist";
 
 import { auth } from "@/auth";
 
@@ -46,7 +46,7 @@ export default async function App({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	// obtain sessioin
+	// obtain session
 	const session = await auth();
 
 	return (

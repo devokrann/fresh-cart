@@ -26,7 +26,7 @@ import SwitchTheme from "@/components/switches/Theme";
 
 import classes from "./Main.module.scss";
 import { auth } from "@/auth";
-import ProviderAuthSignIn from "@/providers/auth/signIn";
+import ProviderAuthSignIn from "@/components/auth/signIn";
 import MenuAvatar from "@/components/menus/Avatar";
 import { IconHeart, IconUser } from "@tabler/icons-react";
 import IndicatorWishlist from "@/components/indicators/Wishlist";

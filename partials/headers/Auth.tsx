@@ -24,7 +24,7 @@ import links from "@/data/links";
 
 import classes from "./Auth.module.scss";
 import { auth } from "@/auth";
-import ProviderAuthSignIn from "@/providers/auth/signIn";
+import ProviderAuthSignIn from "@/components/auth/signIn";
 import MenuAvatar from "@/components/menus/Avatar";
 import { IconHeart, IconUser } from "@tabler/icons-react";
 import Link from "next/link";

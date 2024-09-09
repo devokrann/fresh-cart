@@ -8,8 +8,8 @@ import LayoutSection from "@/layouts/Section";
 import CardBlog from "@/components/card/Blog";
 
 import { typeParams } from "../layout";
-import capitalize from "@/handlers/parsers/string/capitalize";
-import link from "@/handlers/parsers/string/link";
+import { capitalizeWord } from "@/handlers/parsers/string";
+import { linkify } from "@/handlers/parsers/string";
 import getPostCategories from "@/handlers/database/getPostCategories";
 import getPosts from "@/handlers/database/getPosts";
 
@@ -17,14 +17,14 @@ export default async function Categories({ params }: { params: typeParams }) {
 	const postCategories = await getPostCategories();
 	const posts = await getPosts();
 
-	const category = postCategories.find(c => link.linkify(c.id) == params.id);
+	const category = postCategories.find(c => linkify(c.id) == params.id);
 
 	return (
 		<LayoutPage>
 			<LayoutSection margined containerized={"responsive"}>
 				<Stack>
 					<Title order={2} fz={36} fw={900}>
-						{category && capitalize.word(category.title)}
+						{category && capitalizeWord(category.title)}
 					</Title>
 
 					<Grid gutter={"xl"}>

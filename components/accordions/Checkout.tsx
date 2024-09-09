@@ -36,17 +36,20 @@ import CardPaymentMain from "../card/payment/Main";
 import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
-import ModalPayment from "../modal/Payment";
+import ModalPaymentEdit from "../modal/payment/Edit";
 import ModalAddress from "../modal/Address";
-import image from "@/handlers/getters/image";
-import { typeAddress } from "@/types/address";
-import { typePaymentMethod } from "@/types/payment";
+import { getPaymentCardImage } from "@/utilities/image";
+import PaymentMethods from "@/contexts/Payment";
 
-export default function Checkout({
-	data,
-}: {
-	data: { addresses: typeAddress[]; paymentMethods: typePaymentMethod[] };
-}) {
+export default function Checkout() {
+	const paymentMethodsContext = useContext(PaymentMethods);
+
+	if (!paymentMethodsContext) {
+		throw new Error("ChildComponent must be used within a ContextPaymentMethods.Provider");
+	}
+
+	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
+
 	const [checked, setChecked] = useState(false);
 
 	const paymentOptions = [
@@ -214,16 +217,16 @@ export default function Checkout({
 			panel: (
 				<Stack>
 					<Group justify="end">
-						<ModalPayment>
+						<ModalPaymentEdit mode="add">
 							<Button size="xs" variant="outline" color="gray">
 								Add a New Payment Method
 							</Button>
-						</ModalPayment>
+						</ModalPaymentEdit>
 					</Group>
 
 					<RadioGroup>
 						<Grid>
-							{data.paymentMethods.map(method => (
+							{paymentMethods?.map(method => (
 								<GridCol key={method.title} span={{ base: 12, md: 6, lg: 4 }}>
 									<Radio.Card value={method.title} key={method.title} p={"md"} h={"100%"}>
 										<Group wrap="nowrap" align="flex-start" h={"100%"}>
@@ -243,7 +246,7 @@ export default function Checkout({
 												<Group justify="start">
 													<Stack h={64} justify="center">
 														<Image
-															src={image.getPaymentCardImage(method.type)}
+															src={getPaymentCardImage(method.type)}
 															alt={method.title}
 															radius={"md"}
 															component={NextImage}

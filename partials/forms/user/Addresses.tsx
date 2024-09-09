@@ -21,10 +21,10 @@ import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import text from "@/handlers/validators/form/special/text";
-import email from "@/handlers/validators/form/special/email";
-import phone from "@/handlers/validators/form/special/phone";
-import capitalize from "@/handlers/parsers/string/capitalize";
+import text from "@/libraries/validators/special/text";
+import email from "@/libraries/validators/special/email";
+import phone from "@/libraries/validators/special/phone";
+import { capitalizeWord } from "@/handlers/parsers/string";
 
 import { typeAddress } from "@/types/address";
 
@@ -116,15 +116,15 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 			billing:
 				data && data.type == "billing"
 					? {
-							title: capitalize.word(rawData.billing.title.trim()),
-							fname: capitalize.word(rawData.billing.fname.trim()),
-							lname: capitalize.word(rawData.billing.lname.trim()),
+							title: capitalizeWord(rawData.billing.title.trim()),
+							fname: capitalizeWord(rawData.billing.fname.trim()),
+							lname: capitalizeWord(rawData.billing.lname.trim()),
 							email: rawData.billing.email?.trim().toLowerCase(),
-							street: capitalize.word(rawData.billing.street.trim()),
-							city: capitalize.word(rawData.billing.city.trim()),
+							street: capitalizeWord(rawData.billing.street.trim()),
+							city: capitalizeWord(rawData.billing.city.trim()),
 							zip: rawData.billing.zip,
-							state: capitalize.word(rawData.billing.state.trim()),
-							country: capitalize.word(rawData.billing.country.trim()),
+							state: capitalizeWord(rawData.billing.state.trim()),
+							country: capitalizeWord(rawData.billing.country.trim()),
 							type: rawData.billing.type,
 							default: rawData.billing.default,
 					  }
@@ -135,14 +135,14 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 			shipping:
 				data && data.type == "shipping"
 					? {
-							title: capitalize.word(rawData.shipping.title.trim()),
-							fname: capitalize.word(rawData.shipping.fname.trim()),
-							lname: capitalize.word(rawData.shipping.lname.trim()),
-							street: capitalize.word(rawData.shipping.street.trim()),
-							city: capitalize.word(rawData.shipping.city.trim()),
+							title: capitalizeWord(rawData.shipping.title.trim()),
+							fname: capitalizeWord(rawData.shipping.fname.trim()),
+							lname: capitalizeWord(rawData.shipping.lname.trim()),
+							street: capitalizeWord(rawData.shipping.street.trim()),
+							city: capitalizeWord(rawData.shipping.city.trim()),
 							zip: rawData.shipping.zip,
-							state: capitalize.word(rawData.shipping.state.trim()),
-							country: capitalize.word(rawData.shipping.country.trim()),
+							state: capitalizeWord(rawData.shipping.state.trim()),
+							country: capitalizeWord(rawData.shipping.country.trim()),
 							phone: rawData.shipping.phone?.trim()
 								? rawData.shipping.phone.trim().length > 0
 									? rawData.shipping.phone
@@ -226,7 +226,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 		return (
 			<Grid gutter={modal ? "xs" : undefined}>
 				<GridCol span={{ base: 12 }}>
-					<Title order={3}>{capitalize.word(variant)} Address</Title>
+					<Title order={3}>{capitalizeWord(variant)} Address</Title>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput

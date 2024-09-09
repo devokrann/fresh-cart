@@ -2,48 +2,11 @@ import React from "react";
 
 import { Metadata } from "next";
 
-import {
-	Anchor,
-	Button,
-	Card,
-	Flex,
-	Grid,
-	GridCol,
-	Group,
-	List,
-	ListItem,
-	Stack,
-	Text,
-	ThemeIcon,
-	Title,
-} from "@mantine/core";
-
-import {
-	IconChevronRight,
-	IconGift,
-	IconMail,
-	IconPhone,
-	IconShoppingBag,
-	IconTruckDelivery,
-	IconTruckReturn,
-} from "@tabler/icons-react";
+import { List, ListItem, Stack, Text, Title } from "@mantine/core";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import FormContact from "@/partials/forms/Contact";
-import AccordionFaq from "@/components/accordions/Faq";
-import InputAutocompleteHelp from "@/components/inputs/autocomplete/Help";
-
-import TemplateEmailContact from "@/templates/email/Contact";
 import SectionHelp from "@/partials/sections/Help";
-
-import contact from "@/data/contact";
-
-import classes from "./Contact.module.scss";
-import help from "@/data/help";
-import Link from "next/link";
-import faqs from "@/data/faqs";
-import link from "@/handlers/parsers/string/link";
 
 export const metadata: Metadata = { title: "Terms and Conditions" };
 

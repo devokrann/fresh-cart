@@ -41,7 +41,7 @@ export default function Main({ data }: { data: typeOrder[] }) {
 	const rows = data.map(order => {
 		let subTotal: number = 0;
 
-		order.orderedProducts.map(op => subTotal += op.variant.pricePresent);
+		order.orderedProducts.map(op => (subTotal += op.variant.pricePresent));
 
 		const getTotal = () => subTotal + order.taxFee + order.serviceFee + order.shippingFee;
 
@@ -131,6 +131,6 @@ export default function Main({ data }: { data: typeOrder[] }) {
 			<TableTbody>{rows}</TableTbody>
 		</Table>
 	) : (
-		<NotificationEmpty label="order list" />
+		<NotificationEmpty label="No orders" />
 	);
 }

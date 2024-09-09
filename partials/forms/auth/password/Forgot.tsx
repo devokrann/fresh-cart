@@ -10,8 +10,8 @@ import { notifications } from "@mantine/notifications";
 
 import { IconX } from "@tabler/icons-react";
 
-import email from "@/handlers/validators/form/special/email";
-import converter from "@/utilities/converter";
+import email from "@/libraries/validators/special/email";
+import { millToMinSec } from "@/handlers/parsers/number";
 
 interface typeForgot {
 	email: string;
@@ -92,7 +92,7 @@ export default function Forgot() {
 							if (!result.user.otl.expired) {
 								if (!result.user.otl.valid) {
 									// reset time
-									setTime(converter.millSec(result.user.otl.expiry));
+									setTime(millToMinSec(result.user.otl.expiry));
 								} else {
 									setTime(undefined);
 									form.reset();

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { Anchor, Badge, Card, Grid, GridCol, Group, Image, Stack, Text, Title } from "@mantine/core";
 
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 import classes from "./Store.module.scss";
 
@@ -36,7 +36,7 @@ export default function Store({ data }: { data: typeStore }) {
 							<Anchor
 								underline="never"
 								component={Link}
-								href={`#/stores/${link.linkify(data.title)}`}
+								href={`#/stores/${linkify(data.title)}`}
 								className={classes.link}
 							>
 								<Title order={3} fz={"xl"}>

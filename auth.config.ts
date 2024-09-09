@@ -92,19 +92,6 @@ export default {
 			if (!user?.error) {
 				// create session record if doesn't exist
 
-				// await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/sign-in/session-data", {
-				// 	method: "POST",
-				// 	body: JSON.stringify({
-				// 		userId: user.id,
-				// 		sessionToken: account?.access_token,
-				// 		tokenExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-				// 	}),
-				// 	headers: {
-				// 		"Content-Type": "application/json",
-				// 		Accept: "application/json",
-				// 	},
-				// });
-
 				// Return true to allow the sign-in process to continue
 				return true;
 			} else {
@@ -130,7 +117,6 @@ export default {
 
 			if (trigger === "signIn") {
 				token.rememberMe = user.rememberMe == "true" ? true : false;
-				console.log("remember", token.rememberMe);
 			}
 
 			if (token.rememberMe == true) {
@@ -148,14 +134,14 @@ export default {
 		async session({ session, token, user, newSession, trigger }) {
 			session.user = token.user as AdapterUser & User;
 
-			// Send properties to the client, like a user id from a provider.
-			session.token = token.accessToken as string;
-			session.user.id = token.id as string;
-
 			session.rememberMe = token.rememberMe as boolean;
 
 			// Set session expiration dynamically based on token expiration
 			session.expires = new Date(token.exp! * 1000).toISOString() as Date & string;
+
+			// Send properties to the client, like a user id from a provider.
+			session.token = token.accessToken as string;
+			session.user.id = token.id as string;
 
 			return session;
 		},

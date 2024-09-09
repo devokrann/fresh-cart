@@ -34,11 +34,11 @@ import { IconClearAll, IconMoodEmpty, IconSelect, IconShoppingCartPlus, IconTras
 import classes from "./Wishlist.module.scss";
 import Link from "next/link";
 import NotificationEmpty from "../notification/Empty";
-import link from "@/handlers/parsers/string/link";
+import { linkify } from "@/handlers/parsers/string";
 
 import OperatorCart from "@/components/operators/Cart";
 import OperatorWishlist from "@/components/operators/Wishlist";
-import variant from "@/handlers/variant";
+import { getUnits } from "@/utilities/variant";
 
 export default function Wishlist() {
 	const wishlistContext = useContext(ContextWishlist);
@@ -84,8 +84,8 @@ export default function Wishlist() {
 			<TableTd w={widths.image}>
 				<Center>
 					<Image
-						src={item.variant.image}
-						alt={item.product.title}
+						src={item.variant?.image}
+						alt={item.product?.title!}
 						h={{ md: 64 }}
 						radius={"md"}
 						component={NextImage}
@@ -100,24 +100,24 @@ export default function Wishlist() {
 					<Anchor
 						underline="never"
 						component={Link}
-						href={`/shop/products/${link.linkify(item.product.title)}`}
+						href={`/shop/products/${linkify(item.product?.title!)}`}
 						className={classes.link}
 					>
 						<Title order={2} fz={"md"} fw={"bold"}>
-							{item.product.title}
+							{item.product?.title}
 						</Title>
 					</Anchor>
 
 					<Text inherit fz={"sm"}>
-						{item.variant.unitValue} {variant.getUnit(item.variant)}
+						{item.variant?.unitValue} {getUnits(item.variant!)}
 					</Text>
 				</Stack>
 			</TableTd>
 			<TableTd w={widths.price}>
-				<NumberFormatter prefix="$ " value={item.variant.pricePresent} />
+				<NumberFormatter prefix="$ " value={item.variant?.pricePresent} />
 			</TableTd>
 			<TableTd w={widths.status}>
-				{item.variant.available ? (
+				{item.variant?.available ? (
 					<Badge radius={"md"} color="green" c={"white"} size="sm">
 						In Stock
 					</Badge>
@@ -129,10 +129,10 @@ export default function Wishlist() {
 			</TableTd>
 			<TableTd w={widths.cart}>
 				<OperatorWishlist
-					operation={{ type: "transfer", items: [{ product: item.product, variant: item.variant }] }}
+					operation={{ type: "transfer", items: [{ product: item.product!, variant: item.variant! }] }}
 				>
 					<OperatorCart
-						operation={{ type: "add", items: [{ product: item.product, variant: item.variant }] }}
+						operation={{ type: "add", items: [{ product: item.product!, variant: item.variant! }] }}
 					>
 						<Button
 							variant="outline"
@@ -149,7 +149,7 @@ export default function Wishlist() {
 			</TableTd>
 			<TableTd w={widths.remove}>
 				<OperatorWishlist
-					operation={{ type: "remove", items: [{ product: item.product, variant: item.variant }] }}
+					operation={{ type: "remove", items: [{ product: item.product!, variant: item.variant! }] }}
 				>
 					<ActionIcon
 						size={32}
@@ -346,6 +346,6 @@ export default function Wishlist() {
 			</TableCaption>
 		</Table>
 	) : (
-		<NotificationEmpty label="wishlist" />
+		<NotificationEmpty label="Your wishlist is empty" />
 	);
 }

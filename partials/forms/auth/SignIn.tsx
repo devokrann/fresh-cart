@@ -26,7 +26,7 @@ import { IconX } from "@tabler/icons-react";
 
 import AuthProviders from "@/partials/auth/Providers";
 
-import email from "@/handlers/validators/form/special/email";
+import email from "@/libraries/validators/special/email";
 
 import { signIn as authSignIn } from "next-auth/react";
 
