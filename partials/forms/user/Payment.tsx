@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import NextImage from "next/image";
 
@@ -37,12 +37,17 @@ import { capitalizeWords } from "@/handlers/parsers/string";
 import { typePaymentMethod } from "@/types/payment";
 import { getPaymentCardImage } from "@/utilities/image";
 
-enum typeRequest {
-	POST = "POST",
-	PUT = "PUT",
-}
+import PaymentMethods from "@/contexts/Payment";
 
 export default function Payment({ data, mode }: { data?: typePaymentMethod; mode: "add" | "edit" }) {
+	const paymentMethodsContext = useContext(PaymentMethods);
+
+	if (!paymentMethodsContext) {
+		throw new Error("ChildComponent must be used within a ContextPaymentMethods.Provider");
+	}
+
+	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
+
 	const [submitted, setSubmitted] = useState(false);
 	const [previousValues, setPreviousValues] = useState(data);
 
@@ -104,37 +109,49 @@ export default function Payment({ data, mode }: { data?: typePaymentMethod; mode
 						variant: "failed",
 					});
 				} else {
-					console.log(previousValues);
-
-					const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/payment-methods", {
-						method: mode == "add" ? typeRequest.POST : typeRequest.PUT,
-						body: JSON.stringify(parse(formValues)),
-						headers: {
-							"Content-Type": "application/json",
-							Accept: "application/json",
-						},
+					notifications.show({
+						id: "payment-method-success",
+						icon: <IconCheck size={16} stroke={1.5} />,
+						title: `Details ${mode == "add" ? "Added" : "Updated"}`,
+						message: `Your payment details have been ${mode == "add" ? "added" : "updated"}.`,
+						variant: "success",
 					});
 
-					const result = await response.json();
+					switch (mode) {
+						case "add":
+							const newDefault = parse(formValues).default;
 
-					if (!result) {
-						notifications.show({
-							id: "payment-method-failed-no-response",
-							icon: <IconX size={16} stroke={1.5} />,
-							title: "Server Unavailable",
-							message: `There was no response from the server.`,
-							variant: "failed",
-						});
-					} else {
-						notifications.show({
-							id: "payment-method-success",
-							icon: <IconCheck size={16} stroke={1.5} />,
-							title: `Details ${mode == "add" ? "Added" : "Updated"}`,
-							message: `Your payment details have been ${mode == "add" ? "added" : "updated"}.`,
-							variant: "success",
-						});
+							const removedDefault = paymentMethods?.map(m => {
+								if (!m.default) {
+									return m;
+								} else {
+									return { ...m, default: false };
+								}
+							});
 
-						setPreviousValues(form.values);
+							if (!newDefault) {
+								setPaymentMethods([...paymentMethods!, parse(formValues)]);
+							} else {
+								setPaymentMethods([...removedDefault!, parse(formValues)]);
+							}
+							break;
+						case "edit":
+							setPreviousValues(form.values);
+
+							setPaymentMethods(
+								paymentMethods?.map(m => {
+									if (m.id == data?.id) {
+										return { ...m, ...parse(formValues) };
+									} else {
+										if (parse(formValues).default) {
+											return { ...m, default: false };
+										} else {
+											return m;
+										}
+									}
+								})!
+							);
+							break;
 					}
 				}
 			} catch (error) {
@@ -146,7 +163,7 @@ export default function Payment({ data, mode }: { data?: typePaymentMethod; mode
 					variant: "failed",
 				});
 			} finally {
-				// form.reset();
+				form.reset();
 				setSubmitted(false);
 			}
 		}

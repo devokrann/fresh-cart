@@ -5,7 +5,7 @@ import React, { useContext, useEffect } from "react";
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import { Metadata } from "next";
-import { Center, Divider, Grid, GridCol, Group, Stack, Text, Title } from "@mantine/core";
+import { Center, Divider, Grid, GridCol, Group, Skeleton, Stack, Text, Title } from "@mantine/core";
 import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardPaymentMain from "@/components/card/payment/Main";
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
@@ -30,6 +30,12 @@ export default function Payment() {
 
 	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
 
+	const skeletons = [
+		{ key: 1, element: <Skeleton h={360} /> },
+		{ key: 2, element: <Skeleton h={360} /> },
+		{ key: 3, element: <Skeleton h={360} /> },
+	];
+
 	return (
 		<LayoutPage>
 			<LayoutSection>
@@ -47,7 +53,13 @@ export default function Payment() {
 
 					<GridCol span={12}>
 						<Grid>
-							{paymentMethods?.length! > 0 ? (
+							{!paymentMethods ? (
+								skeletons.map(i => (
+									<GridCol key={i.key} span={{ md: 4 }}>
+										{i.element}
+									</GridCol>
+								))
+							) : paymentMethods.length! > 0 ? (
 								paymentMethods?.map(method => (
 									<GridCol key={method.id} span={{ base: 12, md: 6, lg: 4 }}>
 										<CardPaymentMain data={method} />

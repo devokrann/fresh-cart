@@ -38,3 +38,26 @@ export const linkify = (string: string) =>
 		.replace(/-+/g, "-");
 
 export const unlinkify = (string: string) => capitalizeWords(string.toLowerCase().replaceAll("-", " "));
+
+export const hasDatePassed = (dateString: string) => {
+	// Split the input string into month and year
+	const [month, year] = dateString.split("/").map(Number);
+
+	// Get the current date
+	const currentDate = new Date();
+	const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+	const currentYear = currentDate.getFullYear() % 100; // Get last two digits of the year
+
+	// Check if the provided year is in the past
+	if (year < currentYear) {
+		return true;
+	}
+
+	// If the year is the same, check if the month has passed
+	if (year === currentYear && month < currentMonth) {
+		return true;
+	}
+
+	// Otherwise, the date has not passed
+	return false;
+};

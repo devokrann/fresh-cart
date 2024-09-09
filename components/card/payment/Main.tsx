@@ -11,8 +11,11 @@ import { getPaymentCardImage } from "@/utilities/image";
 
 import ModalPaymentDelete from "@/components/modal/payment/Delete";
 import ModalPaymentEdit from "@/components/modal/payment/Edit";
+import ModalPaymentDefault from "@/components/modal/payment/Default";
+import { hasDatePassed } from "@/handlers/parsers/string";
 
 export default function Main({ data }: { data: typePaymentMethod }) {
+	const expired = hasDatePassed(data.expiry!);
 	return (
 		<Card className={classes.card} withBorder>
 			<Stack justify="space-between" h={"100%"}>
@@ -23,10 +26,12 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 								{data.title}
 							</Title>
 
-							<Group justify="space-between">
-								<Badge color="red" size="sm">
-									expired
-								</Badge>
+							<Group align="start" justify={expired ? "space-between" : "end"}>
+								{expired && (
+									<Badge color="red" size="sm">
+										expired
+									</Badge>
+								)}
 
 								<Paper bg={"light-dark(transparent, var(--mantine-color-white))"} px={"md"}>
 									<Stack h={64} justify="center">
@@ -86,9 +91,11 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 							default
 						</Badge>
 					) : (
-						<Button variant="subtle" color="green.6" size="xs">
-							Set as Default
-						</Button>
+						<ModalPaymentDefault data={data}>
+							<Button variant="subtle" color="green.6" size="xs">
+								Set as Default
+							</Button>
+						</ModalPaymentDefault>
 					)}
 
 					<Group gap={"xs"}>
@@ -98,7 +105,7 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 							</Button>
 						</ModalPaymentEdit>
 
-						<ModalPaymentDelete>
+						<ModalPaymentDelete data={data}>
 							<Button variant="subtle" color="red.6" size="xs">
 								Delete
 							</Button>

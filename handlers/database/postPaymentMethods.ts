@@ -3,7 +3,7 @@ import { typePaymentMethod } from "@/types/payment";
 const postPaymentMethods = async (paymentMethods: typePaymentMethod[]): Promise<typePaymentMethod[]> => {
 	try {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/payment-methods`, {
-			method: "POST",
+			method: "PUT",
 			body: JSON.stringify(paymentMethods),
 			headers: {
 				"Content-Type": "application/json",

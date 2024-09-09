@@ -22,10 +22,10 @@ export default function Payment({ children }: { children: React.ReactNode }) {
 	const [paymentMethods, setPaymentMethods] = useState<typePaymentMethod[] | null>(null);
 	const [paymentLoading, setPaymentLoading] = useState(true);
 
-	// const updateDatabasePaymentMethods = useDebouncedCallback(
-	// 	async () => await postPaymentMethods(paymentMethods!),
-	// 	5000
-	// );
+	const updateDatabasePaymentMethods = useDebouncedCallback(
+		async () => await postPaymentMethods(paymentMethods!),
+		5000
+	);
 
 	useEffect(() => {
 		const setInitialPayment = async () => {
@@ -43,8 +43,8 @@ export default function Payment({ children }: { children: React.ReactNode }) {
 			// Sync payment methods with local storage
 			window.localStorage.setItem(UserData.PAYMENT_METHODS, JSON.stringify(paymentMethods));
 
-			// // Sync local storage payment methods with database (throttled)
-			// session && updateDatabasePaymentMethods();
+			// Sync local storage payment methods with database (throttled)
+			session && updateDatabasePaymentMethods();
 		}
 	}, [paymentMethods]);
 
@@ -65,10 +65,6 @@ const handleSetPaymentMethods = async (id?: string): Promise<typePaymentMethod[]
 		} else {
 			// parse local payment methods
 			const parsedSavedPaymentMethods: typePaymentMethod[] = await JSON.parse(savedPaymentMethods);
-
-			if (parsedSavedPaymentMethods.length > 0) {
-				return parsedSavedPaymentMethods;
-			}
 
 			// check if user is signed in
 			if (id) {
