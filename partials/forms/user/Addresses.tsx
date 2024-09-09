@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
 	Box,
@@ -16,7 +16,7 @@ import {
 	Textarea,
 	Title,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { hasLength, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
@@ -24,165 +24,137 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import text from "@/libraries/validators/special/text";
 import email from "@/libraries/validators/special/email";
 import phone from "@/libraries/validators/special/phone";
-import { capitalizeWord } from "@/handlers/parsers/string";
+import { capitalizeWord, capitalizeWords } from "@/handlers/parsers/string";
+
+import ContextUserAddresses from "@/contexts/Addresses";
 
 import { typeAddress } from "@/types/address";
 
-import { typeFormAddress } from "@/types/form";
+export default function Addresses({
+	data,
+	modal,
+	mode,
+	type,
+}: {
+	data?: typeAddress;
+	modal?: boolean;
+	mode: "add" | "edit";
+	type: "billing" | "shipping" | string;
+}) {
+	const addressesContext = useContext(ContextUserAddresses);
 
-export default function Addresses({ data, modal }: { data?: typeAddress; modal?: boolean }) {
+	if (!addressesContext) {
+		throw new Error("ChildComponent must be used within a ContextAddresses.Provider");
+	}
+
+	const { addresses, setAddresses } = addressesContext;
+
 	const [submitted, setSubmitted] = useState(false);
-
-	const [checked, setChecked] = useState(false);
+	const [previousValues, setPreviousValues] = useState(data);
 
 	const form = useForm({
 		initialValues: {
-			billing:
-				data && data.type == "billing"
-					? data
-					: {
-							title: "",
-							fname: "",
-							lname: "",
-							email: "",
-							street: "",
-							city: "",
-							zip: "",
-							state: "",
-							country: "",
-							phone: "",
-							type: "billing",
-							default: false,
-					  },
-
-			different: false,
-
-			shipping:
-				data && data.type == "shipping"
-					? data
-					: {
-							title: "",
-							fname: "",
-							lname: "",
-							email: "",
-							street: "",
-							city: "",
-							zip: "",
-							state: "",
-							country: "",
-							phone: "",
-							type: "shipping",
-							default: false,
-					  },
+			title: previousValues ? previousValues.title : "",
+			fname: previousValues ? previousValues.fname : "",
+			lname: previousValues ? previousValues.lname : "",
+			street: previousValues ? previousValues.street : "",
+			city: previousValues ? previousValues.city : "",
+			zip: previousValues ? previousValues.zip : "",
+			state: previousValues ? previousValues.state : "",
+			country: previousValues ? previousValues.country : "",
+			email: previousValues ? previousValues.email : "",
+			phone: previousValues ? previousValues.phone : "",
+			type: previousValues ? previousValues.type : type,
+			default: false,
 		},
 
 		validate: {
-			billing:
-				!data || data.type == "billing"
-					? {
-							title: value => text(value, 2, 48),
-							fname: value => text(value, 2, 24),
-							lname: value => text(value, 2, 24),
-							email: value => email(value ? value : ""),
-							street: value => text(value, 2, 48),
-							city: value => text(value, 2, 24),
-							zip: value => text(value, 2, 24),
-							state: value => text(value, 2, 24),
-							country: value => text(value, 2, 48),
-							phone: value => value && value.trim().length > 0 && phone(value),
-					  }
-					: undefined,
-
-			shipping:
-				(!data && checked) || data?.type == "shipping"
-					? {
-							title: value => text(value, 2, 48),
-							fname: value => text(value, 2, 24),
-							lname: value => text(value, 2, 24),
-							email: value => value && value.trim().length > 0 && email(value),
-							street: value => text(value, 2, 48),
-							city: value => text(value, 2, 24),
-							zip: value => text(value, 2, 24),
-							state: value => text(value, 2, 24),
-							country: value => text(value, 2, 48),
-							phone: value => value && value.trim().length > 0 && phone(value),
-					  }
-					: undefined,
+			title: hasLength({ min: 2, max: 48 }, "Between 2 and 48 characters"),
+			fname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			lname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			street: hasLength({ min: 2, max: 48 }, "Between 2 and 48 characters"),
+			city: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			zip: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			state: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			country: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			email: value => type == "billing" && value && email(value),
+			phone: value => (value && value.trim().length > 0 ? phone(value) : null),
 		},
 	});
 
-	const parse = (rawData: typeFormAddress) => {
+	const parse = (rawData: typeAddress) => {
 		return {
-			billing:
-				data && data.type == "billing"
-					? {
-							title: capitalizeWord(rawData.billing.title.trim()),
-							fname: capitalizeWord(rawData.billing.fname.trim()),
-							lname: capitalizeWord(rawData.billing.lname.trim()),
-							email: rawData.billing.email?.trim().toLowerCase(),
-							street: capitalizeWord(rawData.billing.street.trim()),
-							city: capitalizeWord(rawData.billing.city.trim()),
-							zip: rawData.billing.zip,
-							state: capitalizeWord(rawData.billing.state.trim()),
-							country: capitalizeWord(rawData.billing.country.trim()),
-							type: rawData.billing.type,
-							default: rawData.billing.default,
-					  }
-					: undefined,
-
-			different: !data ? checked : undefined,
-
-			shipping:
-				data && data.type == "shipping"
-					? {
-							title: capitalizeWord(rawData.shipping.title.trim()),
-							fname: capitalizeWord(rawData.shipping.fname.trim()),
-							lname: capitalizeWord(rawData.shipping.lname.trim()),
-							street: capitalizeWord(rawData.shipping.street.trim()),
-							city: capitalizeWord(rawData.shipping.city.trim()),
-							zip: rawData.shipping.zip,
-							state: capitalizeWord(rawData.shipping.state.trim()),
-							country: capitalizeWord(rawData.shipping.country.trim()),
-							phone: rawData.shipping.phone?.trim()
-								? rawData.shipping.phone.trim().length > 0
-									? rawData.shipping.phone
-									: null
-								: null,
-							type: rawData.shipping.type,
-							default: rawData.shipping.default,
-					  }
-					: undefined,
+			title: capitalizeWords(rawData.title.trim()),
+			fname: capitalizeWord(rawData.fname.trim()),
+			lname: capitalizeWord(rawData.lname.trim()),
+			street: capitalizeWords(rawData.street.trim()),
+			city: capitalizeWords(rawData.city.trim()),
+			zip: rawData.zip,
+			state: capitalizeWord(rawData.state.trim()),
+			country: capitalizeWords(rawData.country.trim()),
+			email: rawData.email?.trim().toLowerCase(),
+			phone: rawData.phone?.trim() ? (rawData.phone.trim().length > 0 ? rawData.phone : null) : null,
+			type,
+			default: rawData.default,
 		};
 	};
 
-	const handleSubmit = async (formValues: typeFormAddress) => {
+	const handleSubmit = async (formValues: typeAddress) => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/contact", {
-					method: "POST",
-					body: JSON.stringify(parse(formValues)),
-					headers: {
-						"Content-Type": "application/json",
-						Accept: "application/json",
-					},
-				});
-
-				const result = await response.json();
-
-				if (!result) {
+				if ((mode == "edit" && !form.isDirty()) || previousValues == form.values) {
 					notifications.show({
-						id: "form-contact-failed-no-response",
+						id: "addresses-failed-no-changes",
 						icon: <IconX size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Server Unavailable",
-						message: `There was no response from the server.`,
+						title: "No Changes",
+						message: `None of the fields have been modified.`,
 						variant: "failed",
 					});
 				} else {
+					switch (mode) {
+						case "add":
+							const newDefault = parse(formValues).default;
+
+							const removedDefault = addresses?.map(m => {
+								if (!m.default) {
+									return m;
+								} else {
+									return { ...m, default: false };
+								}
+							});
+
+							if (!newDefault) {
+								setAddresses([...addresses!, parse(formValues)]);
+							} else {
+								setAddresses([...removedDefault!, parse(formValues)]);
+							}
+							break;
+						case "edit":
+							setPreviousValues({
+								...form.values,
+								phone: form.values.phone?.length > 0 ? form.values.phone : "",
+							});
+
+							setAddresses(
+								addresses?.map(a => {
+									if (a.id == data?.id) {
+										return { ...a, ...parse(formValues) };
+									} else {
+										if (parse(formValues).default) {
+											return { ...a, default: false };
+										} else {
+											return a;
+										}
+									}
+								})!
+							);
+							break;
+					}
+
 					notifications.show({
-						id: "form-contact-success",
+						id: "addresses-success",
 						icon: <IconCheck size={16} stroke={1.5} />,
 						autoClose: 5000,
 						title: "Form Submitted",
@@ -192,7 +164,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 				}
 			} catch (error) {
 				notifications.show({
-					id: "form-contact-failed",
+					id: "addresses-failed",
 					icon: <IconX size={16} stroke={1.5} />,
 					autoClose: 5000,
 					title: "Submisstion Failed",
@@ -206,45 +178,47 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 		}
 	};
 
-	const getFormElements = ({ variant }: { variant: "shipping" | "billing" }) => {
-		let descriptions = {
-			title: "",
-			email: "",
-		};
+	const getVariantProps = () => {
+		let email: string;
+		let title: string;
 
-		switch (variant) {
+		switch (type) {
 			case "billing":
-				descriptions.title = "Downtown Office, My Place, etc.";
-				descriptions.email = "You'll receive your invoice here.";
-				break;
-			case "shipping":
-				descriptions.title = "Brother's Farm, Sister's Apartment, etc.";
-				descriptions.email = "Not needed for shipping.";
-				break;
-		}
+				title = "Downtown Office, My Place, etc.";
+				email = "You'll receive your invoice here.";
 
-		return (
-			<Grid gutter={modal ? "xs" : undefined}>
+				return { email, title };
+			case "shipping":
+				title = "Brother's Farm, Sister's Apartment, etc.";
+				email = "Not needed for shipping.";
+
+				return { email, title };
+		}
+	};
+
+	return (
+		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
+			<Grid gutter={"xs"}>
 				<GridCol span={{ base: 12 }}>
-					<Title order={3}>{capitalizeWord(variant)} Address</Title>
+					<Title order={3}>{capitalizeWord(type)} Address</Title>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
 						required
 						label={"Title"}
 						placeholder="Your Address Title"
-						description={`Ex. ${descriptions.title}`}
-						{...form.getInputProps(`${variant}.title`)}
+						description={`Ex. ${getVariantProps()?.title}`}
+						{...form.getInputProps(`title`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
-						required={variant == "billing"}
+						required={type == "billing"}
 						label={"Email"}
 						placeholder="Your Email"
-						description={descriptions.email}
-						{...form.getInputProps(`${variant}.email`)}
+						description={getVariantProps()?.email}
+						{...form.getInputProps(`email`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -253,7 +227,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"First Name"}
 						placeholder="Your First Name"
-						{...form.getInputProps(`${variant}.fname`)}
+						{...form.getInputProps(`fname`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -262,7 +236,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Last Name"}
 						placeholder="Your Last Name"
-						{...form.getInputProps(`${variant}.lname`)}
+						{...form.getInputProps(`lname`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -271,7 +245,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Street"}
 						placeholder="Your Street"
-						{...form.getInputProps(`${variant}.street`)}
+						{...form.getInputProps(`street`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -282,7 +256,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						placeholder="Your City"
 						data={["Kansas", "Tannersville"]}
 						size={modal ? "xs" : undefined}
-						{...form.getInputProps(`${variant}.city`)}
+						{...form.getInputProps(`city`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -290,7 +264,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Zip"}
 						placeholder="Your Zip Code"
-						{...form.getInputProps(`${variant}.zip`)}
+						{...form.getInputProps(`zip`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -300,7 +274,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						label="State"
 						placeholder="Your State"
 						data={["Nebraska", "Pennsylvania"]}
-						{...form.getInputProps(`${variant}.state`)}
+						{...form.getInputProps(`state`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -310,7 +284,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						label="Country"
 						placeholder="Your Country"
 						data={["United States"]}
-						{...form.getInputProps(`${variant}.country`)}
+						{...form.getInputProps(`country`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -318,47 +292,15 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 					<TextInput
 						label={"Phone"}
 						placeholder="Your Phone"
-						{...form.getInputProps(`${variant}.phone`)}
+						{...form.getInputProps(`phone`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
-			</Grid>
-		);
-	};
-
-	const shippingAddressColumn = ((data && data.type == "shipping") || checked) && (
-		<GridCol span={{ base: 12, md: modal ? (!data ? 6 : 12) : 12 }}>
-			{getFormElements({ variant: "shipping" })}
-		</GridCol>
-	);
-
-	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
-			<Grid gutter={"xl"}>
-				{((data && data.type == "billing") || !data) && (
-					<GridCol span={{ base: 12, md: modal ? (checked ? 6 : 12) : 12 }}>
-						{getFormElements({ variant: "billing" })}
-					</GridCol>
-				)}
-
-				{modal && shippingAddressColumn}
-
-				{!data && (
-					<GridCol span={{ base: 12 }}>
-						<Checkbox
-							label="Use different shipping address"
-							checked={checked}
-							onChange={event => setChecked(event.currentTarget.checked)}
-						/>
-					</GridCol>
-				)}
-
-				{!modal && shippingAddressColumn}
 
 				<GridCol span={{ base: 12 }}>
-					<Group>
+					<Group mt={"xs"}>
 						<Button type="submit" loading={submitted}>
-							{submitted ? "Saving" : `Save Address${checked ? "es" : ""}`}
+							{submitted ? "Saving" : `Save Address`}
 						</Button>
 					</Group>
 				</GridCol>

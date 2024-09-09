@@ -43,7 +43,6 @@ import TemplateEmailContact from "@/templates/email/Contact";
 
 import contact from "@/data/contact";
 import Link from "next/link";
-import getAddresses from "@/handlers/database/getAddresses";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 

@@ -86,12 +86,12 @@ export default function Payment({ data, mode }: { data?: typePaymentMethod; mode
 			type: rawData.type,
 			default: rawData.default,
 			mode,
-			formerValues: previousValues
-				? {
-						name: previousValues.name,
-						title: previousValues.title,
-				  }
-				: null,
+			// formerValues: previousValues
+			// 	? {
+			// 			name: previousValues.name,
+			// 			title: previousValues.title,
+			// 	  }
+			// 	: null,
 		};
 	};
 
@@ -109,14 +109,6 @@ export default function Payment({ data, mode }: { data?: typePaymentMethod; mode
 						variant: "failed",
 					});
 				} else {
-					notifications.show({
-						id: "payment-method-success",
-						icon: <IconCheck size={16} stroke={1.5} />,
-						title: `Details ${mode == "add" ? "Added" : "Updated"}`,
-						message: `Your payment details have been ${mode == "add" ? "added" : "updated"}.`,
-						variant: "success",
-					});
-
 					switch (mode) {
 						case "add":
 							const newDefault = parse(formValues).default;
@@ -153,6 +145,14 @@ export default function Payment({ data, mode }: { data?: typePaymentMethod; mode
 							);
 							break;
 					}
+
+					notifications.show({
+						id: "payment-method-success",
+						icon: <IconCheck size={16} stroke={1.5} />,
+						title: `Details ${mode == "add" ? "Added" : "Updated"}`,
+						message: `Your payment details have been ${mode == "add" ? "added" : "updated"}.`,
+						variant: "success",
+					});
 				}
 			} catch (error) {
 				notifications.show({

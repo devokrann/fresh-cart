@@ -9,12 +9,6 @@ export interface typeFormContact {
 	message: string;
 }
 
-export interface typeFormAddress {
-	billing: typeAddress;
-	different: boolean;
-	shipping: typeAddress;
-}
-
 export interface typeFormRating {
 	fname: string;
 	lname: string;

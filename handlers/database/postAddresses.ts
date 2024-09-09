@@ -1,9 +1,10 @@
 import { typeAddress } from "@/types/address";
 
-const getAddresses = async (): Promise<typeAddress[]> => {
+const postAddresses = async (addresses: typeAddress[]): Promise<typeAddress[]> => {
 	try {
 		const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/addresses`, {
-			method: "GET",
+			method: "PUT",
+			body: JSON.stringify(addresses),
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",
@@ -14,10 +15,10 @@ const getAddresses = async (): Promise<typeAddress[]> => {
 
 		return result;
 	} catch (error) {
-		console.error("X-> Error fetching addresses", error);
+		console.error("X-> Error posting addresses", error);
 
 		return [];
 	}
 };
 
-export default getAddresses;
+export default postAddresses;

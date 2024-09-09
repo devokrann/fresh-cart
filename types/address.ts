@@ -11,12 +11,12 @@ export interface typeAddress extends typeDatabaseFields {
 	zip: string;
 	state: string;
 	country: string;
-	email: string | null;
-	phone: string | null;
+	email?: string | null;
+	phone?: string | null;
 	type: "billing" | "shipping" | string;
 	default: boolean;
 
 	// relationships
-	user: typeUser;
+	user?: typeUser;
 	order?: typeOrder | null;
 }

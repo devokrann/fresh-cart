@@ -3,4 +3,5 @@ export enum UserData {
 	WISHLIST = "wishlist",
 	ORDERS = "orders",
 	PAYMENT_METHODS = "paymentMethods",
+	ADDRESSES = "addresses",
 }
