@@ -9,7 +9,6 @@ export interface typeAddress extends typeDatabaseFields {
 	street: string;
 	city: string;
 	zip: string;
-	state: string;
 	country: string;
 	email?: string | null;
 	phone?: string | null;

@@ -34,3 +34,35 @@ body {
 		background-color: var(--mantine-color-body);
 	}
 }
+
+.phone-input-field {
+	width: 100% !important;
+	background-color: var(--mantine-color-body) !important;
+	color: var(--mantine-color-text) !important;
+	border-color: var(--mantine-color-default-border) !important;
+	border-radius: var(--mantine-radius-md) !important;
+}
+
+.phone-input-button {
+	background-color: var(--mantine-color-body) !important;
+	border-top-left-radius: var(--mantine-radius-md) !important;
+	border-bottom-left-radius: var(--mantine-radius-md) !important;
+	border-color: var(--mantine-color-default-border) !important;
+
+	@include hover {
+		background-color: var(--mantine-color-body) !important;
+	}
+}
+
+.phone-input-dropdown {
+	background-color: var(--mantine-color-body) !important;
+	border: 1px solid var(--mantine-color-default-border) !important;
+	box-shadow: var(--mantine-shadow-xs) !important;
+	border-radius: var(--mantine-radius-md) !important;
+}
+
+.phone-input-search {
+}
+
+.phone-input-container {
+}
