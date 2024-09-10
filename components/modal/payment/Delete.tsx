@@ -7,6 +7,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import React, { useContext } from "react";
 import PaymentMethods from "@/contexts/Payment";
 import { typePaymentMethod } from "@/types/payment";
+import { deletePaymentMethod } from "@/handlers/requests/database/paymentMethods";
 
 export default function Delete({ children, data }: { children: React.ReactNode; data: typePaymentMethod }) {
 	const paymentMethodsContext = useContext(PaymentMethods);
@@ -31,8 +32,12 @@ export default function Delete({ children, data }: { children: React.ReactNode; 
 					message: `The action has been aborted.`,
 					variant: "failed",
 				}),
-			onConfirm: () => {
+			onConfirm: async () => {
+				// remove method from context
 				setPaymentMethods(paymentMethods?.filter(m => m.id != data.id)!);
+
+				// delete method from database
+				await deletePaymentMethod(data);
 
 				notifications.show({
 					id: "payment-method-deletion-confirm",
@@ -43,5 +48,6 @@ export default function Delete({ children, data }: { children: React.ReactNode; 
 				});
 			},
 		});
+
 	return <div onClick={openModal}>{children}</div>;
 }

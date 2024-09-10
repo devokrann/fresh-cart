@@ -1,31 +1,53 @@
 "use client";
 
-import { Modal, Button, Stack, Text } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import React, { useContext } from "react";
+import { typeAddress } from "@/types/address";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconX } from "@tabler/icons-react";
+import { updateAddress } from "@/handlers/requests/database/addresses";
 
-import FormUserPayment from "@/partials/forms/user/Payment";
-import React from "react";
-import { typePaymentMethod } from "@/types/payment";
-import { capitalizeWord } from "@/handlers/parsers/string";
+import ContextUserAddresses from "@/contexts/Addresses";
 
-export default function Edit({
-	data,
-	mode,
-	children,
-}: {
-	data?: typePaymentMethod;
-	mode: "edit" | "add";
-	children: React.ReactNode;
-}) {
-	const [opened, { open, close }] = useDisclosure(false);
+export default function Edit({ data, children }: { data: typeAddress; children: React.ReactNode }) {
+	const addressesContext = useContext(ContextUserAddresses);
 
-	return (
-		<>
-			<Modal opened={opened} onClose={close} size={960} centered title={`${capitalizeWord(mode)} Payment Method`}>
-				<FormUserPayment data={data} mode={mode} />
-			</Modal>
+	if (!addressesContext) {
+		throw new Error("ChildComponent must be used within a ContextAddresses.Provider");
+	}
 
-			<div onClick={open}>{children}</div>
-		</>
-	);
+	const { addresses, setAddresses } = addressesContext;
+
+	const openModal = () =>
+		modals.openConfirmModal({
+			centered: true,
+			size: 960,
+			title: `Edit ${data.title}`,
+			children: "form",
+			labels: { confirm: "Confirm", cancel: "Cancel" },
+			onCancel: () =>
+				notifications.show({
+					id: "address-update-cancel",
+					icon: <IconX size={16} stroke={1.5} />,
+					title: "Canceled",
+					message: `The action has been aborted.`,
+					variant: "failed",
+				}),
+			onConfirm: async () => {
+				// update address in context
+
+				// update address in database
+				await updateAddress(data);
+
+				notifications.show({
+					id: "address-update-confirm",
+					icon: <IconCheck size={16} stroke={1.5} />,
+					title: "Updated",
+					message: `The address has been updated.`,
+					variant: "success",
+				});
+			},
+		});
+
+	return <div onClick={openModal}>{children}</div>;
 }

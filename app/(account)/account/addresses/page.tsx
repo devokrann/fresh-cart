@@ -84,7 +84,7 @@ export default function Addresses() {
 					</GridCol>
 
 					<GridCol span={12}>
-						<FormUserAddresses mode="add" type="billing" />
+						<FormUserAddresses />
 					</GridCol>
 				</Grid>
 			</LayoutSection>

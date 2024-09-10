@@ -28,7 +28,6 @@ model Address {
   street  String
   city    String
   zip     String
-  state   String
   country String
   email   String?
   phone   String?
@@ -43,6 +42,7 @@ model Address {
   userId String  @map("user_id")
   orders Order[]
 
+  @@unique([title, email, userId])
   @@map("addresses")
 }
 

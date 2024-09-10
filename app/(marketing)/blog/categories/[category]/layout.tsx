@@ -8,7 +8,7 @@ import { linkify } from "@/handlers/parsers/string";
 
 import { typeParams } from "../layout";
 
-import getPostCategories from "@/handlers/database/getPostCategories";
+import getPostCategories from "@/handlers/requests/getPostCategories";
 
 export const generateMetadata = async ({ params }: { params: typeParams }): Promise<Metadata> => {
 	const postCategories = await getPostCategories();

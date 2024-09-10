@@ -5,12 +5,12 @@ import React, { useEffect, useState } from "react";
 import ContextUserPayment from "@/contexts/Payment";
 
 import { typePaymentMethod } from "@/types/payment";
-import getPaymentMethods from "@/handlers/database/getPaymentMethods";
 
 import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
 import { useDebouncedCallback } from "@mantine/hooks";
-import postPaymentMethods from "@/handlers/database/postPaymentMethods";
+
+import { getPaymentMethods } from "@/handlers/requests/database/paymentMethods";
 
 export default function Payment({ children }: { children: React.ReactNode }) {
 	// window.localStorage.clear();

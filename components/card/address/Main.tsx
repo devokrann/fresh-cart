@@ -6,7 +6,7 @@ import classes from "./Main.module.scss";
 
 import { typeAddress } from "@/types/address";
 
-import ModalAddressEdit from "@/components/modal/Edit";
+import ModalAddressEdit from "@/components/modal/address/Edit";
 import ModalAddressDefault from "@/components/modal/address/Default";
 import ModalAddressDelete from "@/components/modal/address/Delete";
 
@@ -30,7 +30,6 @@ export default function Main({ data }: { data: typeAddress }) {
 						<Text inherit>{data.street}</Text>
 						<Text inherit>{data.city}</Text>
 						<Text inherit>{data.zip}</Text>
-						<Text inherit>{data.state}</Text>
 						<Text inherit>{data.country}</Text>
 					</Stack>
 				</Stack>

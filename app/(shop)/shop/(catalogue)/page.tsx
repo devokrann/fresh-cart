@@ -23,8 +23,8 @@ import CardProductShopGrid from "@/components/card/product/shop/Grid";
 import CardProductShopList from "@/components/card/product/shop/List";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import { IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
-import getProducts from "@/handlers/database/getProducts";
-import getStores from "@/handlers/database/getStores";
+import getProducts from "@/handlers/requests/getProducts";
+import getStores from "@/handlers/requests/getStores";
 
 export default async function Shop() {
 	const products = await getProducts();

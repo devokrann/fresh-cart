@@ -40,10 +40,10 @@ import { typeOrder } from "@/types/order";
 
 import BadgeOrder from "@/components/badges/Order";
 
-import getOrders from "@/handlers/database/getOrders";
+import getOrders from "@/handlers/requests/getOrders";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import getAddresses from "@/handlers/database/getAddresses";
+import getAddresses from "@/handlers/requests/database/addresses";
 
 export default async function Order({ params }: { params: typeParams }) {
 	const session = await auth();

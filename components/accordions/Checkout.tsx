@@ -36,8 +36,8 @@ import CardPaymentMain from "../card/payment/Main";
 import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
-import ModalPaymentEdit from "../modal/address/Edit";
-import ModalAddress from "../modal/Edit";
+import ModalPaymentEdit from "../modal/payment/Edit";
+import ModalAddressEdit from "../modal/address/Edit";
 import { getPaymentCardImage } from "@/utilities/image";
 import PaymentMethods from "@/contexts/Payment";
 
@@ -85,11 +85,11 @@ export default function Checkout() {
 			panel: (
 				<Stack>
 					<Group justify="end">
-						<ModalAddress>
-							<Button size="xs" variant="outline" color="gray">
-								Add a New Address
-							</Button>
-						</ModalAddress>
+						{/* <ModalAddressEdit> */}
+						<Button size="xs" variant="outline" color="gray">
+							Add a New Address
+						</Button>
+						{/* </ModalAddressEdit> */}
 					</Group>
 
 					<RadioGroup>
@@ -145,11 +145,11 @@ export default function Checkout() {
 						/>
 
 						<Box opacity={checked ? 0 : 1}>
-							<ModalAddress>
-								<Button size="xs" variant="outline" color="gray">
-									Add a New Address
-								</Button>
-							</ModalAddress>
+							{/* <ModalAddressEdit> */}
+							<Button size="xs" variant="outline" color="gray">
+								Add a New Address
+							</Button>
+							{/* </ModalAddressEdit> */}
 						</Box>
 					</Group>
 
