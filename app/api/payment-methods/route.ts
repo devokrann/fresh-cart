@@ -6,12 +6,9 @@ export async function GET(req: Request) {
 	try {
 		const session = await auth();
 
-		const user = await prisma.user.findUnique({
-			where: { id: session?.user.id! },
-			include: { paymentMethods: true },
-		});
+		const paymentMethods = await prisma.paymentMethod.findMany({ where: { userId: session?.user.id } });
 
-		return Response.json(user?.paymentMethods);
+		return Response.json(paymentMethods);
 	} catch (error) {
 		console.error("x-> Error getting payment methods:", error);
 		return Response.error();

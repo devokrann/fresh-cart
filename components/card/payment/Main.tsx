@@ -10,7 +10,7 @@ import { typePaymentMethod, typePaymentType } from "@/types/payment";
 import { getPaymentCardImage } from "@/utilities/image";
 
 import ModalPaymentDelete from "@/components/modal/payment/Delete";
-import ModalPaymentEdit from "@/components/modal/payment/Edit";
+import ModalPaymentEdit from "@/components/modal/address/Edit";
 import ModalPaymentDefault from "@/components/modal/payment/Default";
 import { hasDatePassed } from "@/handlers/parsers/string";
 
