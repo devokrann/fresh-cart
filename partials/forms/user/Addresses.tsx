@@ -19,19 +19,12 @@ import {
 	Title,
 } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
-import { hasLength, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
 
-import text from "@/libraries/validators/special/text";
 import email from "@/libraries/validators/special/email";
-import phone from "@/libraries/validators/special/phone";
 import { capitalizeWord, capitalizeWords } from "@/handlers/parsers/string";
-
-import { typeAddress } from "@/types/address";
-
-import { typeFormAddress } from "@/types/form";
 
 import ContextAddresses from "@/contexts/Addresses";
 
@@ -39,7 +32,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { addAddress, updateAddress } from "@/handlers/requests/database/addresses";
 
-export default function Addresses({ data, modal }: { data?: typeAddress; modal?: boolean }) {
+export default function Addresses() {
 	const addressContext = useContext(ContextAddresses);
 
 	if (!addressContext) {
@@ -49,154 +42,174 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 	const { addresses, setAddresses } = addressContext;
 
 	const [submitted, setSubmitted] = useState(false);
-	const [previousValues, setPreviousValues] = useState(data);
 
 	const [checked, setChecked] = useState(false);
 
-	const form = useForm({
+	const formBilling = useForm({
 		initialValues: {
-			billing: {
-				titleBilling: previousValues ? previousValues.title : "",
-				fnameBilling: previousValues ? previousValues.fname : "",
-				lnameBilling: previousValues ? previousValues.lname : "",
-				emailBilling: previousValues ? previousValues.email : "",
-				streetBilling: previousValues ? previousValues.street : "",
-				cityBilling: previousValues ? previousValues.city : "",
-				zipBilling: previousValues ? previousValues.zip : "",
-				countryBilling: previousValues ? previousValues.country : "",
-				phoneBilling: previousValues ? previousValues.phone : "",
-				typeBilling: previousValues ? previousValues.type : "billing",
-				defaultBilling: previousValues ? previousValues.default : false,
-			},
-			shipping: {
-				titleShipping: previousValues ? previousValues.title : "",
-				fnameShipping: previousValues ? previousValues.fname : "",
-				lnameShipping: previousValues ? previousValues.lname : "",
-				emailShipping: previousValues ? previousValues.email : "",
-				streetShipping: previousValues ? previousValues.street : "",
-				cityShipping: previousValues ? previousValues.city : "",
-				zipShipping: previousValues ? previousValues.zip : "",
-				countryShipping: previousValues ? previousValues.country : "",
-				phoneShipping: previousValues ? previousValues.phone : "",
-				typeShipping: previousValues ? previousValues.type : "shipping",
-				defaultShipping: previousValues ? previousValues.default : false,
-			},
+			title: "",
+			fname: "",
+			lname: "",
+			email: "",
+			street: "",
+			city: "",
+			zip: "",
+			country: "",
+			phone: "",
+			type: "billing",
+			default: false,
 		},
 
 		validate: {
-			billing: {
-				titleBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-				fnameBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-				lnameBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-				emailBilling: value => email(value ? value : ""),
-				streetBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-				cityBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-				zipBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-				countryBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-				phoneBilling: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
-			},
-			shipping: checked
-				? {
-						titleShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-						fnameShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-						lnameShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-						emailShipping: value => value && value.trim().length > 0 && email(value),
-						streetShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-						cityShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-						zipShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-						countryShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-						phoneShipping: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
-				  }
-				: undefined,
+			title: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+			fname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			lname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			email: value => email(value ? value : ""),
+			street: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+			city: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			zip: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			country: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+			phone: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
+		},
+	});
+
+	const formShipping = useForm({
+		initialValues: {
+			title: "",
+			fname: "",
+			lname: "",
+			email: "",
+			street: "",
+			city: "",
+			zip: "",
+			country: "",
+			phone: "",
+			type: "shipping",
+			default: false,
+		},
+
+		validate: {
+			title: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+			fname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			lname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			email: value => value && value.trim().length > 0 && email(value),
+			street: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+			city: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			zip: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+			country: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+			phone: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
 		},
 	});
 
 	const parseBilling = () => {
 		return {
-			title: form.values.billing.titleBilling.trim(),
-			fname: capitalizeWord(form.values.billing.fnameBilling.trim()),
-			lname: capitalizeWord(form.values.billing.lnameBilling.trim()),
-			email: form.values.billing.emailBilling?.trim().toLowerCase(),
-			street: form.values.billing.streetBilling.trim(),
-			city: capitalizeWords(form.values.billing.cityBilling.trim()),
-			zip: form.values.billing.zipBilling,
-			country: capitalizeWords(form.values.billing.countryBilling.trim()),
-			type: form.values.billing.typeBilling,
-			default: form.values.billing.defaultBilling,
+			title: formBilling.values.title.trim(),
+			fname: capitalizeWord(formBilling.values.fname.trim()),
+			lname: capitalizeWord(formBilling.values.lname.trim()),
+			email: formBilling.values.email?.trim().toLowerCase(),
+			street: formBilling.values.street.trim(),
+			city: capitalizeWords(formBilling.values.city.trim()),
+			zip: formBilling.values.zip,
+			country: capitalizeWords(formBilling.values.country.trim()),
+			type: formBilling.values.type,
+			default: formBilling.values.default,
 		};
 	};
 
 	const parseShipping = () => {
 		return {
-			title: form.values.shipping.titleShipping.trim(),
-			fname: capitalizeWord(form.values.shipping.fnameShipping.trim()),
-			lname: capitalizeWord(form.values.shipping.lnameShipping.trim()),
-			email: form.values.shipping.emailShipping?.trim().toLowerCase(),
-			street: form.values.shipping.streetShipping.trim(),
-			city: capitalizeWords(form.values.shipping.cityShipping.trim()),
-			zip: form.values.shipping.zipShipping,
-			country: capitalizeWords(form.values.shipping.countryShipping.trim()),
-			type: form.values.shipping.typeShipping,
-			default: form.values.shipping.defaultShipping,
+			title: formShipping.values.title.trim(),
+			fname: capitalizeWord(formShipping.values.fname.trim()),
+			lname: capitalizeWord(formShipping.values.lname.trim()),
+			email: formShipping.values.email?.trim().toLowerCase(),
+			street: formShipping.values.street.trim(),
+			city: capitalizeWords(formShipping.values.city.trim()),
+			zip: formShipping.values.zip,
+			country: capitalizeWords(formShipping.values.country.trim()),
+			type: formShipping.values.type,
+			default: formShipping.values.default,
 		};
 	};
 
-	const handleSubmit = async () => {
-		if (form.isValid()) {
+	const handleSubmitBilling = async () => {
+		if (formBilling.isValid()) {
 			try {
 				setSubmitted(true);
 
-				if (!data) {
-					// add to context
-					setAddresses([...addresses!, parseBilling()]);
-					checked && setAddresses([...addresses!, parseShipping()]);
+				// add to context
+				setAddresses([...addresses!, parseBilling()]);
+				checked && setAddresses([...addresses!, parseShipping()]);
 
-					// add to database
-					await addAddress(parseBilling());
-					checked && (await addAddress(parseShipping()));
-				} else {
-					// update in context
-					setAddresses(
-						addresses?.map(a => {
-							if (a.id == data.id) {
-								return { ...parseBilling(), id: data.id };
-							} else {
-								return a;
-							}
-						})!
-					);
-
-					// update in database
-					await updateAddress({ ...parseBilling(), id: data.id });
-				}
+				// add to database
+				await addAddress(parseBilling());
+				checked && (await addAddress(parseShipping()));
 
 				notifications.show({
-					id: "address-form-success",
+					id: "address-billing-form-success",
 					icon: <IconCheck size={16} stroke={1.5} />,
-					title: "Form Submitted",
-					message: "Someone will get back to you within 24 hours",
+					title: "Address Added",
+					message: "Address has been added",
 					variant: "success",
 				});
 			} catch (error) {
 				notifications.show({
-					id: "address-form-failed",
+					id: "address-billing-form-failed",
 					icon: <IconX size={16} stroke={1.5} />,
-					title: "Submisstion Failed",
+					title: "Failed",
 					message: (error as Error).message,
 					variant: "failed",
 				});
 			} finally {
 				// clear forms
-				form.reset();
+				formBilling.reset();
 
 				setSubmitted(false);
 			}
+		} else {
+			formBilling.validate();
+		}
+	};
+
+	const handleSubmitShipping = async () => {
+		if (formBilling.isValid()) {
+			try {
+				setSubmitted(true);
+
+				// add to context
+				setAddresses([...addresses!, parseShipping()]);
+
+				// add to database
+				await addAddress(parseShipping());
+
+				notifications.show({
+					id: "address-shipping-form-success",
+					icon: <IconCheck size={16} stroke={1.5} />,
+					title: "Address Added",
+					message: "Address has been added",
+					variant: "success",
+				});
+			} catch (error) {
+				notifications.show({
+					id: "address-shipping-form-failed",
+					icon: <IconX size={16} stroke={1.5} />,
+					title: "Failed",
+					message: (error as Error).message,
+					variant: "failed",
+				});
+			} finally {
+				// clear forms
+				formBilling.reset();
+
+				setSubmitted(false);
+			}
+		} else {
+			formBilling.validate();
 		}
 	};
 
 	const inputSets = {
 		billing: (
-			<Grid gutter={modal ? "xs" : undefined}>
+			<Grid>
 				<GridCol span={{ base: 12 }}>
 					<Title order={3}>Billing Address</Title>
 				</GridCol>
@@ -206,8 +219,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						label={"Title"}
 						placeholder="Your Address Title"
 						description={`Ex. Downtown Office, My Place, etc.`}
-						{...form.getInputProps(`billing.titleBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`title`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -216,8 +228,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						label={"Email"}
 						placeholder="Your Email"
 						description={"You'll receive your invoice here."}
-						{...form.getInputProps(`billing.emailBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`email`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -225,8 +236,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"First Name"}
 						placeholder="Your First Name"
-						{...form.getInputProps(`billing.fnameBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`fname`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -234,8 +244,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Last Name"}
 						placeholder="Your Last Name"
-						{...form.getInputProps(`billing.lnameBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`lname`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -243,26 +252,18 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Street"}
 						placeholder="Your Street"
-						{...form.getInputProps(`billing.streetBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`street`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
-					<TextInput
-						required
-						label="City"
-						placeholder="Your City"
-						size={modal ? "xs" : undefined}
-						{...form.getInputProps(`billing.cityBilling`)}
-					/>
+					<TextInput required label="City" placeholder="Your City" {...formBilling.getInputProps(`city`)} />
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
 						required
 						label={"Zip"}
 						placeholder="Your Zip Code"
-						{...form.getInputProps(`billing.zipBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`zip`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -270,14 +271,13 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label="Country"
 						placeholder="Your Country"
-						{...form.getInputProps(`billing.countryBilling`)}
-						size={modal ? "xs" : undefined}
+						{...formBilling.getInputProps(`country`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
-					<InputWrapper label="Phone Number" {...form.getInputProps(`billing.phoneBilling`)}>
+					<InputWrapper label="Phone Number" {...formBilling.getInputProps(`phone`)}>
 						<PhoneInput
-							{...form.getInputProps(`billing.phoneBilling`)}
+							{...formBilling.getInputProps(`phone`)}
 							country={"ke"}
 							inputProps={{
 								name: "phone",
@@ -297,7 +297,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 			</Grid>
 		),
 		shipping: (
-			<Grid gutter={modal ? "xs" : undefined}>
+			<Grid>
 				<GridCol span={{ base: 12 }}>
 					<Title order={3}>Shipping Address</Title>
 				</GridCol>
@@ -307,8 +307,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						label={"Title"}
 						placeholder="Your Address Title"
 						description={`Ex. Brother's Farm, Sister's Apartment, etc.`}
-						{...form.getInputProps(`shipping.titleShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`title`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -316,8 +315,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						label={"Email"}
 						placeholder="Your Email"
 						description={"Not needed for shipping."}
-						{...form.getInputProps(`shipping.emailShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`email`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -325,8 +323,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"First Name"}
 						placeholder="Your First Name"
-						{...form.getInputProps(`shipping.fnameShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`fname`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -334,8 +331,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Last Name"}
 						placeholder="Your Last Name"
-						{...form.getInputProps(`shipping.lnameShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`lname`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -343,26 +339,18 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label={"Street"}
 						placeholder="Your Street"
-						{...form.getInputProps(`shipping.streetShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`street`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
-					<TextInput
-						required
-						label="City"
-						placeholder="Your City"
-						size={modal ? "xs" : undefined}
-						{...form.getInputProps(`shipping.cityShipping`)}
-					/>
+					<TextInput required label="City" placeholder="Your City" {...formShipping.getInputProps(`city`)} />
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
 						required
 						label={"Zip"}
 						placeholder="Your Zip Code"
-						{...form.getInputProps(`shipping.zipShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`zip`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -370,14 +358,13 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						required
 						label="Country"
 						placeholder="Your Country"
-						{...form.getInputProps(`shipping.countryShipping`)}
-						size={modal ? "xs" : undefined}
+						{...formShipping.getInputProps(`country`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
-					<InputWrapper label="Phone Number" {...form.getInputProps(`shipping.phoneShipping`)}>
+					<InputWrapper label="Phone Number" {...formShipping.getInputProps(`phone`)}>
 						<PhoneInput
-							{...form.getInputProps(`shipping.phoneShipping`)}
+							{...formShipping.getInputProps(`phone`)}
 							country={"ke"}
 							inputProps={{
 								name: "phone",
@@ -398,38 +385,26 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 		),
 	};
 
-	const shippingAddressInputs = ((data && data.type == "shipping") || checked) && (
-		<GridCol span={{ base: 12, md: modal ? (!data ? 6 : 12) : 12 }}>{inputSets.shipping}</GridCol>
-	);
-
 	return (
-		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
+		<Box
+			component="form"
+			onSubmit={e => {
+				e.preventDefault();
+				handleSubmitBilling();
+				// handleSubmitShipping();
+			}}
+			noValidate
+		>
 			<Grid gutter={"xl"}>
-				{((data && data.type == "billing") || !data) && (
-					<GridCol span={{ base: 12, md: modal ? (checked ? 6 : 12) : 12 }}>{inputSets.billing}</GridCol>
-				)}
-
-				{modal && shippingAddressInputs}
-
-				{!data && modal && (
-					<GridCol span={{ base: 12 }}>
-						<Checkbox
-							label="Use different shipping address"
-							checked={checked}
-							onChange={event => setChecked(event.currentTarget.checked)}
-						/>
-					</GridCol>
-				)}
+				<GridCol span={12}>{inputSets.billing}</GridCol>
 
 				<GridCol span={{ base: 12 }}>
 					<Checkbox
 						label="Make default address"
-						key={form.key("billing.defaultBilling")}
-						{...form.getInputProps("billing.defaultBilling", { type: "checkbox" })}
+						key={formBilling.key("default")}
+						{...formBilling.getInputProps("default", { type: "checkbox" })}
 					/>
 				</GridCol>
-
-				{!modal && shippingAddressInputs}
 
 				<GridCol span={{ base: 12 }}>
 					<Group mt={"xs"}>
