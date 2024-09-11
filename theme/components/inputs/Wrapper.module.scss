@@ -1,0 +1,22 @@
+.input {
+	&[data-variant="default"] {
+		background-color: var(--mantine-color-body);
+		border-color: var(--mantine-color-default-border);
+
+		&:focus {
+			border-color: var(--mantine-color-pri-6);
+		}
+	}
+}
+
+.label {
+	margin-left: var(--mantine-spacing-lg);
+}
+
+.description {
+	margin-left: var(--mantine-spacing-lg);
+}
+
+.error {
+	margin-left: var(--mantine-spacing-lg);
+}

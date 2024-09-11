@@ -1,23 +1,37 @@
-import React from "react";
+"use client";
+
+import React, { useContext } from "react";
 
 import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
-import { Metadata } from "next";
-import { Divider, Grid, GridCol, Group, Stack, Text, Title } from "@mantine/core";
+import { Divider, Grid, GridCol, Group, Skeleton, Stack, Text, Title } from "@mantine/core";
 import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardAddressMain from "@/components/card/address/Main";
-import getAddresses from "@/handlers/database/getAddresses";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = { title: "Addresses" };
+import ContextUserAddresses from "@/contexts/Addresses";
+import { useSession } from "next-auth/react";
 
-export default async function Addresses() {
-	const session = await auth();
+export default function Addresses() {
+	const { data: session } = useSession();
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
-	const addresses = session?.user.id ? await getAddresses(session.user.id) : null;
+	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
+	const addressesContext = useContext(ContextUserAddresses);
+
+	if (!addressesContext) {
+		throw new Error("ChildComponent must be used within a ContextAddresses.Provider");
+	}
+
+	const { addresses, setAddresses } = addressesContext;
+
+	const skeletons = [
+		{ key: 1, element: <Skeleton h={360} /> },
+		{ key: 2, element: <Skeleton h={360} /> },
+		{ key: 3, element: <Skeleton h={360} /> },
+	];
 
 	return (
 		<LayoutPage>
@@ -29,18 +43,28 @@ export default async function Addresses() {
 								<Title order={2} fw={"bold"}>
 									My Addresses
 								</Title>
-								<Text fz={"lg"}>You have {"2"} addresses.</Text>
+								{!addresses ? (
+									<Skeleton h={16} w={{ md: 240 }} mt={"xs"} />
+								) : (
+									<Text fz={"lg"}>You have {addresses.length} addresses.</Text>
+								)}
 							</Stack>
 						</Group>
 					</GridCol>
 
 					<GridCol span={12}>
 						<Grid>
-							{addresses?.map(address => (
-								<GridCol key={address.id} span={{ base: 12, md: 6, lg: 4 }}>
-									<CardAddressMain data={address} />
-								</GridCol>
-							))}
+							{!addresses
+								? skeletons.map(i => (
+										<GridCol key={i.key} span={{ md: 4 }}>
+											{i.element}
+										</GridCol>
+								  ))
+								: addresses.map(address => (
+										<GridCol key={address.id} span={{ base: 12, md: 6, lg: 4 }}>
+											<CardAddressMain data={address} />
+										</GridCol>
+								  ))}
 						</Grid>
 					</GridCol>
 
@@ -60,7 +84,7 @@ export default async function Addresses() {
 					</GridCol>
 
 					<GridCol span={12}>
-						<FormUserAddresses />
+						<FormUserAddresses mode="add" type="billing" />
 					</GridCol>
 				</Grid>
 			</LayoutSection>

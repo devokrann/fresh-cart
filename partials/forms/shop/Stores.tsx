@@ -2,7 +2,7 @@ import { Group, Skeleton, Stack } from "@mantine/core";
 import React from "react";
 import InputAutocompleteStores from "@/components/inputs/autocomplete/Stores";
 import InputCheckboxStores from "@/components/inputs/checkbox/Stores";
-import getStores from "@/handlers/database/getStores";
+import getStores from "@/handlers/requests/getStores";
 
 export default async function Stores() {
 	const stores = await getStores();

@@ -40,10 +40,10 @@ import { typeOrder } from "@/types/order";
 
 import BadgeOrder from "@/components/badges/Order";
 
-import getOrders from "@/handlers/database/getOrders";
+import getOrders from "@/handlers/requests/getOrders";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import getAddresses from "@/handlers/database/getAddresses";
+import getAddresses from "@/handlers/requests/database/addresses";
 
 export default async function Order({ params }: { params: typeParams }) {
 	const session = await auth();
@@ -51,7 +51,7 @@ export default async function Order({ params }: { params: typeParams }) {
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	const orders = session?.user.id ? await getOrders(session.user.id) : null;
-	const addresses = session?.user.id ? await getAddresses(session.user.id) : null;
+	const addresses = session?.user.id ? await getAddresses() : null;
 
 	const data: typeOrder | undefined = orders?.find(order => order.id == params.order);
 

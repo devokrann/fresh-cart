@@ -6,7 +6,6 @@ import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 import { Metadata } from "next";
 import { Center, Divider, Grid, GridCol, Group, Skeleton, Stack, Text, Title } from "@mantine/core";
-import FormUserAddresses from "@/partials/forms/user/Addresses";
 import CardPaymentMain from "@/components/card/payment/Main";
 import { typePaymentMethod, typePaymentType } from "@/types/payment";
 import FormUserPayment from "@/partials/forms/user/Payment";

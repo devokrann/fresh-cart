@@ -4,6 +4,7 @@ import { typeCart } from "./cart";
 import { typeOrder } from "./order";
 import { typeWishlist } from "./wishlist";
 import { typePaymentMethod } from "./payment";
+import { typeAddress } from "./address";
 
 export interface typeContextProducts {
 	products: typeProduct[] | null;
@@ -28,4 +29,9 @@ export interface typeContextWishlist {
 export interface typeContextPaymentMethod {
 	paymentMethods: typePaymentMethod[] | null;
 	setPaymentMethods: Dispatch<SetStateAction<typePaymentMethod[] | null>>;
+}
+
+export interface typeContextAddresses {
+	addresses: typeAddress[] | null;
+	setAddresses: Dispatch<SetStateAction<typeAddress[] | null>>;
 }

@@ -11,7 +11,7 @@ import CardStore from "@/components/card/Store";
 
 import classes from "./Stores.module.scss";
 import images from "@/assets/images";
-import getStores from "@/handlers/database/getStores";
+import getStores from "@/handlers/requests/getStores";
 
 export const metadata: Metadata = { title: "Stores" };
 

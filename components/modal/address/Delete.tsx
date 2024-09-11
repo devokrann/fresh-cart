@@ -5,18 +5,18 @@ import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import React, { useContext } from "react";
-import PaymentMethods from "@/contexts/Payment";
-import { typePaymentMethod } from "@/types/payment";
-import { deletePaymentMethod } from "@/handlers/requests/database/paymentMethods";
+import { typeAddress } from "@/types/address";
+import ContextUserAddresses from "@/contexts/Addresses";
+import { deleteAddress } from "@/handlers/requests/database/addresses";
 
-export default function Delete({ children, data }: { children: React.ReactNode; data: typePaymentMethod }) {
-	const paymentMethodsContext = useContext(PaymentMethods);
+export default function Delete({ children, data }: { children: React.ReactNode; data: typeAddress }) {
+	const addressesContext = useContext(ContextUserAddresses);
 
-	if (!paymentMethodsContext) {
-		throw new Error("ChildComponent must be used within a ContextPaymentMethods.Provider");
+	if (!addressesContext) {
+		throw new Error("ChildComponent must be used within a ContextAddresses.Provider");
 	}
 
-	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
+	const { addresses, setAddresses } = addressesContext;
 
 	const openModal = () =>
 		modals.openConfirmModal({
@@ -26,24 +26,24 @@ export default function Delete({ children, data }: { children: React.ReactNode; 
 			labels: { confirm: "Confirm", cancel: "Cancel" },
 			onCancel: () =>
 				notifications.show({
-					id: "payment-method-deletion-cancel",
+					id: "address-deletion-cancel",
 					icon: <IconX size={16} stroke={1.5} />,
 					title: "Canceled",
 					message: `The action has been aborted.`,
 					variant: "failed",
 				}),
 			onConfirm: async () => {
-				// remove method from context
-				setPaymentMethods(paymentMethods?.filter(m => m.id != data.id)!);
+				// remove address from context
+				setAddresses(addresses?.filter(m => m.id != data.id)!);
 
-				// delete method from database
-				await deletePaymentMethod(data);
+				// delete address from database
+				await deleteAddress(data);
 
 				notifications.show({
-					id: "payment-method-deletion-confirm",
+					id: "address-deletion-confirm",
 					icon: <IconCheck size={16} stroke={1.5} />,
 					title: "Deleted",
-					message: `The payment method has been deleted.`,
+					message: `The address has been deleted.`,
 					variant: "success",
 				});
 			},

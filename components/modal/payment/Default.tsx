@@ -3,6 +3,7 @@
 import React, { useContext } from "react";
 import PaymentMethods from "@/contexts/Payment";
 import { typePaymentMethod } from "@/types/payment";
+import { updatePaymentMethod } from "@/handlers/requests/database/paymentMethods";
 
 export default function Default({ children, data }: { children: React.ReactNode; data: typePaymentMethod }) {
 	const paymentMethodsContext = useContext(PaymentMethods);
@@ -13,7 +14,8 @@ export default function Default({ children, data }: { children: React.ReactNode;
 
 	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
 
-	const handleDefaultChange = () => {
+	const handleDefaultChange = async () => {
+		// update default in context
 		setPaymentMethods(
 			paymentMethods?.map(m => {
 				if (data.id == m.id) {
@@ -23,6 +25,9 @@ export default function Default({ children, data }: { children: React.ReactNode;
 				}
 			})!
 		);
+
+		// update default in database
+		await updatePaymentMethod(data, "default");
 	};
 
 	return <div onClick={handleDefaultChange}>{children}</div>;

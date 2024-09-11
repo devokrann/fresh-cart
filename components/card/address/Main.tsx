@@ -6,7 +6,9 @@ import classes from "./Main.module.scss";
 
 import { typeAddress } from "@/types/address";
 
-import ModalAddress from "@/components/modal/Address";
+import ModalAddressEdit from "@/components/modal/Edit";
+import ModalAddressDefault from "@/components/modal/address/Default";
+import ModalAddressDelete from "@/components/modal/address/Delete";
 
 export default function Main({ data }: { data: typeAddress }) {
 	return (
@@ -28,16 +30,17 @@ export default function Main({ data }: { data: typeAddress }) {
 						<Text inherit>{data.street}</Text>
 						<Text inherit>{data.city}</Text>
 						<Text inherit>{data.zip}</Text>
-						<Text inherit>{data.state}</Text>
 						<Text inherit>{data.country}</Text>
 					</Stack>
 				</Stack>
 
 				<Group justify="space-between" gap={"xs"} mt={"md"}>
 					{!data.default ? (
-						<Button variant="subtle" color="green.6" size="xs">
-							Set as Default
-						</Button>
+						<ModalAddressDefault data={data}>
+							<Button variant="subtle" color="green.6" size="xs">
+								Set as Default
+							</Button>
+						</ModalAddressDefault>
 					) : (
 						<Badge color="blue" c={"white"} size="sm">
 							default
@@ -45,15 +48,17 @@ export default function Main({ data }: { data: typeAddress }) {
 					)}
 
 					<Group gap={"xs"}>
-						<ModalAddress data={data}>
+						<ModalAddressEdit data={data} mode="edit">
 							<Button variant="subtle" color="gray" size="xs">
 								Edit
 							</Button>
-						</ModalAddress>
+						</ModalAddressEdit>
 
-						<Button variant="subtle" color="red.6" size="xs">
-							Delete
-						</Button>
+						<ModalAddressDelete data={data}>
+							<Button variant="subtle" color="red.6" size="xs">
+								Delete
+							</Button>
+						</ModalAddressDelete>
 					</Group>
 				</Group>
 			</Stack>
