@@ -70,7 +70,7 @@ export async function PUT(req: Request) {
 	try {
 		const session = await auth();
 
-		const { address, context } = await req.json();
+		const { address, formerValues, context } = await req.json();
 
 		// check context
 		if (context == "default") {
@@ -89,8 +89,8 @@ export async function PUT(req: Request) {
 		const updateAddress = await prisma.address.update({
 			where: {
 				title_email_userId: {
-					title: address.title,
-					email: address.email,
+					title: formerValues.title,
+					email: formerValues.email,
 					userId: session?.user.id!,
 				},
 			},
@@ -118,10 +118,27 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
 	try {
-		const { id } = await req.json();
+		const session = await auth();
 
-		// delete item from database
-		const deleteAddress = await prisma.address.delete({ where: { id } });
+		const address = await req.json();
+
+		let deleteAddress;
+
+		if (!address.id) {
+			// delete item from database using unique values
+			deleteAddress = await prisma.address.delete({
+				where: {
+					title_email_userId: {
+						title: address.title,
+						email: address.email,
+						userId: session?.user.id!,
+					},
+				},
+			});
+		} else {
+			// delete item from database using id
+			deleteAddress = await prisma.address.delete({ where: { id: address.id } });
+		}
 
 		return Response.json(deleteAddress);
 	} catch (error) {

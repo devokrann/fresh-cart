@@ -18,19 +18,17 @@ import {
 	Textarea,
 	Title,
 } from "@mantine/core";
-import { hasLength, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
-
-import email from "@/libraries/validators/special/email";
-import { capitalizeWord, capitalizeWords } from "@/handlers/parsers/string";
 
 import ContextAddresses from "@/contexts/Addresses";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { addAddress, updateAddress } from "@/handlers/requests/database/addresses";
+import { addAddress } from "@/handlers/requests/database/addresses";
+import { parseFormValuesBilling, parseFormValuesShipping } from "@/handlers/parsers/form";
+import { useFormAddressBilling, useFormAddressShipping } from "@/hooks/form/address";
 
 export default function Addresses() {
 	const addressContext = useContext(ContextAddresses);
@@ -42,107 +40,31 @@ export default function Addresses() {
 	const { addresses, setAddresses } = addressContext;
 
 	const [submitted, setSubmitted] = useState(false);
+	const [differentShipping, setDifferentShipping] = useState(false);
 
-	const [checked, setChecked] = useState(false);
-
-	const formBilling = useForm({
-		initialValues: {
-			title: "",
-			fname: "",
-			lname: "",
-			email: "",
-			street: "",
-			city: "",
-			zip: "",
-			country: "",
-			phone: "",
-			type: "billing",
-			default: false,
-		},
-
-		validate: {
-			title: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-			fname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			lname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			email: value => email(value ? value : ""),
-			street: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-			city: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			zip: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			country: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-			phone: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
-		},
-	});
-
-	const formShipping = useForm({
-		initialValues: {
-			title: "",
-			fname: "",
-			lname: "",
-			email: "",
-			street: "",
-			city: "",
-			zip: "",
-			country: "",
-			phone: "",
-			type: "shipping",
-			default: false,
-		},
-
-		validate: {
-			title: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-			fname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			lname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			email: value => value && value.trim().length > 0 && email(value),
-			street: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-			city: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			zip: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			country: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-			phone: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
-		},
-	});
-
-	const parseBilling = () => {
-		return {
-			title: formBilling.values.title.trim(),
-			fname: capitalizeWord(formBilling.values.fname.trim()),
-			lname: capitalizeWord(formBilling.values.lname.trim()),
-			email: formBilling.values.email?.trim().toLowerCase(),
-			street: formBilling.values.street.trim(),
-			city: capitalizeWords(formBilling.values.city.trim()),
-			zip: formBilling.values.zip,
-			country: capitalizeWords(formBilling.values.country.trim()),
-			type: formBilling.values.type,
-			default: formBilling.values.default,
-		};
-	};
-
-	const parseShipping = () => {
-		return {
-			title: formShipping.values.title.trim(),
-			fname: capitalizeWord(formShipping.values.fname.trim()),
-			lname: capitalizeWord(formShipping.values.lname.trim()),
-			email: formShipping.values.email?.trim().toLowerCase(),
-			street: formShipping.values.street.trim(),
-			city: capitalizeWords(formShipping.values.city.trim()),
-			zip: formShipping.values.zip,
-			country: capitalizeWords(formShipping.values.country.trim()),
-			type: formShipping.values.type,
-			default: formShipping.values.default,
-		};
-	};
+	const formBilling = useFormAddressBilling();
+	const formShipping = useFormAddressShipping();
 
 	const handleSubmitBilling = async () => {
 		if (formBilling.isValid()) {
 			try {
 				setSubmitted(true);
 
-				// add to context
-				setAddresses([...addresses!, parseBilling()]);
-				checked && setAddresses([...addresses!, parseShipping()]);
+				if (!formBilling.values.default) {
+					// add to context
+					setAddresses([...addresses!, parseFormValuesBilling(formBilling.values)]);
+				} else {
+					// remove existing defaults and add to context
+					setAddresses([
+						...addresses?.map(a => {
+							return { ...a, default: false };
+						})!,
+						parseFormValuesBilling(formBilling.values),
+					]);
+				}
 
 				// add to database
-				await addAddress(parseBilling());
-				checked && (await addAddress(parseShipping()));
+				await addAddress(parseFormValuesBilling(formBilling.values));
 
 				notifications.show({
 					id: "address-billing-form-success",
@@ -171,15 +93,25 @@ export default function Addresses() {
 	};
 
 	const handleSubmitShipping = async () => {
-		if (formBilling.isValid()) {
+		if (formShipping.isValid()) {
 			try {
 				setSubmitted(true);
 
-				// add to context
-				setAddresses([...addresses!, parseShipping()]);
+				if (!formBilling.values.default) {
+					// add to context
+					setAddresses([...addresses!, parseFormValuesShipping(formShipping.values)]);
+				} else {
+					// remove existing defaults and add to context
+					setAddresses([
+						...addresses?.map(a => {
+							return { ...a, default: false };
+						})!,
+						parseFormValuesShipping(formShipping.values),
+					]);
+				}
 
 				// add to database
-				await addAddress(parseShipping());
+				await addAddress(parseFormValuesShipping(formShipping.values));
 
 				notifications.show({
 					id: "address-shipping-form-success",
@@ -198,12 +130,12 @@ export default function Addresses() {
 				});
 			} finally {
 				// clear forms
-				formBilling.reset();
+				formShipping.reset();
 
 				setSubmitted(false);
 			}
 		} else {
-			formBilling.validate();
+			formShipping.validate();
 		}
 	};
 
@@ -391,20 +323,32 @@ export default function Addresses() {
 			onSubmit={e => {
 				e.preventDefault();
 				handleSubmitBilling();
-				// handleSubmitShipping();
+				differentShipping && handleSubmitShipping();
 			}}
 			noValidate
 		>
 			<Grid gutter={"xl"}>
 				<GridCol span={12}>{inputSets.billing}</GridCol>
 
+				{!differentShipping && (
+					<GridCol span={{ base: 12 }}>
+						<Checkbox
+							label="Make default address"
+							key={formBilling.key("default")}
+							{...formBilling.getInputProps("default", { type: "checkbox" })}
+						/>
+					</GridCol>
+				)}
+
 				<GridCol span={{ base: 12 }}>
 					<Checkbox
-						label="Make default address"
-						key={formBilling.key("default")}
-						{...formBilling.getInputProps("default", { type: "checkbox" })}
+						label="Use different shipping address"
+						checked={differentShipping}
+						onChange={event => setDifferentShipping(event.currentTarget.checked)}
 					/>
 				</GridCol>
+
+				{differentShipping && <GridCol span={12}>{inputSets.shipping}</GridCol>}
 
 				<GridCol span={{ base: 12 }}>
 					<Group mt={"xs"}>

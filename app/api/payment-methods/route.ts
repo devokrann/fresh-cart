@@ -67,7 +67,7 @@ export async function PUT(req: Request) {
 	try {
 		const session = await auth();
 
-		const { method, context } = await req.json();
+		const { paymentMethod, formerValues, context } = await req.json();
 
 		// check context
 		if (context == "default") {
@@ -87,19 +87,19 @@ export async function PUT(req: Request) {
 			where: {
 				userId_name_title: {
 					userId: session?.user.id!,
-					name: method.name,
-					title: method.title,
+					name: formerValues.name,
+					title: formerValues.title,
 				},
 			},
 			data: {
-				title: method.title,
-				name: method.name,
-				number: method.number,
-				cvc: method.cvc,
-				email: method.email,
-				expiry: method.expiry,
-				type: method.type,
-				default: context == "default" ? true : method.default,
+				title: paymentMethod.title,
+				name: paymentMethod.name,
+				number: paymentMethod.number,
+				cvc: paymentMethod.cvc,
+				email: paymentMethod.email,
+				expiry: paymentMethod.expiry,
+				type: paymentMethod.type,
+				default: context == "default" ? true : paymentMethod.default,
 			},
 		});
 
@@ -112,10 +112,27 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
 	try {
-		const { id } = await req.json();
+		const session = await auth();
 
-		// delete item from database
-		const deleteMethod = await prisma.paymentMethod.delete({ where: { id } });
+		const method = await req.json();
+
+		let deleteMethod;
+
+		if (!method.id) {
+			// delete item from database using unique values
+			deleteMethod = await prisma.paymentMethod.delete({
+				where: {
+					userId_name_title: {
+						userId: session?.user.id!,
+						name: method.name,
+						title: method.title,
+					},
+				},
+			});
+		} else {
+			// delete item from database
+			deleteMethod = await prisma.paymentMethod.delete({ where: { id: method.id } });
+		}
 
 		return Response.json(deleteMethod);
 	} catch (error) {

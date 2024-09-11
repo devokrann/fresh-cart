@@ -90,7 +90,7 @@ export default function Payment() {
 					</GridCol>
 
 					<GridCol span={12}>
-						<FormUserPayment mode="add" />
+						<FormUserPayment />
 					</GridCol>
 				</Grid>
 			</LayoutSection>

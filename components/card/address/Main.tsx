@@ -8,6 +8,7 @@ import { typeAddress } from "@/types/address";
 
 import ModalAddressDefault from "@/components/modal/address/Default";
 import ModalAddressDelete from "@/components/modal/address/Delete";
+import ModalAddressEdit from "@/components/modal/address/Edit";
 
 export default function Main({ data }: { data: typeAddress }) {
 	return (
@@ -47,9 +48,11 @@ export default function Main({ data }: { data: typeAddress }) {
 					)}
 
 					<Group gap={"xs"}>
-						<Button variant="subtle" color="gray" size="xs">
-							Edit
-						</Button>
+						<ModalAddressEdit data={data}>
+							<Button variant="subtle" color="gray" size="xs">
+								Edit
+							</Button>
+						</ModalAddressEdit>
 
 						<ModalAddressDelete data={data}>
 							<Button variant="subtle" color="red.6" size="xs">
