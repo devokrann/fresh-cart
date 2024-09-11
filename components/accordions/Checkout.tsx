@@ -22,6 +22,7 @@ import {
 	Overlay,
 	Radio,
 	RadioGroup,
+	Skeleton,
 	Stack,
 	Text,
 	Textarea,
@@ -37,7 +38,9 @@ import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
 import { getPaymentCardImage } from "@/utilities/image";
+
 import PaymentMethods from "@/contexts/Payment";
+import ContextAddresses from "@/contexts/Addresses";
 
 export default function Checkout() {
 	const paymentMethodsContext = useContext(PaymentMethods);
@@ -47,6 +50,14 @@ export default function Checkout() {
 	}
 
 	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
+
+	const addressesContext = useContext(ContextAddresses);
+
+	if (!addressesContext) {
+		throw new Error("ChildComponent must be used within a ContextAddresses.Provider");
+	}
+
+	const { addresses, setAddresses } = addressesContext;
 
 	const [checked, setChecked] = useState(false);
 
@@ -76,6 +87,11 @@ export default function Checkout() {
 		},
 	];
 
+	const skeletons = [
+		{ key: 1, element: <Skeleton h={200} /> },
+		{ key: 2, element: <Skeleton h={200} /> },
+	];
+
 	const sections = [
 		{
 			icon: IconMapPin,
@@ -92,39 +108,51 @@ export default function Checkout() {
 
 					<RadioGroup>
 						<Grid>
-							{data.addresses
-								.filter(a => a.type == "billing")
-								.map(address => (
-									<GridCol key={address.title} span={{ base: 12, md: 6, lg: 4 }}>
-										<Radio.Card value={address.title} key={address.title} p={"md"} h={"100%"}>
-											<Group wrap="nowrap" align="flex-start" h={"100%"}>
-												<Radio.Indicator />
-												<Stack gap={"xs"}>
-													<Title order={3} fz={"sm"}>
-														{address.title}
-													</Title>
+							{!addresses
+								? skeletons.map(i => (
+										<GridCol key={i.key} span={{ md: 6, lg: 4 }}>
+											{i.element}
+										</GridCol>
+								  ))
+								: addresses
+										?.filter(a => a.type == "billing")
+										.map(address => (
+											<GridCol key={address.title} span={{ base: 12, md: 6, lg: 4 }}>
+												<Radio.Card
+													value={address.title}
+													key={address.title}
+													p={"md"}
+													h={"100%"}
+												>
+													<Group wrap="nowrap" align="flex-start" h={"100%"}>
+														<Radio.Indicator />
+														<Stack gap={"xs"}>
+															<Title order={3} fz={"sm"}>
+																{address.title}
+															</Title>
 
-													<Stack fz={"sm"} gap={2}>
-														<Text inherit>{`${address.fname} ${address.fname}`}</Text>
-														{address.email && <Text inherit>{address.email}</Text>}
-														{address.phone && <Text inherit>{address.phone}</Text>}
-														<Text inherit>{address.street}</Text>
-														<Text inherit>{address.city}</Text>
-														<Text inherit>{address.zip}</Text>
-														<Text inherit>{address.state}</Text>
-														<Text inherit>{address.country}</Text>
-													</Stack>
+															<Stack fz={"sm"} gap={2}>
+																<Text
+																	inherit
+																>{`${address.fname} ${address.fname}`}</Text>
+																{address.email && <Text inherit>{address.email}</Text>}
+																{address.phone && <Text inherit>{address.phone}</Text>}
+																<Text inherit>{address.street}</Text>
+																<Text inherit>{address.city}</Text>
+																<Text inherit>{address.zip}</Text>
+																<Text inherit>{address.country}</Text>
+															</Stack>
 
-													{address.default && (
-														<Badge size="sm" color={"blue"}>
-															Default Address
-														</Badge>
-													)}
-												</Stack>
-											</Group>
-										</Radio.Card>
-									</GridCol>
-								))}
+															{address.default && (
+																<Badge size="sm" color={"blue"}>
+																	Default Address
+																</Badge>
+															)}
+														</Stack>
+													</Group>
+												</Radio.Card>
+											</GridCol>
+										))}
 						</Grid>
 					</RadioGroup>
 				</Stack>
@@ -154,41 +182,55 @@ export default function Checkout() {
 					<RadioGroup>
 						<Grid>
 							{!checked &&
-								data.addresses
-									.filter(a => a.type == "shipping")
-									.map(address => (
-										<GridCol key={address.title} span={{ base: 12, md: 6, lg: 4 }}>
-											<Radio.Card value={address.title} key={address.title} p={"md"} h={"100%"}>
-												<Group wrap="nowrap" align="flex-start" h={"100%"}>
-													<Radio.Indicator />
-													<Stack gap={"xs"}>
-														<Title order={3} fz={"sm"}>
-															{address.title}
-														</Title>
+								(!addresses
+									? skeletons.map(i => (
+											<GridCol key={i.key} span={{ md: 6, lg: 4 }}>
+												{i.element}
+											</GridCol>
+									  ))
+									: addresses
+											?.filter(a => a.type == "shipping")
+											.map(address => (
+												<GridCol key={address.title} span={{ base: 12, md: 6, lg: 4 }}>
+													<Radio.Card
+														value={address.title}
+														key={address.title}
+														p={"md"}
+														h={"100%"}
+													>
+														<Group wrap="nowrap" align="flex-start" h={"100%"}>
+															<Radio.Indicator />
+															<Stack gap={"xs"}>
+																<Title order={3} fz={"sm"}>
+																	{address.title}
+																</Title>
 
-														<Stack fz={"sm"} gap={2}>
-															<Text inherit>
-																{address.fname} {address.lname}
-															</Text>
-															{address.email && <Text inherit>{address.email}</Text>}
-															{address.phone && <Text inherit>{address.phone}</Text>}
-															<Text inherit>{address.street}</Text>
-															<Text inherit>{address.city}</Text>
-															<Text inherit>{address.zip}</Text>
-															<Text inherit>{address.state}</Text>
-															<Text inherit>{address.country}</Text>
-														</Stack>
+																<Stack fz={"sm"} gap={2}>
+																	<Text inherit>
+																		{address.fname} {address.lname}
+																	</Text>
+																	{address.email && (
+																		<Text inherit>{address.email}</Text>
+																	)}
+																	{address.phone && (
+																		<Text inherit>{address.phone}</Text>
+																	)}
+																	<Text inherit>{address.street}</Text>
+																	<Text inherit>{address.city}</Text>
+																	<Text inherit>{address.zip}</Text>
+																	<Text inherit>{address.country}</Text>
+																</Stack>
 
-														{address.default && (
-															<Badge size="sm" color={"blue"}>
-																Default Address
-															</Badge>
-														)}
-													</Stack>
-												</Group>
-											</Radio.Card>
-										</GridCol>
-									))}
+																{address.default && (
+																	<Badge size="sm" color={"blue"}>
+																		Default Address
+																	</Badge>
+																)}
+															</Stack>
+														</Group>
+													</Radio.Card>
+												</GridCol>
+											)))}
 						</Grid>
 					</RadioGroup>
 				</Stack>
@@ -215,57 +257,63 @@ export default function Checkout() {
 			panel: (
 				<Stack>
 					<Group justify="end">
-						<ModalPaymentEdit mode="add">
-							<Button size="xs" variant="outline" color="gray">
-								Add a New Payment Method
-							</Button>
-						</ModalPaymentEdit>
+						<Button size="xs" variant="outline" color="gray">
+							Add a New Payment Method
+						</Button>
 					</Group>
 
 					<RadioGroup>
 						<Grid>
-							{paymentMethods?.map(method => (
-								<GridCol key={method.title} span={{ base: 12, md: 6, lg: 4 }}>
-									<Radio.Card value={method.title} key={method.title} p={"md"} h={"100%"}>
-										<Group wrap="nowrap" align="flex-start" h={"100%"}>
-											<Radio.Indicator />
-											<Stack gap={"xs"} w={"100%"}>
-												<Title order={3} fz={"sm"}>
-													{method.title}
-												</Title>
+							{!paymentMethods
+								? skeletons.map(i => (
+										<GridCol key={i.key} span={{ md: 6, lg: 4 }}>
+											{i.element}
+										</GridCol>
+								  ))
+								: paymentMethods?.map(method => (
+										<GridCol key={method.title} span={{ base: 12, md: 6, lg: 4 }}>
+											<Radio.Card value={method.title} key={method.title} p={"md"} h={"100%"}>
+												<Group wrap="nowrap" align="flex-start" h={"100%"}>
+													<Radio.Indicator />
+													<Stack gap={"xs"} w={"100%"}>
+														<Title order={3} fz={"sm"}>
+															{method.title}
+														</Title>
 
-												<Stack fz={"sm"} gap={2}>
-													<Text inherit>{`${method.name}`}</Text>
-													{method.email && <Text inherit>{method.email}</Text>}
-													<Text inherit>{method.number}</Text>
-													{method.expiry && <Text inherit>Expires: {method.expiry}</Text>}
-												</Stack>
+														<Stack fz={"sm"} gap={2}>
+															<Text inherit>{`${method.name}`}</Text>
+															{method.email && <Text inherit>{method.email}</Text>}
+															<Text inherit>{method.number}</Text>
+															{method.expiry && (
+																<Text inherit>Expires: {method.expiry}</Text>
+															)}
+														</Stack>
 
-												<Group justify="start">
-													<Stack h={64} justify="center">
-														<Image
-															src={getPaymentCardImage(method.type)}
-															alt={method.title}
-															radius={"md"}
-															component={NextImage}
-															width={1920}
-															height={1080}
-															priority
-															w={40}
-														/>
+														<Group justify="start">
+															<Stack h={64} justify="center">
+																<Image
+																	src={getPaymentCardImage(method.type)}
+																	alt={method.title}
+																	radius={"md"}
+																	component={NextImage}
+																	width={1920}
+																	height={1080}
+																	priority
+																	w={40}
+																/>
+															</Stack>
+														</Group>
+
+														{method.default && (
+															<Badge size="sm" color={"blue"}>
+																Default Address
+															</Badge>
+														)}
 													</Stack>
 												</Group>
-
-												{method.default && (
-													<Badge size="sm" color={"blue"}>
-														Default Address
-													</Badge>
-												)}
-											</Stack>
-										</Group>
-									</Radio.Card>
-								</GridCol>
-							))}
+											</Radio.Card>
+										</GridCol>
+								  ))}
 						</Grid>
 					</RadioGroup>
 				</Stack>
