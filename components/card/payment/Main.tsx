@@ -11,6 +11,8 @@ import { getPaymentCardImage } from "@/utilities/image";
 
 import ModalPaymentDelete from "@/components/modal/payment/Delete";
 import ModalPaymentDefault from "@/components/modal/payment/Default";
+import ModalPaymentEdit from "@/components/modal/payment/Edit";
+
 import { hasDatePassed } from "@/handlers/parsers/string";
 
 export default function Main({ data }: { data: typePaymentMethod }) {
@@ -98,9 +100,11 @@ export default function Main({ data }: { data: typePaymentMethod }) {
 					)}
 
 					<Group gap={"xs"}>
-						<Button variant="subtle" color="gray" size="xs">
-							Edit
-						</Button>
+						<ModalPaymentEdit data={data}>
+							<Button variant="subtle" color="gray" size="xs">
+								Edit
+							</Button>
+						</ModalPaymentEdit>
 
 						<ModalPaymentDelete data={data}>
 							<Button variant="subtle" color="red.6" size="xs">

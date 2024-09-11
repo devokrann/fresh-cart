@@ -45,7 +45,11 @@ export default function Default({ children, data }: { children: React.ReactNode;
 				);
 
 				// update default in database
-				await updatePaymentMethod(data, "default");
+				await updatePaymentMethod({
+					paymentMethod: data,
+					formerValues: { title: data.title, name: data.name },
+					context: "default",
+				});
 
 				notifications.show({
 					id: "method-default-confirm",

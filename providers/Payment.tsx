@@ -8,7 +8,6 @@ import { typePaymentMethod } from "@/types/payment";
 
 import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
-import { useDebouncedCallback } from "@mantine/hooks";
 
 import { getPaymentMethods } from "@/handlers/requests/database/paymentMethods";
 
@@ -21,11 +20,6 @@ export default function Payment({ children }: { children: React.ReactNode }) {
 
 	const [paymentMethods, setPaymentMethods] = useState<typePaymentMethod[] | null>(null);
 	const [paymentLoading, setPaymentLoading] = useState(true);
-
-	const updateDatabasePaymentMethods = useDebouncedCallback(
-		async () => await postPaymentMethods(paymentMethods!),
-		5000
-	);
 
 	useEffect(() => {
 		const setInitialPayment = async () => {
@@ -42,9 +36,6 @@ export default function Payment({ children }: { children: React.ReactNode }) {
 		if (inClient && !paymentLoading) {
 			// Sync payment methods with local storage
 			window.localStorage.setItem(UserData.PAYMENT_METHODS, JSON.stringify(paymentMethods));
-
-			// Sync local storage payment methods with database (throttled)
-			session && updateDatabasePaymentMethods();
 		}
 	}, [paymentMethods]);
 
