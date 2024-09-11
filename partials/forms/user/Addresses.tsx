@@ -36,7 +36,7 @@ import ContextAddresses from "@/contexts/Addresses";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { addAddress } from "@/handlers/requests/database/addresses";
+import { addAddress, updateAddress } from "@/handlers/requests/database/addresses";
 
 export default function Addresses({ data, modal }: { data?: typeAddress; modal?: boolean }) {
 	const addressContext = useContext(ContextAddresses);
@@ -55,30 +55,30 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 	const form = useForm({
 		initialValues: {
 			billing: {
-				titleBilling: "",
-				fnameBilling: "",
-				lnameBilling: "",
-				emailBilling: "",
-				streetBilling: "",
-				cityBilling: "",
-				zipBilling: "",
-				countryBilling: "",
-				phoneBilling: "",
-				typeBilling: "billing",
-				defaultBilling: false,
+				titleBilling: previousValues ? previousValues.title : "",
+				fnameBilling: previousValues ? previousValues.fname : "",
+				lnameBilling: previousValues ? previousValues.lname : "",
+				emailBilling: previousValues ? previousValues.email : "",
+				streetBilling: previousValues ? previousValues.street : "",
+				cityBilling: previousValues ? previousValues.city : "",
+				zipBilling: previousValues ? previousValues.zip : "",
+				countryBilling: previousValues ? previousValues.country : "",
+				phoneBilling: previousValues ? previousValues.phone : "",
+				typeBilling: previousValues ? previousValues.type : "billing",
+				defaultBilling: previousValues ? previousValues.default : false,
 			},
 			shipping: {
-				titleShipping: "",
-				fnameShipping: "",
-				lnameShipping: "",
-				emailShipping: "",
-				streetShipping: "",
-				cityShipping: "",
-				zipShipping: "",
-				countryShipping: "",
-				phoneShipping: "",
-				typeShipping: "shipping",
-				defaultShipping: false,
+				titleShipping: previousValues ? previousValues.title : "",
+				fnameShipping: previousValues ? previousValues.fname : "",
+				lnameShipping: previousValues ? previousValues.lname : "",
+				emailShipping: previousValues ? previousValues.email : "",
+				streetShipping: previousValues ? previousValues.street : "",
+				cityShipping: previousValues ? previousValues.city : "",
+				zipShipping: previousValues ? previousValues.zip : "",
+				countryShipping: previousValues ? previousValues.country : "",
+				phoneShipping: previousValues ? previousValues.phone : "",
+				typeShipping: previousValues ? previousValues.type : "shipping",
+				defaultShipping: previousValues ? previousValues.default : false,
 			},
 		},
 
@@ -92,7 +92,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 				cityBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
 				zipBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
 				countryBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-				phoneBilling: value => value.length > 0 && value.length < 11 && "Invalid phone number",
+				phoneBilling: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
 			},
 			shipping: checked
 				? {
@@ -104,7 +104,7 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 						cityShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
 						zipShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
 						countryShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
-						phoneShipping: value => value.length > 0 && value.length < 11 && "Invalid phone number",
+						phoneShipping: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
 				  }
 				: undefined,
 		},
@@ -145,13 +145,29 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 			try {
 				setSubmitted(true);
 
-				// add to context
-				setAddresses([...addresses!, parseBilling()]);
-				checked && setAddresses([...addresses!, parseShipping()]);
+				if (!data) {
+					// add to context
+					setAddresses([...addresses!, parseBilling()]);
+					checked && setAddresses([...addresses!, parseShipping()]);
 
-				// add to database
-				await addAddress(parseBilling());
-				checked && (await addAddress(parseShipping()));
+					// add to database
+					await addAddress(parseBilling());
+					checked && (await addAddress(parseShipping()));
+				} else {
+					// update in context
+					setAddresses(
+						addresses?.map(a => {
+							if (a.id == data.id) {
+								return { ...parseBilling(), id: data.id };
+							} else {
+								return a;
+							}
+						})!
+					);
+
+					// update in database
+					await updateAddress({ ...parseBilling(), id: data.id });
+				}
 
 				notifications.show({
 					id: "address-form-success",
@@ -404,15 +420,13 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 					</GridCol>
 				)}
 
-				{!data && (
-					<GridCol span={{ base: 12 }}>
-						<Checkbox
-							label="Make default address"
-							key={form.key("billing.defaultBilling")}
-							{...form.getInputProps("billing.defaultBilling", { type: "checkbox" })}
-						/>
-					</GridCol>
-				)}
+				<GridCol span={{ base: 12 }}>
+					<Checkbox
+						label="Make default address"
+						key={form.key("billing.defaultBilling")}
+						{...form.getInputProps("billing.defaultBilling", { type: "checkbox" })}
+					/>
+				</GridCol>
 
 				{!modal && shippingAddressInputs}
 

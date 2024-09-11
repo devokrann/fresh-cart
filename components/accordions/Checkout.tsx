@@ -37,7 +37,6 @@ import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
 import ModalPaymentEdit from "../modal/payment/Edit";
-import ModalAddressEdit from "../modal/address/Edit";
 import { getPaymentCardImage } from "@/utilities/image";
 import PaymentMethods from "@/contexts/Payment";
 

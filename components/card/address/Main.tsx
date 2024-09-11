@@ -48,7 +48,7 @@ export default function Main({ data }: { data: typeAddress }) {
 					)}
 
 					<Group gap={"xs"}>
-						<ModalAddressEdit data={data}>
+						<ModalAddressEdit data={data} mode="edit">
 							<Button variant="subtle" color="gray" size="xs">
 								Edit
 							</Button>
