@@ -36,7 +36,6 @@ import CardPaymentMain from "../card/payment/Main";
 import classes from "./Checkout.module.scss";
 import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
 
-import ModalPaymentEdit from "../modal/payment/Edit";
 import { getPaymentCardImage } from "@/utilities/image";
 import PaymentMethods from "@/contexts/Payment";
 

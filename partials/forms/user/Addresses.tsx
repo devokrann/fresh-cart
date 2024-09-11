@@ -19,6 +19,7 @@ import {
 	Title,
 } from "@mantine/core";
 import { hasLength, useForm } from "@mantine/form";
+import { hasLength, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
 import { IconCheck, IconX } from "@tabler/icons-react";
@@ -431,9 +432,9 @@ export default function Addresses({ data, modal }: { data?: typeAddress; modal?:
 				{!modal && shippingAddressInputs}
 
 				<GridCol span={{ base: 12 }}>
-					<Group>
+					<Group mt={"xs"}>
 						<Button type="submit" loading={submitted}>
-							{submitted ? "Saving" : `Save Address${checked ? "es" : ""}`}
+							{submitted ? "Saving" : `Save Address`}
 						</Button>
 					</Group>
 				</GridCol>

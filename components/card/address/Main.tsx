@@ -6,7 +6,7 @@ import classes from "./Main.module.scss";
 
 import { typeAddress } from "@/types/address";
 
-import ModalAddressEdit from "@/components/modal/address/Edit";
+import ModalAddressEdit from "@/components/modal/Edit";
 import ModalAddressDefault from "@/components/modal/address/Default";
 import ModalAddressDelete from "@/components/modal/address/Delete";
 
