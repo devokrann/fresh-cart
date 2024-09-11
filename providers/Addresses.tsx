@@ -9,7 +9,6 @@ import { getAddresses } from "@/handlers/requests/database/addresses";
 
 import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
-// import { useDebouncedCallback } from "@mantine/hooks";
 
 export default function Addresses({ children }: { children: React.ReactNode }) {
 	// window.localStorage.clear();
@@ -20,8 +19,6 @@ export default function Addresses({ children }: { children: React.ReactNode }) {
 
 	const [addresses, setAddresses] = useState<typeAddress[] | null>(null);
 	const [addressesLoading, setAddressesLoading] = useState(true);
-
-	// const updateDatabaseAddresses = useDebouncedCallback(async () => await postAddresses(addresses!), 5000);
 
 	useEffect(() => {
 		const setInitialAddresses = async () => {
@@ -38,9 +35,6 @@ export default function Addresses({ children }: { children: React.ReactNode }) {
 		if (inClient && !addressesLoading) {
 			// Sync addresses with local storage
 			window.localStorage.setItem(UserData.ADDRESSES, JSON.stringify(addresses));
-
-			// // Sync local storage addresses with database (throttled)
-			// session && updateDatabaseAddresses();
 		}
 	}, [addresses]);
 

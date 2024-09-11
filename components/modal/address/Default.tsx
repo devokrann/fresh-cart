@@ -45,7 +45,11 @@ export default function Default({ children, data }: { children: React.ReactNode;
 				);
 
 				// update default in database
-				await updateAddress(data, "default");
+				await updateAddress({
+					address: data,
+					formerValues: { title: data.title, email: data.email! },
+					context: "default",
+				});
 
 				notifications.show({
 					id: "address-default-confirm",
