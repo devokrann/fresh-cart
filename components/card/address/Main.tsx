@@ -6,7 +6,6 @@ import classes from "./Main.module.scss";
 
 import { typeAddress } from "@/types/address";
 
-import ModalAddressEdit from "@/components/modal/Edit";
 import ModalAddressDefault from "@/components/modal/address/Default";
 import ModalAddressDelete from "@/components/modal/address/Delete";
 
@@ -48,11 +47,9 @@ export default function Main({ data }: { data: typeAddress }) {
 					)}
 
 					<Group gap={"xs"}>
-						<ModalAddressEdit data={data} mode="edit">
-							<Button variant="subtle" color="gray" size="xs">
-								Edit
-							</Button>
-						</ModalAddressEdit>
+						<Button variant="subtle" color="gray" size="xs">
+							Edit
+						</Button>
 
 						<ModalAddressDelete data={data}>
 							<Button variant="subtle" color="red.6" size="xs">
