@@ -38,8 +38,11 @@ import { typePaymentMethod } from "@/types/payment";
 import { getPaymentCardImage } from "@/utilities/image";
 
 import PaymentMethods from "@/contexts/Payment";
+import { cardTypes, useFormPaymentMethod } from "@/hooks/form/paymentMethods";
+import { parseFormValuesPaymentMethods } from "@/handlers/parsers/form";
+import { addPaymentMethod } from "@/handlers/requests/database/paymentMethods";
 
-export default function Payment({ data, mode }: { data?: typePaymentMethod; mode: "add" | "edit" }) {
+export default function Payment() {
 	const paymentMethodsContext = useContext(PaymentMethods);
 
 	if (!paymentMethodsContext) {
@@ -49,128 +52,58 @@ export default function Payment({ data, mode }: { data?: typePaymentMethod; mode
 	const { paymentMethods, setPaymentMethods } = paymentMethodsContext;
 
 	const [submitted, setSubmitted] = useState(false);
-	const [previousValues, setPreviousValues] = useState(data);
 
-	const cardTypes = ["mastercard", "visa", "discover", "american express", "paypal express"];
+	const form = useFormPaymentMethod();
 
-	const form = useForm({
-		initialValues: {
-			title: previousValues?.title ? previousValues.title : "",
-			name: previousValues?.name ? previousValues.name : "",
-			number: previousValues?.number ? previousValues.number : "",
-			cvc: previousValues?.cvc ? previousValues.cvc : "",
-			email: previousValues?.email ? previousValues.email : "",
-			expiry: previousValues?.expiry ? previousValues.expiry : "",
-			type: previousValues?.type ? previousValues.type : cardTypes[0],
-			default: previousValues?.default ? previousValues.default : false,
-		},
-
-		validate: {
-			title: value => text(value, 2, 24),
-			name: value => text(value, 2, 24),
-			number: (value, values) => values.type != "paypal express" && (value?.trim().length! < 19 ? true : null),
-			cvc: (value, values) => values.type != "paypal express" && (value?.trim().length! < 3 ? true : null),
-			email: (value, values) => values.type == "paypal express" && email(value!),
-			expiry: (value, values) => values.type != "paypal express" && (value?.trim().length! < 5 ? true : null),
-		},
-	});
-
-	const parse = (rawData: typePaymentMethod) => {
-		return {
-			title: rawData.title.trim(),
-			name: capitalizeWords(rawData.name.trim()),
-			number: rawData.number && rawData.type !== "paypal express" ? rawData.number : null,
-			cvc: rawData.cvc && rawData.type !== "paypal express" ? rawData.cvc : null,
-			email: rawData.email && rawData.type === "paypal express" ? rawData.email.trim().toLowerCase() : null,
-			expiry: rawData.expiry && rawData.type !== "paypal express" ? rawData.expiry : null,
-			type: rawData.type,
-			default: rawData.default,
-			mode,
-			// formerValues: previousValues
-			// 	? {
-			// 			name: previousValues.name,
-			// 			title: previousValues.title,
-			// 	  }
-			// 	: null,
-		};
-	};
-
-	const handleSubmit = async (formValues: typePaymentMethod) => {
+	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				if ((mode == "edit" && !form.isDirty()) || previousValues == form.values) {
-					notifications.show({
-						id: "payment-method-failed-no-changes",
-						icon: <IconX size={16} stroke={1.5} />,
-						title: "No Changes",
-						message: `None of the fields have been modified.`,
-						variant: "failed",
-					});
+				if (!form.values.default) {
+					// add to context
+					setPaymentMethods([...paymentMethods!, parseFormValuesPaymentMethods(form.values)]);
 				} else {
-					switch (mode) {
-						case "add":
-							const newDefault = parse(formValues).default;
-
-							const removedDefault = paymentMethods?.map(m => {
-								if (!m.default) {
-									return m;
-								} else {
-									return { ...m, default: false };
-								}
-							});
-
-							if (!newDefault) {
-								setPaymentMethods([...paymentMethods!, parse(formValues)]);
-							} else {
-								setPaymentMethods([...removedDefault!, parse(formValues)]);
-							}
-							break;
-						case "edit":
-							setPreviousValues(form.values);
-
-							setPaymentMethods(
-								paymentMethods?.map(m => {
-									if (m.id == data?.id) {
-										return { ...m, ...parse(formValues) };
-									} else {
-										if (parse(formValues).default) {
-											return { ...m, default: false };
-										} else {
-											return m;
-										}
-									}
-								})!
-							);
-							break;
-					}
-
-					notifications.show({
-						id: "payment-method-success",
-						icon: <IconCheck size={16} stroke={1.5} />,
-						title: `Details ${mode == "add" ? "Added" : "Updated"}`,
-						message: `Your payment details have been ${mode == "add" ? "added" : "updated"}.`,
-						variant: "success",
-					});
+					// add to context
+					setPaymentMethods([
+						...paymentMethods?.map(m => {
+							return { ...m, default: false };
+						})!,
+						parseFormValuesPaymentMethods(form.values),
+					]);
 				}
+
+				// add to database
+				addPaymentMethod(parseFormValuesPaymentMethods(form.values));
+
+				notifications.show({
+					id: "payment-methods-form-success",
+					icon: <IconCheck size={16} stroke={1.5} />,
+					title: "Payment Method Added",
+					message: "Your method has been added",
+					variant: "success",
+				});
 			} catch (error) {
 				notifications.show({
-					id: "payment-method-failed",
+					id: "payment-methods-form-failed",
 					icon: <IconX size={16} stroke={1.5} />,
 					title: "Failed",
 					message: (error as Error).message,
 					variant: "failed",
 				});
 			} finally {
+				// clear forms
 				form.reset();
+
 				setSubmitted(false);
 			}
+		} else {
+			form.validate();
 		}
 	};
 
 	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
+		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
 			<Grid>
 				<GridCol span={{ base: 12, xs: 12 }}>
 					<RadioGroup

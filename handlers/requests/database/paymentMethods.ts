@@ -43,14 +43,15 @@ export const addPaymentMethod = async (paymentMethod: typePaymentMethod): Promis
 	}
 };
 
-export const updatePaymentMethod = async (
-	paymentMethod: typePaymentMethod,
-	context?: "default"
-): Promise<typePaymentMethod[]> => {
+export const updatePaymentMethod = async (data: {
+	paymentMethod: typePaymentMethod;
+	formerValues?: { title: string; name: string };
+	context?: "default";
+}): Promise<typePaymentMethod[]> => {
 	try {
 		const response = await fetch(apiUrl, {
 			method: enumRequest.PUT,
-			body: JSON.stringify({ method: paymentMethod, context }),
+			body: JSON.stringify(data),
 			headers,
 		});
 
