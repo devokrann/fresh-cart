@@ -40,11 +40,15 @@ export const addAddress = async (address: typeAddress): Promise<typeAddress[]> =
 	}
 };
 
-export const updateAddress = async (address: typeAddress, context?: "default"): Promise<typeAddress[]> => {
+export const updateAddress = async (data: {
+	address: typeAddress;
+	formerValues?: { title: string; email: string };
+	context?: "default";
+}): Promise<typeAddress[]> => {
 	try {
 		const response = await fetch(apiUrl, {
 			method: enumRequest.PUT,
-			body: JSON.stringify({ address, context }),
+			body: JSON.stringify(data),
 			headers,
 		});
 
