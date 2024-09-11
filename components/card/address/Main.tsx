@@ -30,7 +30,6 @@ export default function Main({ data }: { data: typeAddress }) {
 						<Text inherit>{data.street}</Text>
 						<Text inherit>{data.city}</Text>
 						<Text inherit>{data.zip}</Text>
-						<Text inherit>{data.state}</Text>
 						<Text inherit>{data.country}</Text>
 					</Stack>
 				</Stack>
@@ -49,7 +48,7 @@ export default function Main({ data }: { data: typeAddress }) {
 					)}
 
 					<Group gap={"xs"}>
-						<ModalAddressEdit data={data}>
+						<ModalAddressEdit data={data} mode="edit">
 							<Button variant="subtle" color="gray" size="xs">
 								Edit
 							</Button>

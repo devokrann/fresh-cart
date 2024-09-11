@@ -7,6 +7,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import React, { useContext } from "react";
 import { typeAddress } from "@/types/address";
 import ContextUserAddresses from "@/contexts/Addresses";
+import { deleteAddress } from "@/handlers/requests/database/addresses";
 
 export default function Delete({ children, data }: { children: React.ReactNode; data: typeAddress }) {
 	const addressesContext = useContext(ContextUserAddresses);
@@ -31,8 +32,12 @@ export default function Delete({ children, data }: { children: React.ReactNode; 
 					message: `The action has been aborted.`,
 					variant: "failed",
 				}),
-			onConfirm: () => {
+			onConfirm: async () => {
+				// remove address from context
 				setAddresses(addresses?.filter(m => m.id != data.id)!);
+
+				// delete address from database
+				await deleteAddress(data);
 
 				notifications.show({
 					id: "address-deletion-confirm",
@@ -43,5 +48,6 @@ export default function Delete({ children, data }: { children: React.ReactNode; 
 				});
 			},
 		});
+
 	return <div onClick={openModal}>{children}</div>;
 }

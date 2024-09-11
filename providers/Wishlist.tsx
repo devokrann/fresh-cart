@@ -5,12 +5,12 @@ import React, { useEffect, useState } from "react";
 import ContextUserWishlist from "@/contexts/Wishlist";
 
 import { typeWishlist } from "@/types/wishlist";
-import getWishlist from "@/handlers/database/getWishlist";
+import getWishlist from "@/handlers/requests/getWishlist";
 
 import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
 
-import postWishlist from "@/handlers/database/postWishlist";
+import postWishlist from "@/handlers/requests/postWishlist";
 import { useDebouncedCallback } from "@mantine/hooks";
 
 export default function Wishlist({ children }: { children: React.ReactNode }) {

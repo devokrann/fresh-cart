@@ -6,6 +6,7 @@ export async function GET(req: Request) {
 	try {
 		const session = await auth();
 
+		// get items from database
 		const addresses = await prisma.address.findMany({ where: { userId: session?.user.id } });
 
 		return Response.json(addresses);
@@ -15,88 +16,116 @@ export async function GET(req: Request) {
 	}
 }
 
+export async function POST(req: Request) {
+	try {
+		const session = await auth();
+
+		const address: typeAddress = await req.json();
+
+		// check if new default
+		if (address.default) {
+			// remove existing user default from database
+			await prisma.user.update({
+				where: { id: session?.user.id },
+				data: {
+					addresses: {
+						updateMany: { where: { default: true }, data: { default: false } },
+					},
+				},
+			});
+		}
+
+		// add new item to database
+		const addAddress = await prisma.user.update({
+			where: { id: session?.user.id },
+			data: {
+				addresses: {
+					create: [
+						{
+							title: address.title,
+							fname: address.fname,
+							lname: address.lname,
+							street: address.street,
+							city: address.city,
+							zip: address.zip,
+							country: address.country,
+							email: address.email,
+							phone: address.phone,
+							type: address.type,
+							default: address.default,
+						},
+					],
+				},
+			},
+		});
+
+		return Response.json(addAddress);
+	} catch (error) {
+		console.error("Error adding address:", error);
+		return Response.error();
+	}
+}
+
 export async function PUT(req: Request) {
 	try {
 		const session = await auth();
 
-		const data: typeAddress[] = await req.json();
+		const { address, context } = await req.json();
 
-		const userAddresses: typeAddress[] = await prisma.address.findMany({
-			where: { userId: session?.user.id },
-		});
-
-		// find items to remove from database
-		const itemsToRemove = userAddresses.filter(a => !data.find(da => da.id == a.id));
-
-		if (itemsToRemove.length > 0) {
-			// remove items from database
-			await Promise.all(
-				userAddresses.map(async da => {
-					const isPresent = itemsToRemove.find(a => a.id == da.id);
-
-					if (isPresent) {
-						await prisma.address.delete({ where: { id: da.id } });
-					}
-				})
-			);
+		// check context
+		if (context == "default") {
+			// remove existing user default from database
+			await prisma.user.update({
+				where: { id: session?.user.id },
+				data: {
+					addresses: {
+						updateMany: { where: { default: true }, data: { default: false } },
+					},
+				},
+			});
 		}
 
-		const result = await Promise.all(
-			data.map(async a => {
-				// check if context item is present in database
-				const isPresent = userAddresses.find(da => da.id == a.id);
+		// update item in database
+		const updateAddress = await prisma.address.update({
+			where: {
+				title_email_userId: {
+					title: address.title,
+					email: address.email,
+					userId: session?.user.id!,
+				},
+			},
+			data: {
+				title: address.title,
+				fname: address.fname,
+				lname: address.lname,
+				street: address.street,
+				city: address.city,
+				zip: address.zip,
+				country: address.country,
+				email: address.email,
+				phone: address.phone,
+				type: address.type,
+				default: context == "default" ? true : address.default,
+			},
+		});
 
-				if (isPresent) {
-					// update item in database
-					await prisma.address.update({
-						where: { id: a.id },
-						data: {
-							title: a.title,
-							fname: a.fname,
-							lname: a.lname,
-							street: a.street,
-							city: a.city,
-							zip: a.zip,
-							state: a.state,
-							country: a.country,
-							email: a.email,
-							phone: a.phone,
-							type: a.type,
-							default: a.default,
-						},
-					});
-				} else {
-					// add new item to database
-					await prisma.user.update({
-						where: { id: session?.user.id },
-						data: {
-							addresses: {
-								create: [
-									{
-										title: a.title,
-										fname: a.fname,
-										lname: a.lname,
-										street: a.street,
-										city: a.city,
-										zip: a.zip,
-										state: a.state,
-										country: a.country,
-										email: a.email,
-										phone: a.phone,
-										type: a.type,
-										default: a.default,
-									},
-								],
-							},
-						},
-					});
-				}
-			})
-		);
-
-		return Response.json(result);
+		return Response.json(updateAddress);
 	} catch (error) {
-		console.error("Error updating addresses:", error);
+		console.error("Error updating address:", error);
+		return Response.error();
+	}
+}
+
+export async function DELETE(req: Request) {
+	try {
+		const { id } = await req.json();
+
+		// delete item from database
+		const deleteAddress = await prisma.address.delete({ where: { id } });
+
+		return Response.json(deleteAddress);
+	} catch (error) {
+		console.error("Error deleting address:", error);
 		return Response.error();
 	}
 }

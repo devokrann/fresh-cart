@@ -10,12 +10,15 @@ import {
 	Grid,
 	GridCol,
 	Group,
+	Input,
+	InputWrapper,
 	Select,
 	Stack,
 	TextInput,
 	Textarea,
 	Title,
 } from "@mantine/core";
+import { hasLength, useForm } from "@mantine/form";
 import { hasLength, useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 
@@ -26,199 +29,194 @@ import email from "@/libraries/validators/special/email";
 import phone from "@/libraries/validators/special/phone";
 import { capitalizeWord, capitalizeWords } from "@/handlers/parsers/string";
 
-import ContextUserAddresses from "@/contexts/Addresses";
-
 import { typeAddress } from "@/types/address";
 
-export default function Addresses({
-	data,
-	modal,
-	mode,
-	type,
-}: {
-	data?: typeAddress;
-	modal?: boolean;
-	mode: "add" | "edit";
-	type: "billing" | "shipping" | string;
-}) {
-	const addressesContext = useContext(ContextUserAddresses);
+import { typeFormAddress } from "@/types/form";
 
-	if (!addressesContext) {
-		throw new Error("ChildComponent must be used within a ContextAddresses.Provider");
+import ContextAddresses from "@/contexts/Addresses";
+
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { addAddress, updateAddress } from "@/handlers/requests/database/addresses";
+
+export default function Addresses({ data, modal }: { data?: typeAddress; modal?: boolean }) {
+	const addressContext = useContext(ContextAddresses);
+
+	if (!addressContext) {
+		throw new Error("ChildComponent must be used within a ContextAddress.Provider");
 	}
 
-	const { addresses, setAddresses } = addressesContext;
+	const { addresses, setAddresses } = addressContext;
 
 	const [submitted, setSubmitted] = useState(false);
 	const [previousValues, setPreviousValues] = useState(data);
 
+	const [checked, setChecked] = useState(false);
+
 	const form = useForm({
 		initialValues: {
-			title: previousValues ? previousValues.title : "",
-			fname: previousValues ? previousValues.fname : "",
-			lname: previousValues ? previousValues.lname : "",
-			street: previousValues ? previousValues.street : "",
-			city: previousValues ? previousValues.city : "",
-			zip: previousValues ? previousValues.zip : "",
-			state: previousValues ? previousValues.state : "",
-			country: previousValues ? previousValues.country : "",
-			email: previousValues ? previousValues.email : "",
-			phone: previousValues ? previousValues.phone : "",
-			type: previousValues ? previousValues.type : type,
-			default: false,
+			billing: {
+				titleBilling: previousValues ? previousValues.title : "",
+				fnameBilling: previousValues ? previousValues.fname : "",
+				lnameBilling: previousValues ? previousValues.lname : "",
+				emailBilling: previousValues ? previousValues.email : "",
+				streetBilling: previousValues ? previousValues.street : "",
+				cityBilling: previousValues ? previousValues.city : "",
+				zipBilling: previousValues ? previousValues.zip : "",
+				countryBilling: previousValues ? previousValues.country : "",
+				phoneBilling: previousValues ? previousValues.phone : "",
+				typeBilling: previousValues ? previousValues.type : "billing",
+				defaultBilling: previousValues ? previousValues.default : false,
+			},
+			shipping: {
+				titleShipping: previousValues ? previousValues.title : "",
+				fnameShipping: previousValues ? previousValues.fname : "",
+				lnameShipping: previousValues ? previousValues.lname : "",
+				emailShipping: previousValues ? previousValues.email : "",
+				streetShipping: previousValues ? previousValues.street : "",
+				cityShipping: previousValues ? previousValues.city : "",
+				zipShipping: previousValues ? previousValues.zip : "",
+				countryShipping: previousValues ? previousValues.country : "",
+				phoneShipping: previousValues ? previousValues.phone : "",
+				typeShipping: previousValues ? previousValues.type : "shipping",
+				defaultShipping: previousValues ? previousValues.default : false,
+			},
 		},
 
 		validate: {
-			title: hasLength({ min: 2, max: 48 }, "Between 2 and 48 characters"),
-			fname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			lname: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			street: hasLength({ min: 2, max: 48 }, "Between 2 and 48 characters"),
-			city: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			zip: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			state: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			country: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
-			email: value => type == "billing" && value && email(value),
-			phone: value => (value && value.trim().length > 0 ? phone(value) : null),
+			billing: {
+				titleBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+				fnameBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+				lnameBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+				emailBilling: value => email(value ? value : ""),
+				streetBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+				cityBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+				zipBilling: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+				countryBilling: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+				phoneBilling: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
+			},
+			shipping: checked
+				? {
+						titleShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+						fnameShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+						lnameShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+						emailShipping: value => value && value.trim().length > 0 && email(value),
+						streetShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+						cityShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+						zipShipping: hasLength({ min: 2, max: 24 }, "Between 2 and 24 characters"),
+						countryShipping: hasLength({ min: 2, max: 48 }, "Between 2 and 24 characters"),
+						phoneShipping: value => value?.length! > 0 && value?.length! < 11 && "Invalid phone number",
+				  }
+				: undefined,
 		},
 	});
 
-	const parse = (rawData: typeAddress) => {
+	const parseBilling = () => {
 		return {
-			title: capitalizeWords(rawData.title.trim()),
-			fname: capitalizeWord(rawData.fname.trim()),
-			lname: capitalizeWord(rawData.lname.trim()),
-			street: capitalizeWords(rawData.street.trim()),
-			city: capitalizeWords(rawData.city.trim()),
-			zip: rawData.zip,
-			state: capitalizeWord(rawData.state.trim()),
-			country: capitalizeWords(rawData.country.trim()),
-			email: rawData.email?.trim().toLowerCase(),
-			phone: rawData.phone?.trim() ? (rawData.phone.trim().length > 0 ? rawData.phone : null) : null,
-			type,
-			default: rawData.default,
+			title: form.values.billing.titleBilling.trim(),
+			fname: capitalizeWord(form.values.billing.fnameBilling.trim()),
+			lname: capitalizeWord(form.values.billing.lnameBilling.trim()),
+			email: form.values.billing.emailBilling?.trim().toLowerCase(),
+			street: form.values.billing.streetBilling.trim(),
+			city: capitalizeWords(form.values.billing.cityBilling.trim()),
+			zip: form.values.billing.zipBilling,
+			country: capitalizeWords(form.values.billing.countryBilling.trim()),
+			type: form.values.billing.typeBilling,
+			default: form.values.billing.defaultBilling,
 		};
 	};
 
-	const handleSubmit = async (formValues: typeAddress) => {
+	const parseShipping = () => {
+		return {
+			title: form.values.shipping.titleShipping.trim(),
+			fname: capitalizeWord(form.values.shipping.fnameShipping.trim()),
+			lname: capitalizeWord(form.values.shipping.lnameShipping.trim()),
+			email: form.values.shipping.emailShipping?.trim().toLowerCase(),
+			street: form.values.shipping.streetShipping.trim(),
+			city: capitalizeWords(form.values.shipping.cityShipping.trim()),
+			zip: form.values.shipping.zipShipping,
+			country: capitalizeWords(form.values.shipping.countryShipping.trim()),
+			type: form.values.shipping.typeShipping,
+			default: form.values.shipping.defaultShipping,
+		};
+	};
+
+	const handleSubmit = async () => {
 		if (form.isValid()) {
 			try {
 				setSubmitted(true);
 
-				if ((mode == "edit" && !form.isDirty()) || previousValues == form.values) {
-					notifications.show({
-						id: "addresses-failed-no-changes",
-						icon: <IconX size={16} stroke={1.5} />,
-						title: "No Changes",
-						message: `None of the fields have been modified.`,
-						variant: "failed",
-					});
+				if (!data) {
+					// add to context
+					setAddresses([...addresses!, parseBilling()]);
+					checked && setAddresses([...addresses!, parseShipping()]);
+
+					// add to database
+					await addAddress(parseBilling());
+					checked && (await addAddress(parseShipping()));
 				} else {
-					switch (mode) {
-						case "add":
-							const newDefault = parse(formValues).default;
-
-							const removedDefault = addresses?.map(m => {
-								if (!m.default) {
-									return m;
-								} else {
-									return { ...m, default: false };
-								}
-							});
-
-							if (!newDefault) {
-								setAddresses([...addresses!, parse(formValues)]);
+					// update in context
+					setAddresses(
+						addresses?.map(a => {
+							if (a.id == data.id) {
+								return { ...parseBilling(), id: data.id };
 							} else {
-								setAddresses([...removedDefault!, parse(formValues)]);
+								return a;
 							}
-							break;
-						case "edit":
-							setPreviousValues({
-								...form.values,
-								phone: form.values.phone?.length > 0 ? form.values.phone : "",
-							});
+						})!
+					);
 
-							setAddresses(
-								addresses?.map(a => {
-									if (a.id == data?.id) {
-										return { ...a, ...parse(formValues) };
-									} else {
-										if (parse(formValues).default) {
-											return { ...a, default: false };
-										} else {
-											return a;
-										}
-									}
-								})!
-							);
-							break;
-					}
-
-					notifications.show({
-						id: "addresses-success",
-						icon: <IconCheck size={16} stroke={1.5} />,
-						autoClose: 5000,
-						title: "Form Submitted",
-						message: "Someone will get back to you within 24 hours",
-						variant: "success",
-					});
+					// update in database
+					await updateAddress({ ...parseBilling(), id: data.id });
 				}
+
+				notifications.show({
+					id: "address-form-success",
+					icon: <IconCheck size={16} stroke={1.5} />,
+					title: "Form Submitted",
+					message: "Someone will get back to you within 24 hours",
+					variant: "success",
+				});
 			} catch (error) {
 				notifications.show({
-					id: "addresses-failed",
+					id: "address-form-failed",
 					icon: <IconX size={16} stroke={1.5} />,
-					autoClose: 5000,
 					title: "Submisstion Failed",
 					message: (error as Error).message,
 					variant: "failed",
 				});
 			} finally {
+				// clear forms
 				form.reset();
+
 				setSubmitted(false);
 			}
 		}
 	};
 
-	const getVariantProps = () => {
-		let email: string;
-		let title: string;
-
-		switch (type) {
-			case "billing":
-				title = "Downtown Office, My Place, etc.";
-				email = "You'll receive your invoice here.";
-
-				return { email, title };
-			case "shipping":
-				title = "Brother's Farm, Sister's Apartment, etc.";
-				email = "Not needed for shipping.";
-
-				return { email, title };
-		}
-	};
-
-	return (
-		<Box component="form" onSubmit={form.onSubmit(values => handleSubmit(values))} noValidate>
-			<Grid gutter={"xs"}>
+	const inputSets = {
+		billing: (
+			<Grid gutter={modal ? "xs" : undefined}>
 				<GridCol span={{ base: 12 }}>
-					<Title order={3}>{capitalizeWord(type)} Address</Title>
+					<Title order={3}>Billing Address</Title>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
 						required
 						label={"Title"}
 						placeholder="Your Address Title"
-						description={`Ex. ${getVariantProps()?.title}`}
-						{...form.getInputProps(`title`)}
+						description={`Ex. Downtown Office, My Place, etc.`}
+						{...form.getInputProps(`billing.titleBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
-						required={type == "billing"}
+						required
 						label={"Email"}
 						placeholder="Your Email"
-						description={getVariantProps()?.email}
-						{...form.getInputProps(`email`)}
+						description={"You'll receive your invoice here."}
+						{...form.getInputProps(`billing.emailBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -227,7 +225,7 @@ export default function Addresses({
 						required
 						label={"First Name"}
 						placeholder="Your First Name"
-						{...form.getInputProps(`fname`)}
+						{...form.getInputProps(`billing.fnameBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -236,7 +234,7 @@ export default function Addresses({
 						required
 						label={"Last Name"}
 						placeholder="Your Last Name"
-						{...form.getInputProps(`lname`)}
+						{...form.getInputProps(`billing.lnameBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
@@ -245,18 +243,17 @@ export default function Addresses({
 						required
 						label={"Street"}
 						placeholder="Your Street"
-						{...form.getInputProps(`street`)}
+						{...form.getInputProps(`billing.streetBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
-					<Select
+					<TextInput
 						required
 						label="City"
 						placeholder="Your City"
-						data={["Kansas", "Tannersville"]}
 						size={modal ? "xs" : undefined}
-						{...form.getInputProps(`city`)}
+						{...form.getInputProps(`billing.cityBilling`)}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
@@ -264,38 +261,175 @@ export default function Addresses({
 						required
 						label={"Zip"}
 						placeholder="Your Zip Code"
-						{...form.getInputProps(`zip`)}
-						size={modal ? "xs" : undefined}
-					/>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 6 }}>
-					<Select
-						required
-						label="State"
-						placeholder="Your State"
-						data={["Nebraska", "Pennsylvania"]}
-						{...form.getInputProps(`state`)}
-						size={modal ? "xs" : undefined}
-					/>
-				</GridCol>
-				<GridCol span={{ base: 12, xs: 6 }}>
-					<Select
-						required
-						label="Country"
-						placeholder="Your Country"
-						data={["United States"]}
-						{...form.getInputProps(`country`)}
+						{...form.getInputProps(`billing.zipBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
 				<GridCol span={{ base: 12, xs: 6 }}>
 					<TextInput
-						label={"Phone"}
-						placeholder="Your Phone"
-						{...form.getInputProps(`phone`)}
+						required
+						label="Country"
+						placeholder="Your Country"
+						{...form.getInputProps(`billing.countryBilling`)}
 						size={modal ? "xs" : undefined}
 					/>
 				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<InputWrapper label="Phone Number" {...form.getInputProps(`billing.phoneBilling`)}>
+						<PhoneInput
+							{...form.getInputProps(`billing.phoneBilling`)}
+							country={"ke"}
+							inputProps={{
+								name: "phone",
+								required: false,
+								autoFocus: false,
+							}}
+							containerStyle={{
+								marginBottom: 5,
+							}}
+							inputClass="phone-input-field"
+							buttonClass="phone-input-button"
+							containerClass="phone-input-container"
+							dropdownClass="phone-input-dropdown"
+						/>
+					</InputWrapper>
+				</GridCol>
+			</Grid>
+		),
+		shipping: (
+			<Grid gutter={modal ? "xs" : undefined}>
+				<GridCol span={{ base: 12 }}>
+					<Title order={3}>Shipping Address</Title>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={"Title"}
+						placeholder="Your Address Title"
+						description={`Ex. Brother's Farm, Sister's Apartment, etc.`}
+						{...form.getInputProps(`shipping.titleShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						label={"Email"}
+						placeholder="Your Email"
+						description={"Not needed for shipping."}
+						{...form.getInputProps(`shipping.emailShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={"First Name"}
+						placeholder="Your First Name"
+						{...form.getInputProps(`shipping.fnameShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={"Last Name"}
+						placeholder="Your Last Name"
+						{...form.getInputProps(`shipping.lnameShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={"Street"}
+						placeholder="Your Street"
+						{...form.getInputProps(`shipping.streetShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label="City"
+						placeholder="Your City"
+						size={modal ? "xs" : undefined}
+						{...form.getInputProps(`shipping.cityShipping`)}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label={"Zip"}
+						placeholder="Your Zip Code"
+						{...form.getInputProps(`shipping.zipShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<TextInput
+						required
+						label="Country"
+						placeholder="Your Country"
+						{...form.getInputProps(`shipping.countryShipping`)}
+						size={modal ? "xs" : undefined}
+					/>
+				</GridCol>
+				<GridCol span={{ base: 12, xs: 6 }}>
+					<InputWrapper label="Phone Number" {...form.getInputProps(`shipping.phoneShipping`)}>
+						<PhoneInput
+							{...form.getInputProps(`shipping.phoneShipping`)}
+							country={"ke"}
+							inputProps={{
+								name: "phone",
+								required: false,
+								autoFocus: false,
+							}}
+							containerStyle={{
+								marginBottom: 5,
+							}}
+							inputClass="phone-input-field"
+							buttonClass="phone-input-button"
+							containerClass="phone-input-container"
+							dropdownClass="phone-input-dropdown"
+						/>
+					</InputWrapper>
+				</GridCol>
+			</Grid>
+		),
+	};
+
+	const shippingAddressInputs = ((data && data.type == "shipping") || checked) && (
+		<GridCol span={{ base: 12, md: modal ? (!data ? 6 : 12) : 12 }}>{inputSets.shipping}</GridCol>
+	);
+
+	return (
+		<Box component="form" onSubmit={form.onSubmit(handleSubmit)} noValidate>
+			<Grid gutter={"xl"}>
+				{((data && data.type == "billing") || !data) && (
+					<GridCol span={{ base: 12, md: modal ? (checked ? 6 : 12) : 12 }}>{inputSets.billing}</GridCol>
+				)}
+
+				{modal && shippingAddressInputs}
+
+				{!data && modal && (
+					<GridCol span={{ base: 12 }}>
+						<Checkbox
+							label="Use different shipping address"
+							checked={checked}
+							onChange={event => setChecked(event.currentTarget.checked)}
+						/>
+					</GridCol>
+				)}
+
+				<GridCol span={{ base: 12 }}>
+					<Checkbox
+						label="Make default address"
+						key={form.key("billing.defaultBilling")}
+						{...form.getInputProps("billing.defaultBilling", { type: "checkbox" })}
+					/>
+				</GridCol>
+
+				{!modal && shippingAddressInputs}
 
 				<GridCol span={{ base: 12 }}>
 					<Group mt={"xs"}>

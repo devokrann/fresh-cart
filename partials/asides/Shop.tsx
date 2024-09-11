@@ -9,8 +9,8 @@ import InputCheckboxStores from "@/components/inputs/checkbox/Stores";
 import CardShopOffer from "@/components/card/shop/Offer";
 import FormShopStores from "../forms/shop/Stores";
 
-import getProducts from "@/handlers/database/getProducts";
-import getProductParentCategories from "@/handlers/database/getProductParentCategories";
+import getProducts from "@/handlers/requests/getProducts";
+import getProductParentCategories from "@/handlers/requests/getProductParentCategories";
 
 export default async function Shop() {
 	const products = await getProducts();

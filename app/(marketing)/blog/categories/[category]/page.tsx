@@ -10,8 +10,8 @@ import CardBlog from "@/components/card/Blog";
 import { typeParams } from "../layout";
 import { capitalizeWord } from "@/handlers/parsers/string";
 import { linkify } from "@/handlers/parsers/string";
-import getPostCategories from "@/handlers/database/getPostCategories";
-import getPosts from "@/handlers/database/getPosts";
+import getPostCategories from "@/handlers/requests/getPostCategories";
+import getPosts from "@/handlers/requests/getPosts";
 
 export default async function Categories({ params }: { params: typeParams }) {
 	const postCategories = await getPostCategories();
