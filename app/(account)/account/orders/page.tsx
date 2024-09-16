@@ -30,6 +30,7 @@ import TemplateEmailContact from "@/templates/email/Contact";
 import contact from "@/data/contact";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { getOrders } from "@/handlers/requests/database/orders";
 
 export const metadata: Metadata = { title: "Orders" };
 
@@ -37,6 +38,8 @@ export default async function Orders() {
 	const session = await auth();
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+
+	const orders = await getOrders();
 
 	return (
 		<LayoutPage>
@@ -54,7 +57,7 @@ export default async function Orders() {
 					</GridCol>
 
 					<GridCol span={12}>
-						<TableOrders />
+						<TableOrders data={orders} />
 					</GridCol>
 				</Grid>
 			</LayoutSection>

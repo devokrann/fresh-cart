@@ -27,16 +27,14 @@ import {
 	Title,
 } from "@mantine/core";
 
-import { IconClearAll, IconMoodEmpty, IconShoppingCartPlus, IconTrash, IconX } from "@tabler/icons-react";
-
 import classes from "./Products.module.scss";
 import Link from "next/link";
 import NotificationEmpty from "@/components/notification/Empty";
 import { linkify } from "@/handlers/parsers/string";
 import { getUnits } from "@/utilities/variant";
-import { typeCart } from "@/types/cart";
+import { typeOrderedProduct } from "@/types/orderedProducts";
 
-export default function Products({ data }: { data: typeCart[] }) {
+export default function Products({ data }: { data: typeOrderedProduct[] }) {
 	const rows = data.map(item => (
 		<TableTr key={item.variant.id}>
 			<TableTd>

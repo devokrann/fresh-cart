@@ -29,7 +29,7 @@ import CarouselShop from "@/components/carousel/Shop";
 import { IconGridDots, IconLayoutGrid, IconList, IconSearch } from "@tabler/icons-react";
 import TabsProduct from "@/components/tabs/product/Images";
 
-import CardShopCheckout from "@/components/card/shop/Checkout";
+import CardInvoiceOrder from "@/components/card/invoice/Order";
 import CardAddressOrder from "@/components/card/address/Order";
 
 import { typeParams } from "./layout";
@@ -40,20 +40,40 @@ import { typeOrder } from "@/types/order";
 
 import BadgeOrder from "@/components/badges/Order";
 
-import getOrders from "@/handlers/requests/getOrders";
+import { getOrders } from "@/handlers/requests/database/orders";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import getAddresses from "@/handlers/requests/database/addresses";
+import { parseDateYmd } from "@/handlers/parsers/date";
+import { prependZeros } from "@/handlers/parsers/number";
 
 export default async function Order({ params }: { params: typeParams }) {
 	const session = await auth();
 
 	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
-	const orders = session?.user.id ? await getOrders(session.user.id) : null;
-	const addresses = session?.user.id ? await getAddresses() : null;
+	const orders = session?.user.id ? await getOrders() : null;
 
 	const data: typeOrder | undefined = orders?.find(order => order.id == params.order);
+
+	let sentence;
+
+	switch (data?.status) {
+		case "processing":
+			sentence = <>is currently being processed</>;
+			break;
+		case "completed":
+			const currentDate = new Date(Date.now());
+			sentence =
+				currentDate > data.dateDelivered! ? (
+					<>was delivered on {parseDateYmd(data.dateDelivered!)}</>
+				) : (
+					<>is currently being delivered</>
+				);
+			break;
+		case "canceled":
+			sentence = <>was later cancelled</>;
+			break;
+	}
 
 	return (
 		<LayoutPage>
@@ -70,8 +90,8 @@ export default async function Order({ params }: { params: typeParams }) {
 									<BadgeOrder status={data?.status!} />
 								</Group>
 								<Text inherit>
-									Order <u>{data?.id}</u> was placed on <u>{data?.datePlaced.toDateString()}</u> and
-									is currently being prepared.
+									Order <u>#{prependZeros(5, data?.id!)}</u> was placed on{" "}
+									{parseDateYmd(data?.datePlaced!)} and {sentence}.
 								</Text>
 								<Text inherit>
 									If you have any questions, please feel free to contact us, our customer service
@@ -92,12 +112,12 @@ export default async function Order({ params }: { params: typeParams }) {
 					<GridCol span={12}>
 						<Grid>
 							<GridCol span={{ base: 12, md: 5 }}>
-								<CardShopCheckout />
+								<CardInvoiceOrder orderedProducts={data?.orderedProducts!} />
 							</GridCol>
 
 							<GridCol span={{ base: 12, md: 7 }}>
 								<Grid>
-									{addresses?.map(address => (
+									{data?.addresses?.map(address => (
 										<GridCol key={address.id} span={{ base: 12, md: 6 }}>
 											<CardAddressOrder data={address} />
 										</GridCol>

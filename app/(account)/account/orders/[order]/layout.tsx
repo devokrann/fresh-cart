@@ -2,14 +2,19 @@ import React from "react";
 
 import LayoutBody from "@/layouts/Body";
 import { Metadata } from "next";
-import orders from "@/data/orders";
+import { getOrders } from "@/handlers/requests/database/orders";
+import { prependZeros } from "@/handlers/parsers/number";
 
 export interface typeParams {
-	order: string;
+	order: number;
 }
 
-export const generateMetadata = ({ params }: { params: typeParams }): Metadata => {
-	return { title: `#${orders.find(order => order.id == params.order)?.id}` };
+export const generateMetadata = async ({ params }: { params: typeParams }): Promise<Metadata> => {
+	const orders = await getOrders();
+
+	const order = orders.find(order => order.id == params.order);
+
+	return { title: `#${prependZeros(5, order?.id!)}` };
 };
 
 export default function ProductDetails({

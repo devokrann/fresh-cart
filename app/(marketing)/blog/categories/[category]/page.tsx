@@ -11,7 +11,7 @@ import { typeParams } from "../layout";
 import { capitalizeWord } from "@/handlers/parsers/string";
 import { linkify } from "@/handlers/parsers/string";
 import getPostCategories from "@/handlers/requests/getPostCategories";
-import getPosts from "@/handlers/requests/getPosts";
+import { getPosts } from "@/handlers/requests/database/posts";
 
 export default async function Categories({ params }: { params: typeParams }) {
 	const postCategories = await getPostCategories();

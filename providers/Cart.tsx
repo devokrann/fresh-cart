@@ -5,11 +5,11 @@ import React, { useEffect, useState } from "react";
 import ContextUserCart from "@/contexts/Cart";
 
 import { typeCart } from "@/types/cart";
-import getCart from "@/handlers/requests/getCart";
+import { getCart } from "@/handlers/requests/database/cart";
 
 import { UserData } from "@/types/enums";
 import { useSession } from "next-auth/react";
-import postCart from "@/handlers/requests/postCart";
+import { postCart } from "@/handlers/requests/database/cart";
 import { useDebouncedCallback } from "@mantine/hooks";
 
 export default function Cart({ children }: { children: React.ReactNode }) {

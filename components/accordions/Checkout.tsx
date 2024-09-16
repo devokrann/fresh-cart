@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import NextImage from "next/image";
 
@@ -35,15 +35,29 @@ import { MonthPickerInput } from "@mantine/dates";
 import CardPaymentMain from "../card/payment/Main";
 
 import classes from "./Checkout.module.scss";
-import { IconClockHour4, IconCreditCardPay, IconMapPin, IconPackageExport } from "@tabler/icons-react";
+import {
+	IconCheck,
+	IconClockHour4,
+	IconCreditCardPay,
+	IconMapPin,
+	IconPackageExport,
+	IconX,
+} from "@tabler/icons-react";
 
 import { getPaymentCardImage } from "@/utilities/image";
 
 import PaymentMethods from "@/contexts/Payment";
 import ContextAddresses from "@/contexts/Addresses";
+import { addOrder } from "@/handlers/requests/database/orders";
+import { notifications } from "@mantine/notifications";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import ContextUserCart from "@/contexts/Cart";
 
 export default function Checkout() {
 	const paymentMethodsContext = useContext(PaymentMethods);
+
+	const router = useRouter();
 
 	if (!paymentMethodsContext) {
 		throw new Error("ChildComponent must be used within a ContextPaymentMethods.Provider");
@@ -59,33 +73,57 @@ export default function Checkout() {
 
 	const { addresses, setAddresses } = addressesContext;
 
+	const cartContext = useContext(ContextUserCart);
+
+	if (!cartContext) {
+		throw new Error("ChildComponent must be used within a ContextCart.Provider");
+	}
+
+	const { cart, setCart } = cartContext;
+
 	const [checked, setChecked] = useState(false);
 
-	const paymentOptions = [
-		{
-			title: "Payment with Paypal",
-			desc: <Text inherit>You will be redirected to PayPal website to complete your purchase securely.</Text>,
-		},
-		{
-			title: "Credit / Debit Card",
-			desc: (
-				<Stack>
-					<Text inherit>
-						Safe money transfer using your bank account. We support Mastercard tercard, Visa, Discover and
-						Stripe.
-					</Text>
-				</Stack>
-			),
-		},
-		{
-			title: "Pay with Payoneer",
-			desc: <Text inherit>You will be redirected to Payoneer website to complete your purchase securely.</Text>,
-		},
-		{
-			title: "Cash on Delivery",
-			desc: <Text inherit>Pay with cash when your order is delivered.</Text>,
-		},
-	];
+	const [billingAddress, setBillingAddress] = useState("");
+	const [shippingAddress, setShippingAddress] = useState("");
+	const [paymentMethod, setPaymentMethod] = useState("");
+	const [deliveryInstructions, setDeliveryInstructions] = useState("");
+	const [submitting, setSubmitting] = useState(false);
+
+	const handleSubmit = async () => {
+		try {
+			setSubmitting(true);
+
+			// send post request
+			await addOrder({
+				orderDetails: {
+					deliveryInstructions,
+				},
+				billingAddressTitle: billingAddress,
+				shippingAddressTitle: shippingAddress,
+				paymentMethodTitle: paymentMethod,
+			});
+
+			// clear cart
+			setCart([]);
+
+			// redirect to success page
+			router.replace("/shop/checkout/order-placed");
+		} catch (e) {
+			notifications.show({
+				id: "checkout-failed",
+				icon: <IconX size={16} stroke={1.5} />,
+				title: "Failed",
+				message: `Could not place order.`,
+				variant: "failed",
+			});
+		} finally {
+			setSubmitting(false);
+		}
+	};
+
+	useEffect(() => {
+		checked && setShippingAddress("");
+	}, [checked]);
 
 	const skeletons = [
 		{ key: 1, element: <Skeleton h={200} /> },
@@ -99,14 +137,12 @@ export default function Checkout() {
 			panel: (
 				<Stack>
 					<Group justify="end">
-						{/* <ModalAddressEdit> */}
-						<Button size="xs" variant="outline" color="gray">
-							Add a New Address
+						<Button size="xs" variant="outline" color="gray" component={Link} href={"/account/addresses"}>
+							View Addresses
 						</Button>
-						{/* </ModalAddressEdit> */}
 					</Group>
 
-					<RadioGroup>
+					<RadioGroup value={billingAddress} onChange={setBillingAddress}>
 						<Grid>
 							{!addresses
 								? skeletons.map(i => (
@@ -171,15 +207,19 @@ export default function Checkout() {
 						/>
 
 						<Box opacity={checked ? 0 : 1}>
-							{/* <ModalAddressEdit> */}
-							<Button size="xs" variant="outline" color="gray">
-								Add a New Address
+							<Button
+								size="xs"
+								variant="outline"
+								color="gray"
+								component={Link}
+								href={"/account/addresses"}
+							>
+								View Addresses
 							</Button>
-							{/* </ModalAddressEdit> */}
 						</Box>
 					</Group>
 
-					<RadioGroup>
+					<RadioGroup value={shippingAddress} onChange={setShippingAddress}>
 						<Grid>
 							{!checked &&
 								(!addresses
@@ -248,6 +288,8 @@ export default function Checkout() {
 					maxRows={10}
 					autosize
 					resize="vertical"
+					value={deliveryInstructions}
+					onChange={event => setDeliveryInstructions(event.currentTarget.value)}
 				/>
 			),
 		},
@@ -257,12 +299,12 @@ export default function Checkout() {
 			panel: (
 				<Stack>
 					<Group justify="end">
-						<Button size="xs" variant="outline" color="gray">
-							Add a New Payment Method
+						<Button size="xs" variant="outline" color="gray" component={Link} href={"/account/payment"}>
+							View Payment Methods
 						</Button>
 					</Group>
 
-					<RadioGroup>
+					<RadioGroup value={paymentMethod} onChange={setPaymentMethod}>
 						<Grid>
 							{!paymentMethods
 								? skeletons.map(i => (
@@ -356,7 +398,9 @@ export default function Checkout() {
 								Next
 							</Button>
 						) : (
-							<Button size="xs">Place Order</Button>
+							<Button size="xs" onClick={handleSubmit} loading={submitting}>
+								Place Order
+							</Button>
 						)}
 					</Group>
 				</Stack>

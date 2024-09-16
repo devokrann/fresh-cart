@@ -37,7 +37,7 @@ import { typeParams } from "./layout";
 import { typeProduct } from "@/types/product";
 
 import TabsReview from "@/components/tabs/product/Review";
-import getProducts from "@/handlers/requests/getProducts";
+import { getProducts } from "@/handlers/requests/database/getProducts";
 
 export default async function Shop({ params }: { params: typeParams }) {
 	const products = await getProducts();

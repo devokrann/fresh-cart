@@ -41,6 +41,8 @@ import TemplateEmailContact from "@/templates/email/Contact";
 import contact from "@/data/contact";
 import Link from "next/link";
 
+import { CartCount } from "@/partials/context/Count";
+
 export const metadata: Metadata = { title: "Cart" };
 
 export default async function Cart() {
@@ -54,7 +56,9 @@ export default async function Cart() {
 								<Title order={2} fw={"bold"}>
 									My Cart
 								</Title>
-								<Text inherit>There are {"5"} products in your cart.</Text>
+								<Text inherit>
+									There are <CartCount /> products in your cart.
+								</Text>
 							</Stack>
 
 							<Group gap={"xs"}>

@@ -21,9 +21,9 @@ import ContextCart from "@/contexts/Cart";
 
 import FormShopRedeem from "@/partials/forms/shop/Redeem";
 
-import CardProductCheckout from "../product/Checkout";
+import CardProductInvoiceCart from "../product/invoice/Cart";
 
-import TableInvoice from "@/components/tables/Invoice";
+import TableInvoiceCart from "@/components/tables/invoice/Cart";
 
 import classes from "./Checkout.module.scss";
 import contact from "@/data/contact";
@@ -65,13 +65,13 @@ export default function Checkout() {
 										: undefined
 								}
 							>
-								<CardProductCheckout data={product} />
+								<CardProductInvoiceCart data={product} />
 							</Box>
 						))}
 					</Stack>
 				)}
 
-				<TableInvoice />
+				<TableInvoiceCart />
 
 				<Text c="dimmed" fz={"xs"}>
 					By placing your order, you agree to be bound by the {contact.name.company}{" "}

@@ -27,26 +27,14 @@ import {
 	NumberInputHandlers,
 } from "@mantine/core";
 
-import {
-	IconEye,
-	IconHeart,
-	IconMinus,
-	IconPlus,
-	IconShoppingCart,
-	IconShoppingCartMinus,
-	IconShoppingCartPlus,
-	IconShoppingCartX,
-	IconTrash,
-} from "@tabler/icons-react";
-
 import { linkify } from "@/handlers/parsers/string";
 
-import classes from "./Checkout.module.scss";
+import classes from "./Order.module.scss";
 
-import { typeCart } from "@/types/cart";
 import { getUnits } from "@/utilities/variant";
+import { typeOrderedProduct } from "@/types/orderedProducts";
 
-export default function Checkout({ data }: { data: typeCart }) {
+export default function Checkout({ data }: { data: typeOrderedProduct }) {
 	return (
 		<Card className={classes.card}>
 			<Grid align="center">
@@ -54,7 +42,7 @@ export default function Checkout({ data }: { data: typeCart }) {
 					<Stack>
 						<Image
 							src={data.variant.image}
-							alt={data.product.title}
+							alt={data.variant.product.title}
 							w={"100%"}
 							radius={"md"}
 							component={NextImage}
@@ -70,11 +58,11 @@ export default function Checkout({ data }: { data: typeCart }) {
 						<Anchor
 							underline="never"
 							component={Link}
-							href={`/shop/products/${linkify(data.product.title)}`}
+							href={`/shop/products/${linkify(data.variant.product.title)}`}
 							className={classes.link}
 						>
 							<Title order={3} fz={"sm"} fw={"bold"} lh={1}>
-								{data.product.title}
+								{data.variant.product.title}
 							</Title>
 						</Anchor>
 
