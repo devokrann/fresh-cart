@@ -7,7 +7,7 @@ import FormShopRedeem from "@/partials/forms/shop/Redeem";
 
 import classes from "./Cart.module.scss";
 
-import TableInvoice from "@/components/tables/Invoice";
+import TableInvoiceCart from "@/components/tables/invoice/Cart";
 
 export default function Cart() {
 	return (
@@ -17,7 +17,7 @@ export default function Cart() {
 					Summary
 				</Title>
 
-				<TableInvoice />
+				<TableInvoiceCart />
 
 				<Divider />
 

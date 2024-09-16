@@ -36,7 +36,7 @@ import LayoutSection from "@/layouts/Section";
 import FormContact from "@/partials/forms/Contact";
 import AccordionFaq from "@/components/accordions/Faq";
 import TableCart from "@/components/tables/Cart";
-import CardShopCheckout from "@/components/card/shop/Checkout";
+import CardShopCheckout from "@/components/card/invoice/Checkout";
 import AccordionCheckout from "@/components/accordions/Checkout";
 
 import TemplateEmailContact from "@/templates/email/Contact";
@@ -45,13 +45,14 @@ import contact from "@/data/contact";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { CartCount } from "@/partials/context/Count";
 
 export const metadata: Metadata = { title: "Checkout" };
 
 export default async function Checkout() {
 	const session = await auth();
 
-	!session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
+	// !session && redirect(process.env.NEXT_PUBLIC_SIGN_IN_URL!);
 
 	return (
 		<LayoutPage>
@@ -63,13 +64,19 @@ export default async function Checkout() {
 								<Title order={2} fw={"bold"}>
 									Checkout
 								</Title>
-								<Text inherit>
-									Already have an account?{" "}
-									<Anchor inherit component={Link} href={"#"}>
-										Sign in
-									</Anchor>
-									.
-								</Text>
+								{!session ? (
+									<Text inherit>
+										Already have an account?{" "}
+										<Anchor inherit component={Link} href={"#"}>
+											Sign in
+										</Anchor>
+										.
+									</Text>
+								) : (
+									<Text inherit>
+										There are <CartCount /> products in your cart.
+									</Text>
+								)}
 							</Stack>
 						</Group>
 					</GridCol>

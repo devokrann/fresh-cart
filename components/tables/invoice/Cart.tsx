@@ -6,8 +6,9 @@ import React, { useContext } from "react";
 import ContextCart from "@/contexts/Cart";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useCalculateCart } from "@/hooks/calculator";
 
-export default function Invoice() {
+export default function Cart() {
 	const pathname = usePathname();
 
 	const cartContext = useContext(ContextCart);
@@ -18,29 +19,7 @@ export default function Invoice() {
 
 	const { cart, setCart } = cartContext;
 
-	const getTotal = () => {
-		let total = 0;
-
-		cart?.map(p => {
-			if (p.quantity) {
-				total += p.variant.pricePresent * p.quantity;
-			}
-		});
-
-		return total;
-	};
-
-	const itemSubtotal = { label: "Item Subtotal", value: getTotal() };
-	const shipping = { label: "Shipping", value: Math.ceil(getTotal() * 0.1) };
-	const serviceFee = { label: "Service Fee", value: Math.ceil(3 * cart?.length!) };
-	const tax = { label: "Tax", value: Math.ceil(getTotal() * 0) };
-	const discount = { label: "Discount", value: Math.ceil(getTotal() * 0.15) };
-	const subTotal = {
-		label: "Subtotal",
-		value: Math.ceil(itemSubtotal.value + shipping.value + serviceFee.value + tax.value - discount.value),
-	};
-
-	const data = [itemSubtotal, shipping, serviceFee, tax, discount, subTotal];
+	const { array: data, object } = useCalculateCart();
 
 	const rows = data.map(item => (
 		<Table.Tr key={item.label} fw={data.indexOf(item) == data.length - 1 ? "bold" : undefined}>
@@ -81,7 +60,7 @@ export default function Invoice() {
 										thousandSeparator
 										prefix="$ "
 										suffix=".00"
-										value={subTotal.value}
+										value={object.subTotal.value}
 									/>
 								)}
 							</Text>

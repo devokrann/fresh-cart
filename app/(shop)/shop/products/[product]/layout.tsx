@@ -3,7 +3,7 @@ import React from "react";
 import LayoutBody from "@/layouts/Body";
 import { Metadata } from "next";
 import { linkify } from "@/handlers/parsers/string";
-import getProducts from "@/handlers/requests/getProducts";
+import { getProducts } from "@/handlers/requests/database/getProducts";
 
 export interface typeParams {
 	product: string;

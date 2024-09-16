@@ -36,25 +36,27 @@ import classes from "./Main.module.scss";
 import Link from "next/link";
 import NotificationEmpty from "@/components/notification/Empty";
 import { typeOrder } from "@/types/order";
+import { calculateOrderedProducts } from "@/hooks/calculator";
+import { parseDateYmd } from "@/handlers/parsers/date";
+import { prependZeros } from "@/handlers/parsers/number";
 
 export default function Main({ data }: { data: typeOrder[] }) {
 	const rows = data.map(order => {
-		let subTotal: number = 0;
+		const { object: totals } = calculateOrderedProducts(order.orderedProducts);
 
-		order.orderedProducts.map(op => (subTotal += op.variant.pricePresent));
-
-		const getTotal = () => subTotal + order.taxFee + order.serviceFee + order.shippingFee;
+		const getTotal = () =>
+			totals.subTotal.value + totals.tax.value + totals.serviceFee.value + totals.shipping.value;
 
 		return (
 			<TableTr key={order.id}>
 				<TableTd>
 					<Text inherit fz={"sm"}>
-						# {order.id}
+						#{prependZeros(5, order.id)}
 					</Text>
 				</TableTd>
 				<TableTd>
 					<Text inherit fz={"sm"}>
-						{order.datePlaced.toDateString()}
+						{parseDateYmd(order.datePlaced)}
 					</Text>
 				</TableTd>
 				<TableTd>

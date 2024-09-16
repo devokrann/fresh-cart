@@ -6,7 +6,7 @@ import LayoutPage from "@/layouts/Page";
 import LayoutSection from "@/layouts/Section";
 
 import CardBlog from "@/components/card/Blog";
-import getPosts from "@/handlers/requests/getPosts";
+import { getPosts } from "@/handlers/requests/database/posts";
 
 export default async function Blog() {
 	const posts = await getPosts();

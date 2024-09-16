@@ -14,7 +14,7 @@ import classes from "./Blog.module.scss";
 import { IconBrandFacebook, IconBrandLinkedin, IconBrandTwitter } from "@tabler/icons-react";
 
 import { typeParams } from "../layout";
-import getPosts from "@/handlers/requests/getPosts";
+import { getPosts } from "@/handlers/requests/database/posts";
 
 export default async function Post({ params }: { params: typeParams }) {
 	const posts = await getPosts();

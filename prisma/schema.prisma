@@ -42,7 +42,7 @@ model Address {
   userId String  @map("user_id")
   orders Order[]
 
-  @@unique([title, email, userId])
+  @@unique([title, userId])
   @@map("addresses")
 }
 
@@ -124,19 +124,19 @@ model Device {
 }
 
 model Order {
-  datePlaced    DateTime  @map("date_placed")
-  dateDelivered DateTime? @map("date_delivered")
-  taxFee        Int       @map("tax_fee")
-  serviceFee    Int       @map("service_fee")
-  shippingFee   Int       @map("shipping_fee")
-  status        String
+  datePlaced           DateTime  @map("date_placed")
+  status               String
+  deliveryInstructions String?   @map("delivery_instructions")
+  dateDelivered        DateTime? @map("date_delivered")
 
-  id        String   @id @default(cuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String           @map("user_id")
+  paymentMethod   PaymentMethod    @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId String           @map("payment_method_id")
   purchase        Purchase?
   addresses       Address[]
   orderedProducts OrderedProduct[]
@@ -154,7 +154,7 @@ model OrderedProduct {
   variant   Variant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
   variantId String?  @map("variant_id")
   order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId   String   @map("order_id")
+  orderId   Int      @map("order_id")
 
   @@unique([variantId, orderId])
   @@map("ordered_products")
@@ -204,10 +204,11 @@ model PaymentMethod {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @map("user_id")
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String  @map("user_id")
+  orders Order[]
 
-  @@unique([userId, name, title])
+  @@unique([userId, title])
   @@map("payment_methods")
 }
 
@@ -279,8 +280,8 @@ model Purchase {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId String @unique @map("order_id")
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId Int   @unique @map("order_id")
 
   @@map("purchases")
 }

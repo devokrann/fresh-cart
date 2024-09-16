@@ -63,8 +63,8 @@ export default async function OrderPlaced() {
 							Your Order Has Been Placed!
 						</Title>
 						<Text fz={"lg"} ta={"center"}>
-							Thank you, {"Julie"}. Your order has been completed. Your order hasn&apos;t shipped yet but
-							we will send you an email when it does.
+							Thank you{session?.user.name && `, ${session.user.name}`}. Your order has been placed. We
+							will send you an email when your order ships.
 						</Text>
 					</Stack>
 

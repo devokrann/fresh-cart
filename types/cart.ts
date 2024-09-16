@@ -3,7 +3,7 @@ import { typeVariant } from "./variant";
 import { typeUser } from "./user";
 import { typeProduct } from "./product";
 
-export interface typeCart {
+export interface typeCart extends typeDatabaseFields {
 	quantity: number;
 	compoundId: string;
 
