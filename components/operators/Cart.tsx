@@ -14,7 +14,7 @@ export default function Cart({
 	children,
 }: {
 	operation: {
-		type: "add" | "remove" | "decrease" | "increase" | "clear";
+		type: "add" | "remove" | "decrease" | "increase" | "clear" | "transfer";
 		items?: typeProductVariant[];
 		unmount?: boolean;
 		quantity?: number;
@@ -98,24 +98,25 @@ export default function Cart({
 			const compoundIdsToRemove = itemsToRemove.map(item => joinIds(item.product.id, item.variant.id));
 			cart && setCart(cart.filter(p => !compoundIdsToRemove.includes(p.compoundId)));
 
-			notifications.show({
-				id: `cart-remove-${itemsToRemove.map(item => joinIds(item.product.id, item.variant.id)).join("-")}`,
-				icon: <IconShoppingCartMinus size={16} stroke={1.5} />,
-				title: `Removed From Cart`,
-				message: (
-					<Text inherit>
-						{itemsToRemove.length > 1 ? (
-							`${itemsToRemove.length} items`
-						) : (
-							<Text component="span" inherit fw={500} c={"sl.4"}>
-								{itemsToRemove[0].product.title}
-							</Text>
-						)}{" "}
-						removed from your cart.
-					</Text>
-				),
-				variant: "failed",
-			});
+			operation.type != "transfer" &&
+				notifications.show({
+					id: `cart-remove-${itemsToRemove.map(item => joinIds(item.product.id, item.variant.id)).join("-")}`,
+					icon: <IconShoppingCartMinus size={16} stroke={1.5} />,
+					title: `Removed From Cart`,
+					message: (
+						<Text inherit>
+							{itemsToRemove.length > 1 ? (
+								`${itemsToRemove.length} items`
+							) : (
+								<Text component="span" inherit fw={500} c={"sl.4"}>
+									{itemsToRemove[0].product.title}
+								</Text>
+							)}{" "}
+							removed from your cart.
+						</Text>
+					),
+					variant: "failed",
+				});
 		} else {
 			notifications.show({
 				id: `cart-removed`,
@@ -153,6 +154,7 @@ export default function Cart({
 		} else {
 			operation.type == "add" && addToCart(operation.items);
 			operation.type == "remove" && removeFromCart(operation.items);
+			operation.type == "transfer" && removeFromCart(operation.items);
 			operation.type == "decrease" &&
 				updateQuantity.decrease(joinIds(operation.items[0].product.id, operation.items[0].variant.id));
 			operation.type == "increase" &&

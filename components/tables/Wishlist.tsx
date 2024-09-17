@@ -128,24 +128,35 @@ export default function Wishlist() {
 				)}
 			</TableTd>
 			<TableTd w={widths.cart}>
-				<OperatorWishlist
-					operation={{ type: "transfer", items: [{ product: item.product!, variant: item.variant! }] }}
-				>
-					<OperatorCart
-						operation={{ type: "add", items: [{ product: item.product!, variant: item.variant! }] }}
+				{!item.variant?.available ? (
+					<Button
+						variant="outline"
+						leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
+						size="xs"
+						disabled={true}
 					>
-						<Button
-							variant="outline"
-							leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
-							onClick={() =>
-								setSelectedRows(selectedRows.filter(position => position !== item.compoundId))
-							}
-							size="xs"
+						Cart
+					</Button>
+				) : (
+					<OperatorWishlist
+						operation={{ type: "transfer", items: [{ product: item.product!, variant: item.variant! }] }}
+					>
+						<OperatorCart
+							operation={{ type: "add", items: [{ product: item.product!, variant: item.variant! }] }}
 						>
-							Add to Cart
-						</Button>
-					</OperatorCart>
-				</OperatorWishlist>
+							<Button
+								variant="outline"
+								leftSection={<IconShoppingCartPlus size={16} stroke={2} />}
+								onClick={() =>
+									setSelectedRows(selectedRows.filter(position => position !== item.compoundId))
+								}
+								size="xs"
+							>
+								Cart
+							</Button>
+						</OperatorCart>
+					</OperatorWishlist>
+				)}
 			</TableTd>
 			<TableTd w={widths.remove}>
 				<OperatorWishlist
