@@ -63,12 +63,13 @@ export default async function Order({ params }: { params: typeParams }) {
 			break;
 		case "completed":
 			const currentDate = new Date(Date.now());
-			sentence =
-				currentDate > data.dateDelivered! ? (
-					<>was delivered on {parseDateYmd(data.dateDelivered!)}</>
-				) : (
-					<>is currently being delivered</>
-				);
+			sentence = !data.dateDelivered ? (
+				<>is yet to be delivered</>
+			) : currentDate > data.dateDelivered! ? (
+				<>was delivered on {parseDateYmd(data.dateDelivered!)}</>
+			) : (
+				<>is currently being delivered</>
+			);
 			break;
 		case "canceled":
 			sentence = <>was later cancelled</>;
@@ -111,14 +112,14 @@ export default async function Order({ params }: { params: typeParams }) {
 
 					<GridCol span={12}>
 						<Grid>
-							<GridCol span={{ base: 12, md: 5 }}>
+							<GridCol span={{ base: 12, md: 7, lg: 5 }}>
 								<CardInvoiceOrder orderedProducts={data?.orderedProducts!} />
 							</GridCol>
 
-							<GridCol span={{ base: 12, md: 7 }}>
+							<GridCol span={{ base: 12, md: 5, lg: 7 }}>
 								<Grid>
 									{data?.addresses?.map(address => (
-										<GridCol key={address.id} span={{ base: 12, md: 6 }}>
+										<GridCol key={address.id} span={{ base: 12, lg: 6 }}>
 											<CardAddressOrder data={address} />
 										</GridCol>
 									))}

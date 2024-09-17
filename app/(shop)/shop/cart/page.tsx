@@ -33,6 +33,7 @@ import FormContact from "@/partials/forms/Contact";
 import AccordionFaq from "@/components/accordions/Faq";
 import TableCart from "@/components/tables/Cart";
 import CardShopCart from "@/components/card/shop/Cart";
+import ModalCheckout from "@/components/modal/Checkout";
 
 import OperatorCart from "@/components/operators/Cart";
 
@@ -94,13 +95,7 @@ export default async function Cart() {
 									Continue Shopping
 								</Button>
 
-								<Button
-									component={Link}
-									href={"/shop/checkout"}
-									rightSection={<IconChevronRight size={16} stroke={2} />}
-								>
-									Proceed to Checkout
-								</Button>
+								<ModalCheckout>Proceed to Checkout</ModalCheckout>
 							</Group>
 						</Stack>
 					</GridCol>

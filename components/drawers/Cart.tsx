@@ -21,6 +21,7 @@ import { IconMoodEmpty, IconShoppingCart } from "@tabler/icons-react";
 import IndicatorCart from "../indicators/Cart";
 import CardProductCart from "../card/product/Cart";
 import NotificationEmpty from "../notification/Empty";
+import ModalCheckout from "../modal/Checkout";
 
 import classes from "./Cart.module.scss";
 
@@ -121,9 +122,8 @@ export default function Cart() {
 							>
 								View Cart
 							</Button>
-							<Button onClick={close} component={Link} href={"/shop/checkout"}>
-								Checkout
-							</Button>
+
+							<ModalCheckout>Checkout</ModalCheckout>
 						</Group>
 					</Stack>
 				</Stack>
